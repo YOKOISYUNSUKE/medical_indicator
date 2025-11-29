@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>RA分類基準 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- 共通ヘッダー/フッター読込 -->
+    <script src="../js/include.js" defer></script>
+    <!-- 共通スコアユーティリティ -->
+    <script src="../js/score-utils.js" defer></script>
+    <!-- このスコア専用JS -->
+    <script src="ra_classification.js" defer></script>
+  </head>
+
+  <body data-subtitle="RA分類基準（2010 ACR/EULAR）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main>
+      <div class="wrapper">
+        <div class="score-card-container">
+          <a href="rheumatology.index.html" class="back-link">
+            ← 膠原病スコア一覧に戻る
+          </a>
+
+          <div class="score-title">RA分類基準（2010 ACR/EULAR）</div>
+          <div class="score-subtitle">
+            2010 ACR/EULAR 分類基準の 4 ドメイン（関節病変・血清学・急性期反応・病悩期間）からスコアを算出し、6 点以上で RA と分類します。
+          </div>
+
+          <form id="ra_classification_form" onsubmit="return false;">
+            <div class="form-grid">
+              <!-- 関節病変 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">関節病変（joint involvement）</div>
+                <label>
+                  <input type="radio" name="joints" value="0" checked />
+                  1 大関節のみ（0点）
+                </label>
+                <label>
+                  <input type="radio" name="joints" value="1" />
+                  2–10 大関節（1点）
+                </label>
+                <label>
+                  <input type="radio" name="joints" value="2" />
+                  1–3 小関節（±大関節）（2点）
+                </label>
+                <label>
+                  <input type="radio" name="joints" value="3" />
+                  4–10 小関節（±大関節）（3点）
+                </label>
+                <label>
+                  <input type="radio" name="joints" value="5" />
+                  10 関節を超える（うち少なくとも 1 小関節）（5点）
+                </label>
+              </div>
+
+              <!-- 血清学 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">血清学（serology）</div>
+                <label>
+                  <input type="radio" name="serology" value="0" checked />
+                  RF / ACPA とも陰性（0点）
+                </label>
+                <label>
+                  <input type="radio" name="serology" value="2" />
+                  RF または ACPA 低陽性（2点）
+                </label>
+                <label>
+                  <input type="radio" name="serology" value="3" />
+                  RF または ACPA 高陽性（3点）
+                </label>
+              </div>
+
+              <!-- 急性期反応 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">急性期反応（acute-phase reactants）</div>
+                <label>
+                  <input type="radio" name="acute" value="0" checked />
+                  CRP・ESR とも正常（0点）
+                </label>
+                <label>
+                  <input type="radio" name="acute" value="1" />
+                  CRP または ESR 異常（1点）
+                </label>
+              </div>
+
+              <!-- 病悩期間 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">病悩期間（duration of symptoms）</div>
+                <label>
+                  <input type="radio" name="duration" value="0" checked />
+                  6 週未満（0点）
+                </label>
+                <label>
+                  <input type="radio" name="duration" value="1" />
+                  6 週以上（1点）
+                </label>
+              </div>
+            </div>
+
+            <div class="small-note">
+              ※ 本ツールは 2010 ACR/EULAR RA 分類基準に基づき、6 点以上で RA と分類します。<br />
+              ※ 関節数・抗体価・急性期反応・症状期間の詳細は原典ガイドラインを参照してください。
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" onclick="calculateRAClassification()">
+                計算
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="clearRAClassification()">
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <div class="result-area" id="ra_classification_result">
+            <div class="result-card">
+              <div class="result-title">RA分類スコア</div>
+              <div class="result-value" id="ra_class_score">--</div>
+              <div class="result-category" id="ra_class_category"></div>
+              <div class="result-message" id="ra_class_message">
+                合計スコア 6 点以上で、2010 ACR/EULAR 分類基準上「RA と分類」されます。
+              </div>
+            </div>
+          </div>
+
+          <div class="result-warning">
+            ※ 本ツールは分類基準の理解・教育を目的とした参考値です。<br />
+            ※ 最終的な診断・治療方針は、必ず臨床医の総合判断に基づいて決定してください。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

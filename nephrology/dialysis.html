@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>透析・血液浄化｜腎疾患スコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- PWA 関連 -->
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+  <!-- 共通JS -->
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+
+  <script src="dialysis.js" defer></script>
+  <script src="../js/pwa-register.js" defer></script>
+</head>
+<body data-subtitle="透析・血液浄化">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="nephrology.index.html" class="back-link">← 腎疾患スコア一覧に戻る</a>
+
+    <div class="section-title" style="margin-top: 12px;">
+      透析・血液浄化（Kt/V・URR）
+    </div>
+
+    <div class="score-card-container">
+      <section class="score-card" aria-labelledby="ktv-section-title">
+        <h2 id="ktv-section-title" class="score-name" style="margin-bottom: 8px;">
+          維持血液透析 Kt/V・URR 計算
+        </h2>
+        <p class="score-desc" style="margin-bottom: 12px;">
+          単回血液透析セッションの
+          Kt/V（Daugirdas 式）と URR を簡便に求めます。
+          値は参考情報であり、臨床判断は必ず総合的に行ってください。
+        </p>
+
+        <!-- 入力項目 -->
+        <div class="field-wrapper">
+          <label for="bun-pre">
+            BUN（前値, pre）<span style="font-size: 0.8rem;"> [mg/dL]</span>
+          </label>
+          <input
+            id="bun-pre"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 60"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="bun-post">
+            BUN（後値, post）<span style="font-size: 0.8rem;"> [mg/dL]</span>
+          </label>
+          <input
+            id="bun-post"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 15"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="dialysis-time">
+            透析時間 t<span style="font-size: 0.8rem;"> [時間]</span>
+          </label>
+          <input
+            id="dialysis-time"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 4"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="uf-volume">
+            除水量 UF<span style="font-size: 0.8rem;"> [L]</span>
+          </label>
+          <input
+            id="uf-volume"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 2.0"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="post-weight">
+            透析後体重 W<span style="font-size: 0.8rem;"> [kg]</span>
+          </label>
+          <input
+            id="post-weight"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 60"
+          />
+        </div>
+
+        <button id="calc-ktv-btn" class="calc-button">
+          Kt/V・URR を計算する
+        </button>
+
+        <!-- 結果表示 -->
+        <div id="ktv-result" class="score-result" aria-live="polite"></div>
+        <div id="ktv-interpret" class="score-interpret"></div>
+
+        <div id="urr-result" class="score-result" style="margin-top: 8px;" aria-live="polite"></div>
+        <div id="urr-interpret" class="score-interpret"></div>
+
+        <p style="margin-top: 12px; font-size: 0.75rem; color: #777; line-height: 1.5;">
+          Kt/V は単回セッションの single-pool Kt/V を簡便に推定する式を用いています。
+          不十分な透析量が疑われる場合は、ダイアライザ条件・血流量・透析時間・アクセス
+          などを含め総合的に見直してください。
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

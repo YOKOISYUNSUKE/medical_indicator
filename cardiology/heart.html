@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>HEARTスコア（胸痛トリアージ）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+
+  <!-- HEART専用JS -->
+  <script src="heart.js" defer></script>
+</head>
+
+<body data-subtitle="胸痛トリアージ（HEARTスコア）">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <div class="score-card-container">
+      <a href="cardiology.index.html" class="back-link">循環器スコア一覧に戻る</a>
+
+      <div class="section-title">入力項目</div>
+
+      <div class="score-card">
+        <div class="score-name">HEARTスコア</div>
+
+        <!-- H: History -->
+        <div class="field-wrapper">
+          <label for="heart-history">病歴（胸痛の性状）</label>
+          <select id="heart-history">
+            <option value="0">0点：心筋虚血として非典型的</option>
+            <option value="1">1点：やや疑わしい</option>
+            <option value="2">2点：典型的で強く疑わしい</option>
+          </select>
+        </div>
+
+        <!-- E: ECG -->
+        <div class="field-wrapper">
+          <label for="heart-ecg">心電図（ECG）</label>
+          <select id="heart-ecg">
+            <option value="0">0点：正常</option>
+            <option value="1">1点：非特異的ST-T変化</option>
+            <option value="2">2点：有意ST低下/上昇</option>
+          </select>
+        </div>
+
+        <!-- A: Age -->
+        <div class="field-wrapper">
+          <label for="heart-age">年齢（歳）</label>
+          <input
+            type="number"
+            id="heart-age"
+            min="18"
+            max="110"
+          />
+        </div>
+
+        <!-- T: Troponin -->
+        <div class="field-wrapper">
+          <label for="heart-trop">トロポニン</label>
+          <select id="heart-trop">
+            <option value="0">0点：基準値以内</option>
+            <option value="1">1点：基準上限の1〜3倍</option>
+            <option value="2">2点：基準上限の3倍超</option>
+          </select>
+        </div>
+
+        <!-- R: Risk factors（Booleanグループ） -->
+        <div class="boolean-section-title">危険因子</div>
+        <div class="field-boolean-group field-boolean-group--row">
+          <label for="heart-rf-htn">
+            <input type="checkbox" id="heart-rf-htn" />
+            高血圧（治療中を含む）
+          </label>
+          <label for="heart-rf-hyperlipid">
+            <input type="checkbox" id="heart-rf-hyperlipid" />
+            高脂血症
+          </label>
+          <label for="heart-rf-dm">
+            <input type="checkbox" id="heart-rf-dm" />
+            糖尿病
+          </label>
+          <label for="heart-rf-smoker">
+            <input type="checkbox" id="heart-rf-smoker" />
+            喫煙（現在または最近まで）
+          </label>
+          <label for="heart-rf-obesity">
+            <input type="checkbox" id="heart-rf-obesity" />
+            肥満（BMI &gt; 30 目安）
+          </label>
+          <label for="heart-rf-fhx">
+            <input type="checkbox" id="heart-rf-fhx" />
+            早発性冠動脈疾患の家族歴
+          </label>
+          <label for="heart-rf-vascular">
+            <input type="checkbox" id="heart-rf-vascular" />
+            血管疾患（PAD / 大動脈プラークなど）
+          </label>
+          <label for="heart-rf-known-cad">
+            <input type="checkbox" id="heart-rf-known-cad" />
+            既知の冠動脈疾患（PCI/CABG 既往等）
+          </label>
+        </div>
+
+        <button
+          type="button"
+          class="calc-button"
+          onclick="calculateHeartScore()"
+        >
+          HEARTスコアを計算
+        </button>
+
+        <div id="heart-result" class="score-result"></div>
+        <div id="heart-interpret" class="score-interpret"></div>
+      </div>
+
+      <p style="margin-top:8px; font-size:0.8rem; color:#666;">
+        ※ 0〜3点：低リスク、4〜6点：中等度リスク、7〜10点：高リスクとされます。<br />
+        実際の入院・精査・治療方針は、臨床所見や施設のプロトコルに基づき総合的に判断してください。
+      </p>
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

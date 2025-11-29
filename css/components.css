@@ -1,0 +1,214 @@
+/* ------------------------
+   components.css : カード・ボタンなど
+------------------------- */
+
+/* 診療科カード */
+.dept-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 80px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.1s ease-out,
+    border-color 0.08s;
+  text-align: center;      /* 追加: 中央揃え */
+  width: 100%;
+  max-width: 200px;
+}
+
+/* ボタンタグとして使うときの初期化 */
+button.dept-card {
+  background: none;
+}
+
+/* ホバー・フォーカス */
+.dept-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: #4f8cff;
+}
+
+.dept-card:focus-visible {
+  outline: 2px solid #4f8cff;
+  outline-offset: 2px;
+}
+
+/* 診療科カード内テキスト */
+.dept-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dept-desc {
+  font-size: 0.78rem;
+  color: #777;
+  line-height: 1.4;
+}
+
+/* スコアカード */
+.score-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 14px;  
+  min-height: 160px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: center;      /* 追加: 中央揃え */
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.1s ease-out,
+    border-color 0.08s;
+  width: 100%;
+  max-width: 200px;
+}
+
+.score-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: #4f8cff;
+}
+
+.score-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.score-desc {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;     /* ← スマホでの長文化軽減 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* スコア計算ボタン */
+.calc-button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #4f8cff;
+  color: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 100%;
+  max-width: 260px;
+}
+
+.calc-button:hover {
+  opacity: 0.9;
+}
+
+/* スコア結果 */
+.score-result {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.score-interpret {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* 入力エラー表示 */
+.input-error {
+  border-color: #e53935;
+}
+
+.field-error {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #e53935;
+}
+
+/* 入力項目（ラベル＋入力）を縦一列・中央揃え */
+.field-wrapper {
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* Boolean（チェックボックス）項目をまとめて表示するグループ */
+.field-boolean-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;                  /* チェックボックス間の距離 */
+  padding: 6px 10px;         /* 余白を追加して詰まり感を軽減 */
+  background: #fafbff;       /* ごく薄い背景でグループを識別 */
+  border-radius: 8px;
+  border: 1px solid #e3e8f3; /* 軽い境界線 */
+  text-align: left;          /* ラベルは左寄せが読みやすい */
+}
+
+/* ▼ ③ タップ領域の拡大 ＋ レイアウト調整 */
+.field-boolean-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;                  /* チェックボックスとテキストの間隔 */
+  font-size: 0.9rem;
+  padding: 4px 2px;          /* ラベル全体をタップ可能にして誤タップを軽減 */
+}
+
+/* ① Boolean を横並びにしたいときのバリエーション */
+.field-boolean-group--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 16px;             /* 行×列方向の間隔 */
+}
+
+/* ② Boolean セクションの小見出し */
+.boolean-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 8px 0 4px;
+  color: #444;
+  text-align: left;
+}
+
+/* リスク表示色 */
+.risk-low {
+  color: #1f7a1f;
+}
+.risk-mid {
+  color: #b36b00;
+}
+.risk-high {
+  color: #c53030;
+  font-weight: 700;
+}
+
+
+
+
+/* ------------------------
+   並べ替え用の見た目
+------------------------- */
+
+.dept-card.sortable-chosen,
+.score-card.sortable-chosen {
+  transform: scale(1.02);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.dept-card.sortable-ghost,
+.score-card.sortable-ghost {
+  opacity: 0.6;
+}
+

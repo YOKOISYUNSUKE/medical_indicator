@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>SYNTAXスコア（簡易リスク分類）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="syntax.js" defer></script>
+</head>
+
+<body data-subtitle="SYNTAXスコアのリスク層別（簡易版）">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <div class="score-card-container">
+      <a href="cardiology.index.html" class="back-link">循環器スコア一覧に戻る</a>
+
+      <div class="section-title">SYNTAXスコア値を入力</div>
+
+      <div class="score-card">
+        <div class="score-name">SYNTAXスコア（簡易リスク分類）</div>
+
+        <div class="field-wrapper">
+          <label for="syntax-score">SYNTAXスコア（0〜60）</label>
+          <input
+            type="number"
+            id="syntax-score"
+            min="0"
+            max="60"
+            step="1"
+          />
+        </div>
+
+        <button
+          type="button"
+          class="calc-button"
+          onclick="calculateSyntaxRisk()"
+        >
+          リスク分類を計算
+        </button>
+
+        <div id="syntax-result" class="score-result"></div>
+        <div id="syntax-interpret" class="score-interpret"></div>
+      </div>
+
+      <p style="margin-top:8px; font-size:0.8rem; color:#666;">
+        ※ 本ページは造影画像から既に算出された SYNTAXスコアを入力し、<br />
+        低リスク（≤22）、中等度リスク（23–32）、高リスク（≥33）に層別する簡易ツールです。<br />
+        実際の再血行再建方針（PCI / CABG 等）は、ハートチームでの総合判断に基づいて決定してください。
+      </p>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

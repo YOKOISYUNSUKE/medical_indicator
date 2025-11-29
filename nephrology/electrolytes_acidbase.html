@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>電解質・酸塩基異常｜腎疾患スコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- PWA 関連（透析ページと同等） -->
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+  <!-- 共通JS -->
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+
+  <!-- 電解質・酸塩基用 JS -->
+  <script src="electrolytes_acidbase.js" defer></script>
+
+  <!-- PWA 登録 -->
+  <script src="../js/pwa-register.js" defer></script>
+</head>
+<body data-subtitle="電解質・酸塩基異常の簡易評価">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="nephrology.index.html" class="back-link">← 腎疾患スコア一覧に戻る</a>
+
+    <div class="section-title" style="margin-top: 12px;">
+      電解質・酸塩基異常の簡易評価
+    </div>
+
+    <div class="score-card-container">
+
+      <!-- 1. 補正 Na / AG / 浸透圧 -->
+      <section class="score-card" aria-labelledby="elec-basic-title">
+        <h2 id="elec-basic-title" class="score-name" style="margin-bottom: 8px;">
+          補正 Na・アニオンギャップ・浸透圧
+        </h2>
+        <p class="score-desc" style="margin-bottom: 12px;">
+          血糖による補正 Na、アニオンギャップ（AG）、計算浸透圧と浸透圧ギャップをまとめて計算します。
+        </p>
+
+        <div class="field-wrapper">
+          <label for="elec-na">
+            Na<span style="font-size:0.8rem;"> [mEq/L]</span>
+          </label>
+          <input
+            id="elec-na"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 120"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="elec-glu">
+            血糖<span style="font-size:0.8rem;"> [mg/dL]</span>
+          </label>
+          <input
+            id="elec-glu"
+            type="number"
+            inputmode="decimal"
+            step="1"
+            placeholder="例: 600"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="elec-k">
+            K<span style="font-size:0.8rem;"> [mEq/L]</span>（AG に含める場合のみ）
+          </label>
+          <input
+            id="elec-k"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 4.5"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="elec-cl">
+            Cl<span style="font-size:0.8rem;"> [mEq/L]</span>
+          </label>
+          <input
+            id="elec-cl"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 95"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="elec-hco3">
+            HCO₃⁻<span style="font-size:0.8rem;"> [mEq/L]</span>
+          </label>
+          <input
+            id="elec-hco3"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            placeholder="例: 18"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="elec-osm-measured">
+            実測浸透圧<span style="font-size:0.8rem;"> [mOsm/kg]</span>（任意）
+          </label>
+          <input
+            id="elec-osm-measured"
+            type="number"
+            inputmode="decimal"
+            step="1"
+            placeholder="例: 320"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label class="boolean-section-title">アニオンギャップ計算オプション</label>
+          <div class="field-boolean-group field-boolean-group--row">
+            <label>
+              <input type="checkbox" id="elec-ag-include-k" />
+              AG 計算に K を含める（Na + K - Cl - HCO₃⁻）
+            </label>
+            <label>
+              <input type="checkbox" id="elec-ag-use-alb" />
+              Stewart セクションの Alb 値で Alb 補正 AG も表示する
+            </label>
+          </div>
+        </div>
+
+        <button id="elec-basic-calc-btn" class="calc-button">
+          補正 Na・AG・浸透圧を計算
+        </button>
+
+
+        <div id="elec-na-corrected-result" class="score-result" aria-live="polite"></div>
+        <div id="elec-na-interpret" class="score-interpret"></div>
+
+        <div id="elec-ag-result" class="score-result" style="margin-top:8px;" aria-live="polite"></div>
+        <div id="elec-ag-interpret" class="score-interpret"></div>
+        <div id="elec-ag-corr-result" class="score-result" style="margin-top:4px;" aria-live="polite"></div>
+        <div id="elec-ag-corr-note" class="score-interpret"></div>
+
+        <div id="elec-osm-calc-result" class="score-result" style="margin-top:8px;" aria-live="polite"></div>
+        <div id="elec-osm-gap-result" class="score-interpret"></div>
+        <div id="elec-osm-interpret" class="score-interpret"></div>
+      </section>
+
+
+      <!-- 2. Stewart アプローチ簡易（SID 評価） -->
+      <section class="score-card" aria-labelledby="stewart-title">
+        <h2 id="stewart-title" class="score-name" style="margin-bottom: 8px;">
+          Stewart アプローチ簡易評価（SID）
+        </h2>
+        <p class="score-desc" style="margin-bottom: 12px;">
+          Na・K・Cl から強イオン差 (SID) を簡易的に計算し、代謝性アシドーシス／アルカローシス傾向の目安を示します。
+        </p>
+
+        <div class="field-wrapper">
+          <label for="stw-na">Na [mEq/L]</label>
+          <input id="stw-na" type="number" inputmode="decimal" step="0.1" placeholder="例: 140" />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="stw-k">K [mEq/L]</label>
+          <input id="stw-k" type="number" inputmode="decimal" step="0.1" placeholder="例: 4.0" />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="stw-cl">Cl [mEq/L]</label>
+          <input id="stw-cl" type="number" inputmode="decimal" step="0.1" placeholder="例: 100" />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="stw-alb">
+            アルブミン<span style="font-size:0.8rem;"> [g/dL]（任意）</span>
+          </label>
+          <input id="stw-alb" type="number" inputmode="decimal" step="0.1" placeholder="例: 3.0" />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="stw-lac">
+            乳酸<span style="font-size:0.8rem;"> [mmol/L]（任意）</span>
+          </label>
+          <input id="stw-lac" type="number" inputmode="decimal" step="0.1" placeholder="例: 2.0" />
+        </div>
+
+        <button id="stw-calc-btn" class="calc-button">
+          SID を計算して解釈を表示
+        </button>
+
+        <div id="stw-sid-result" class="score-result" aria-live="polite"></div>
+        <div id="stw-sid-interpret" class="score-interpret"></div>
+        <div id="stw-note" class="score-interpret"></div>
+      </section>
+
+      <!-- 3. RTA 類型化ヒント（Boolean グループ） -->
+      <section class="score-card" aria-labelledby="rta-title">
+        <h2 id="rta-title" class="score-name" style="margin-bottom: 8px;">
+          RTA 類型化のヒント（簡易チェック）
+        </h2>
+        <p class="score-desc" style="margin-bottom: 12px;">
+          代謝性アシドーシスの背景にある RTA の可能性を、いくつかの所見から簡易的に整理するためのヒントです。
+        </p>
+
+        <div class="field-wrapper">
+          <div class="boolean-section-title">血液ガス・アニオンギャップ</div>
+          <div class="field-boolean-group">
+            <label>
+              <input type="checkbox" id="rta-met-acid" />
+              代謝性アシドーシスあり（pH 低下 + HCO₃⁻ 低下）
+            </label>
+            <label>
+              <input type="checkbox" id="rta-normal-ag" />
+              アニオンギャップはおおむね正常（正常 AG アシドーシス）
+            </label>
+          </div>
+        </div>
+
+        <div class="field-wrapper">
+          <div class="boolean-section-title">尿所見・電解質</div>
+          <div class="field-boolean-group field-boolean-group--row">
+            <label>
+              <input type="checkbox" id="rta-urine-ph-high" />
+              尿 pH &gt; 5.5 が持続
+            </label>
+            <label>
+              <input type="checkbox" id="rta-hypok" />
+              低カリウム血症あり
+            </label>
+            <label>
+              <input type="checkbox" id="rta-hyperk" />
+              高カリウム血症あり
+            </label>
+          </div>
+        </div>
+
+        <div class="field-wrapper">
+          <div class="boolean-section-title">腎機能</div>
+          <div class="field-boolean-group field-boolean-group--row">
+            <label>
+              <input type="checkbox" id="rta-ckd" />
+              明らかな腎機能低下（中等度以上の CKD）あり
+            </label>
+          </div>
+        </div>
+
+        <button id="rta-eval-btn" class="calc-button">
+          RTA 類型のヒントを表示
+        </button>
+
+        <div id="rta-suggestion" class="score-result" aria-live="polite"></div>
+        <div id="rta-detail" class="score-interpret"></div>
+
+        <!-- 将来拡張用：RTA 数値入力版（尿 Anion gap, 尿 Na/K 比など）を追加するスペース -->
+        <!-- 例: 尿Na, 尿K, 尿Cl, 尿浸透圧などの input と、尿AG/AGD を計算する窓をここに追加予定 -->
+
+        <p style="margin-top: 8px; font-size: 0.75rem; color:#777; line-height:1.4;">
+          本ツールはあくまで「考える順番」を整理するためのヒントであり、
+          RTA の確定診断には血液ガスや尿電解質など、詳細な検査と専門的判断が必要です。
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

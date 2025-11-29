@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ICHスコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="ich.js" defer></script>
+</head>
+
+<body data-subtitle="ICHスコア">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="neurology.index.html" class="back-link">神経スコア一覧に戻る</a>
+    <div class="section-title">ICHスコア（脳出血の予後予測）</div>
+
+    <div class="score-card-container">
+      <p class="score-description">
+        自発性脳出血の30日死亡率予測などに用いられる ICHスコアです（0〜6点）。
+        GCS、年齢、血腫量、脳室内出血の有無、小脳・脳幹出血の有無を入力します。
+      </p>
+
+      <!-- 年齢 -->
+      <div class="field-wrapper">
+        <label for="ich-age">年齢（歳）</label>
+        <input
+          id="ich-age"
+          type="number"
+          inputmode="decimal"
+          step="1"
+          placeholder="例: 78"
+        />
+        <div class="field-error"></div>
+      </div>
+
+      <!-- GCS合計 -->
+      <div class="field-wrapper">
+        <label for="ich-gcs">GCS合計（3〜15）</label>
+        <input
+          id="ich-gcs"
+          type="number"
+          inputmode="decimal"
+          step="1"
+          placeholder="例: 9"
+        />
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ICH体積 -->
+      <div class="field-wrapper">
+        <label for="ich-volume">出血量（推定血腫体積, mL）</label>
+        <input
+          id="ich-volume"
+          type="number"
+          inputmode="decimal"
+          step="1"
+          placeholder="例: 35"
+        />
+        <div class="field-error"></div>
+      </div>
+
+      <!-- IVH -->
+      <div class="field-wrapper">
+        <label>
+          <input type="checkbox" id="ich-ivh" />
+          脳室内出血（IVH）あり
+        </label>
+      </div>
+
+      <!-- infratentorial -->
+      <div class="field-wrapper">
+        <label>
+          <input type="checkbox" id="ich-infratentorial" />
+          小脳・脳幹などテント下出血
+        </label>
+      </div>
+
+      <button class="calc-button" id="ich-calc-btn">ICHスコアを計算</button>
+
+      <div id="ich-result" class="score-result"></div>
+      <div id="ich-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Burch–Wartofsky Point Scale | 内分泌・代謝</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="thyroid_storm.js" defer></script>
+</head>
+
+<body data-subtitle="Burch–Wartofsky Point Scale（甲状腺クリーシス）">
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a class="back-link" href="endocrine.index.html">← 内分泌・代謝スコア一覧に戻る</a>
+
+    <div class="section-title">Burch–Wartofsky Point Scale（BWPS）</div>
+
+    <div class="wrapper">
+      <div class="score-card-container">
+        <form id="bwps-form">
+          <!-- 体温 -->
+          <div class="field-wrapper">
+            <label for="bwps-temp">体温 (℃)</label>
+            <input
+              type="number"
+              id="bwps-temp"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 38.5"
+            />
+          </div>
+
+          <!-- 心拍数 -->
+          <div class="field-wrapper">
+            <label for="bwps-hr">心拍数 (bpm)</label>
+            <input
+              type="number"
+              id="bwps-hr"
+              inputmode="numeric"
+              step="1"
+              placeholder="例: 120"
+            />
+          </div>
+
+          <!-- 中枢神経症状 -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">中枢神経症状</div>
+            <div class="field-boolean-group">
+              <label>
+                <input type="radio" name="bwps-cns" value="0" checked />
+                なし
+              </label>
+              <label>
+                <input type="radio" name="bwps-cns" value="10" />
+                軽度（不安・不穏など）
+              </label>
+              <label>
+                <input type="radio" name="bwps-cns" value="20" />
+                中等度（せん妄・精神症状・高度傾眠など）
+              </label>
+              <label>
+                <input type="radio" name="bwps-cns" value="30" />
+                重度（けいれん・昏睡など）
+              </label>
+            </div>
+          </div>
+
+          <!-- 消化器・肝症状 -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">消化器・肝症状</div>
+            <div class="field-boolean-group">
+              <label>
+                <input type="radio" name="bwps-gi" value="0" checked />
+                なし
+              </label>
+              <label>
+                <input type="radio" name="bwps-gi" value="10" />
+                嘔気・嘔吐・下痢・腹痛など
+              </label>
+              <label>
+                <input type="radio" name="bwps-gi" value="20" />
+                理由不明の黄疸
+              </label>
+            </div>
+          </div>
+
+          <!-- 心不全 -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">心不全所見</div>
+            <div class="field-boolean-group">
+              <label>
+                <input type="radio" name="bwps-chf" value="0" checked />
+                なし
+              </label>
+              <label>
+                <input type="radio" name="bwps-chf" value="5" />
+                軽度（下腿浮腫など）
+              </label>
+              <label>
+                <input type="radio" name="bwps-chf" value="10" />
+                中等度（両側ラ音など）
+              </label>
+              <label>
+                <input type="radio" name="bwps-chf" value="15" />
+                重度（肺水腫など）
+              </label>
+            </div>
+          </div>
+
+          <!-- 心房細動 -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">心房細動</div>
+            <div class="field-boolean-group field-boolean-group--row">
+              <label>
+                <input type="radio" name="bwps-af" value="0" checked />
+                なし
+              </label>
+              <label>
+                <input type="radio" name="bwps-af" value="10" />
+                あり
+              </label>
+            </div>
+          </div>
+
+          <!-- 誘因 -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">誘因（感染・手術・外傷など）</div>
+            <div class="field-boolean-group field-boolean-group--row">
+              <label>
+                <input type="radio" name="bwps-precipitant" value="0" checked />
+                特になし
+              </label>
+              <label>
+                <input type="radio" name="bwps-precipitant" value="10" />
+                明らかな誘因あり
+              </label>
+            </div>
+          </div>
+        </form>
+
+        <button class="calc-button" id="bwps-calc-button">スコアを計算</button>
+        <div class="score-result" id="bwps-score"></div>
+        <div class="score-interpret" id="bwps-interpret"></div>
+      </div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

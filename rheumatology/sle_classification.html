@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SLE分類基準 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- 共通ヘッダー/フッター読込 -->
+    <script src="../js/include.js" defer></script>
+    <!-- 共通スコアユーティリティ -->
+    <script src="../js/score-utils.js" defer></script>
+    <!-- このスコア専用JS -->
+    <script src="sle_classification.js" defer></script>
+  </head>
+
+  <body data-subtitle="SLE分類基準（2019 EULAR/ACR）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main>
+      <div class="wrapper">
+        <div class="score-card-container">
+          <a href="rheumatology.index.html" class="back-link">
+            ← 膠原病スコア一覧に戻る
+          </a>
+
+          <div class="score-title">SLE分類基準（2019 EULAR/ACR）</div>
+          <div class="score-subtitle">
+            2019 EULAR/ACR SLE 分類基準に基づき、ANA 陽性を前提として
+            加重スコアを算出します。<br />
+            合計 10 点以上かつ少なくとも 1 つ以上の臨床基準がある場合に
+            「SLE と分類」されます。
+          </div>
+
+          <form id="sle_classification_form" onsubmit="return false;">
+            <!-- ANA entry criterion -->
+            <div class="section-title" style="margin-top: 12px;">
+              エントリー条件
+            </div>
+            <div class="field-wrapper field-boolean-group">
+              <div class="boolean-section-title">抗核抗体（ANA）</div>
+              <label>
+                <input type="checkbox" id="ana_positive" />
+                ANA 陽性（少なくとも一度、1:80 以上など）<br />
+              </label>
+              <div class="small-note">
+                ※ 2019 EULAR/ACR 分類では ANA 陽性が必須のエントリー条件です。
+              </div>
+            </div>
+
+            <!-- 臨床ドメイン -->
+            <div class="section-title" style="margin-top: 16px;">
+              臨床ドメイン（各ドメインから最大 1 つのみスコア化）
+            </div>
+
+            <div class="form-grid">
+              <!-- Constitutional -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Constitutional</div>
+                <label>
+                  <input type="radio" name="dom_constit" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_constit" value="2" />
+                  発熱（> 38℃, 他の原因で説明できない）（2点）
+                </label>
+              </div>
+
+              <!-- Hematologic -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Hematologic</div>
+                <label>
+                  <input type="radio" name="dom_hema" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_hema" value="3" />
+                  白血球減少（< 4,000/μL）（3点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_hema" value="4" />
+                  血小板減少（< 10万/μL）（4点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_hema" value="4" />
+                  自己免疫性溶血性貧血（4点）
+                </label>
+              </div>
+
+              <!-- Neuropsychiatric -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Neuropsychiatric</div>
+                <label>
+                  <input type="radio" name="dom_neuro" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_neuro" value="2" />
+                  せん妄（delirium）（2点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_neuro" value="3" />
+                  精神病（psychosis）（3点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_neuro" value="5" />
+                  けいれん発作（seizure）（5点）
+                </label>
+              </div>
+
+              <!-- Mucocutaneous -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Mucocutaneous</div>
+                <label>
+                  <input type="radio" name="dom_mucocut" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_mucocut" value="2" />
+                  非瘢痕性脱毛（2点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_mucocut" value="2" />
+                  口腔・鼻咽頭潰瘍（2点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_mucocut" value="4" />
+                  皮疹（ACLE / SCLE / 慢性皮膚ループス）（4点）
+                </label>
+              </div>
+
+              <!-- Serosal -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Serosal</div>
+                <label>
+                  <input type="radio" name="dom_serosal" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_serosal" value="5" />
+                  胸膜炎 / 心嚢液貯留（5点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_serosal" value="6" />
+                  急性心膜炎（6点）
+                </label>
+              </div>
+
+              <!-- Musculoskeletal -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Musculoskeletal</div>
+                <label>
+                  <input type="radio" name="dom_msk" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_msk" value="6" />
+                  関節炎（圧痛＋腫脹関節など）（6点）
+                </label>
+              </div>
+
+              <!-- Renal -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">Renal</div>
+                <label>
+                  <input type="radio" name="dom_renal" value="0" checked />
+                  該当なし（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_renal" value="4" />
+                  蛋白尿 > 0.5 g/日（4点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_renal" value="8" />
+                  腎生検：class II or V ループス腎炎（8点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_renal" value="10" />
+                  腎生検：class III or IV ループス腎炎（10点）
+                </label>
+              </div>
+            </div>
+
+            <!-- 免疫学ドメイン -->
+            <div class="section-title" style="margin-top: 16px;">
+              免疫学ドメイン（各ドメインから最大 1 つのみスコア化）
+            </div>
+
+            <div class="form-grid">
+              <!-- Antiphospholipid -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">抗リン脂質抗体</div>
+                <label>
+                  <input type="radio" name="dom_apls" value="0" checked />
+                  陰性（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_apls" value="2" />
+                  LA / aCL / 抗β2GPI のいずれか陽性（2点）
+                </label>
+              </div>
+
+              <!-- Complement -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">補体</div>
+                <label>
+                  <input type="radio" name="dom_comp" value="0" checked />
+                  正常（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_comp" value="3" />
+                  C3 または C4 低下（3点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_comp" value="4" />
+                  C3 かつ C4 低下（4点）
+                </label>
+              </div>
+
+              <!-- SLE-specific antibody -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">SLE 特異的自己抗体</div>
+                <label>
+                  <input type="radio" name="dom_sleab" value="0" checked />
+                  陰性（0点）
+                </label>
+                <label>
+                  <input type="radio" name="dom_sleab" value="6" />
+                  抗 dsDNA 抗体 または 抗 Sm 抗体 陽性（6点）
+                </label>
+              </div>
+            </div>
+
+            <div class="small-note">
+              ※ 各ドメインでは<strong>最もスコアの高い 1 項目のみ</strong>をカウントします。<br />
+              ※ ANA 陽性がない場合はスコアにかかわらず SLE とは分類されません。
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" onclick="calculateSLEClassification()">
+                計算
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="clearSLEClassification()">
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <div class="result-area" id="sle_classification_result">
+            <div class="result-card">
+              <div class="result-title">SLE分類スコア</div>
+              <div class="result-value" id="sle_class_score">--</div>
+              <div class="result-category" id="sle_class_category"></div>
+              <div class="result-message" id="sle_class_message">
+                合計 10 点以上かつ少なくとも 1 つ以上の臨床基準を満たす場合、
+                2019 EULAR/ACR 分類基準上「SLE と分類」されます。
+              </div>
+            </div>
+          </div>
+
+          <div class="result-warning">
+            ※ 本ツールは分類基準の理解・教育を目的とした参考値です。<br />
+            ※ 最終的な診断・治療方針は、必ず臨床医の総合判断に基づいて決定してください。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

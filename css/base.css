@@ -1,0 +1,75 @@
+/* ------------------------
+   base.css : 共通の土台
+------------------------- */
+
+/* リセット・共通フォント */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
+}
+
+/* body 基本レイアウト */
+body {
+  background: #f5f7fb;
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ヘッダー */
+header {
+  padding: 16px 20px 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;      /* 追加: 中央揃え */
+}
+
+.app-subtitle {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;      /* 追加: 中央揃え */
+}
+
+/* メイン領域 */
+main {
+  flex: 1;
+  padding: 16px 16px 24px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+/* 戻るリンク */
+.back-link {
+  font-size: 0.85rem;
+  color: #4f8cff;
+  text-decoration: none;
+}
+
+/* フッター */
+footer {
+  padding: 8px 16px 12px;
+  font-size: 0.75rem;
+  color: #999;
+  text-align: center;
+}

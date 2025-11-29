@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>腎疾患スコア一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <!-- ▼ ここから PWA 用に追加 ▼ -->
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- iOS ホーム画面アイコン -->
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+  <!-- ▲ ここまで PWA 用に追加 ▲ -->
+
+  <!-- 共通JS（ヘッダー/フッター include, 並べ替え） -->
+  <script src="../js/include.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+  <script src="../js/sortable-init.js" defer></script>
+  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
+  <script src="../js/pwa-register.js" defer></script>
+  <!-- ▲ ここまで追加 ▲ -->
+</head>
+<body data-subtitle="腎疾患スコア一覧">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a href="../index.html" class="back-link">← 診療科一覧に戻る</a>
+
+    <div class="section-title" style="margin-top: 12px;">
+      腎疾患（腎臓内科）スコア
+    </div>
+
+    <!-- 腎疾患スコアカテゴリー一覧：ドラッグで並べ替え可能 -->
+    <div class="score-list" data-sortable-id="nephrology-scores">
+      <!-- 1. 急性腎障害・AKI -->
+      <button class="score-card" onclick="location.href='aki.html'">
+        <div class="score-name">急性腎障害・AKI</div>
+        <div class="score-desc">
+          KDIGO に基づく AKI ステージ、尿量・Cr 上昇、周術期AKIリスクなどをまとめて評価するための窓です。
+        </div>
+      </button>
+
+      <!-- 2. 慢性腎臓病・CKD/eGFR -->
+      <button class="score-card" onclick="location.href='ckd_egfr.html'">
+        <div class="score-name">慢性腎臓病・CKD / eGFR</div>
+        <div class="score-desc">
+          eGFR 計算（CKD-EPI 等）と CKD ステージ分類、アルブミン尿区分を一括で確認するための窓です。
+        </div>
+      </button>
+
+      <!-- 3. 透析・血液浄化 -->
+      <button class="score-card" onclick="location.href='dialysis.html'">
+        <div class="score-name">透析・血液浄化</div>
+        <div class="score-desc">
+          Kt/V、透析量評価、目標除水量の計算など、維持透析や急性血液浄化に関連する指標を扱う窓です。
+        </div>
+      </button>
+
+      <!-- 4. 電解質・酸塩基異常 -->
+      <button class="score-card" onclick="location.href='electrolytes_acidbase.html'">
+        <div class="score-name">電解質・酸塩基異常</div>
+        <div class="score-desc">
+          補正 Na、浸透圧・アニオンギャップ、K 異常の重症度評価など、腎疾患で頻用する計算を集約します。
+        </div>
+      </button>
+
+      <!-- 5. 腎炎・ネフローゼ / 糖尿病性腎症 -->
+      <button class="score-card" onclick="location.href='gn_nephrotic.html'">
+        <div class="score-name">腎炎・ネフローゼ / 糖尿病性腎症</div>
+        <div class="score-desc">
+          尿蛋白・アルブミン尿、尿沈渣所見と合わせたリスク評価など、糸球体疾患領域のスコアをまとめる窓です。
+        </div>
+      </button>
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

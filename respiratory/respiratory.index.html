@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>呼吸器 | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <!-- ▼ ここから PWA 用に追加 ▼ -->
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- iOS ホーム画面アイコン -->
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+  <!-- ▲ ここまで PWA 用に追加 ▲ -->
+
+  <!-- 共通JS -->
+  <script src="../js/include.js" defer></script>
+
+  <!-- 並び替え用ライブラリ & 初期化スクリプト -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+  <script src="../js/sortable-init.js" defer></script>
+  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
+  <script src="../js/pwa-register.js" defer></script>
+  <!-- ▲ ここまで追加 ▲ -->
+</head>
+
+<body data-subtitle="呼吸器スコア一覧">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a href="../index.html" class="back-link">診療科一覧に戻る</a>
+
+    <div class="section-title">スコア一覧</div>
+
+    <!-- 並べ替え対象コンテナ -->
+    <div class="score-list" data-sortable-id="respiratory-scores">
+      <!-- 肺炎重症度 -->
+      <button
+        class="score-card"
+        data-id="score-pneumonia"
+        onclick="location.href='pneumonia.html'">
+        <div class="score-name">肺炎重症度</div>
+        <div class="score-desc">
+          CURB-65 や PSI（肺炎重症度指数）など、肺炎の重症度分類に用いるスコアをまとめて扱う予定です。
+        </div>
+      </button>
+
+      <!-- COPD関連スコア -->
+      <button
+        class="score-card"
+        data-id="score-copd"
+        onclick="location.href='copd.html'">
+        <div class="score-name">COPD</div>
+        <div class="score-desc">
+          CAT、mMRC、BODE指数など、COPD の症状評価や予後予測に関わる指標をまとめて扱う予定です。
+        </div>
+      </button>
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

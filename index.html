@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CSS 分割後 -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- ▼ ここから PWA 用に追加 ▼ -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- iOS ホーム画面アイコン -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <!-- ▲ ここまで PWA 用に追加 ▲ -->
+
+  <script src="js/include.js" defer></script>
+  <script src="js/main.js" defer></script> 
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+  <script src="js/sortable-init.js" defer></script>
+  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
+  <script src="js/pwa-register.js" defer></script>
+  <!-- ▲ ここまで追加 ▲ -->
+
+</head>
+
+<body data-subtitle="診療科を選んでスコア計算へ進んでください">
+  <!-- 共通ヘッダー -->
+  <div data-include="partials/header.html"></div>
+
+  <main>
+    <div class="section-title">診療科を選択</div>
+
+    <!-- 追加: data-sortable-id -->
+    <div class="dept-grid" data-sortable-id="dept-grid">
+      <button class="dept-card" data-dept="emergency" data-id="dept-emergency">
+        <div class="dept-name">救急</div>
+        <div class="dept-desc">DICスコア、SOFAなどの救急関連スコア</div>
+      </button>
+
+      <button class="dept-card" data-dept="rheumatology" data-id="dept-rheumatology">
+        <div class="dept-name">膠原病</div>
+        <div class="dept-desc">DAS28、CDAI、SDAI などの疾患活動性スコア</div>
+      </button>
+
+      <button class="dept-card" data-dept="cardiology" data-id="dept-cardiology">
+        <div class="dept-name">循環器</div>
+        <div class="dept-desc">心不全・虚血性心疾患などのリスクスコア</div>
+      </button>
+
+      <button class="dept-card" data-dept="respiratory" data-id="dept-respiratory">
+        <div class="dept-name">呼吸器</div>
+        <div class="dept-desc">肺炎重症度、COPD関連スコアなど</div>
+      </button>
+
+      <button class="dept-card" data-dept="nephrology" data-id="dept-nephrology">
+        <div class="dept-name">腎臓</div>
+        <div class="dept-desc">eGFR、CKDステージ評価など</div>
+      </button>
+
+      <button class="dept-card" data-dept="hematology" data-id="dept-hematology">
+        <div class="dept-name">血液</div>
+        <div class="dept-desc">各種リスク分類・スコア（追加予定）</div>
+      </button>
+     <button class="dept-card" data-dept="gastroenterology" data-id="dept-gastroenterology">
+       <div class="dept-name">消化器</div>
+       <div class="dept-desc">肝臓・膵臓の重症度スコア</div>
+     </button>
+
+      <button class="dept-card" data-dept="neurology" data-id="dept-neurology">
+        <div class="dept-name">神経</div>
+        <div class="dept-desc">脳卒中重症度、予後予測スコア（追加予定）</div>
+      </button>
+
+      <button class="dept-card" data-dept="infectious" data-id="dept-infectious">
+        <div class="dept-name">感染症</div>
+        <div class="dept-desc">感染症スコア</div>
+      </button>
+
+      <button class="dept-card" data-dept="endocrine" data-id="dept-endocrine">
+        <div class="dept-name">内分泌・代謝</div>
+        <div class="dept-desc">糖尿病・甲状腺・副腎の主要スコア</div>
+      </button>
+
+
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="partials/footer.html"></div>
+</body>
+</html>

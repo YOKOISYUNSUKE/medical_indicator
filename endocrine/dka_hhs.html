@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>DKA / HHS Severity | 内分泌・代謝</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="dka_hhs.js" defer></script>
+</head>
+
+<body data-subtitle="DKA 重症度 / HHS 判定">
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a class="back-link" href="endocrine.index.html">← 内分泌・代謝スコア一覧に戻る</a>
+
+    <div class="section-title">DKA Severity &amp; HHS</div>
+
+    <div class="wrapper">
+      <div class="score-card-container">
+        <form id="dka-hhs-form">
+          <!-- 血糖（単位切替） -->
+          <div class="field-wrapper">
+            <label for="dka-glucose">血糖</label>
+            <input
+              type="number"
+              id="dka-glucose"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 350"
+              data-unit="mg/dL"
+            />
+            <div class="field-boolean-group field-boolean-group--row" style="margin-top:4px;">
+              <label>
+                単位:
+                <select id="dka-glucose-unit">
+                  <option value="mg/dL" selected>mg/dL</option>
+                  <option value="mmol/L">mmol/L</option>
+                </select>
+              </label>
+              <!-- 必要に応じて「目安」などを追加 -->
+            </div>
+          </div>
+
+          <!-- pH -->
+          <div class="field-wrapper">
+            <label for="dka-ph">動脈血 pH</label>
+            <input
+              type="number"
+              id="dka-ph"
+              inputmode="decimal"
+              step="0.01"
+              placeholder="例: 7.10"
+            />
+          </div>
+
+          <!-- HCO3- -->
+          <div class="field-wrapper">
+            <label for="dka-hco3">HCO₃⁻ (mEq/L)</label>
+            <input
+              type="number"
+              id="dka-hco3"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 9.5"
+            />
+          </div>
+
+          <!-- 浸透圧 -->
+          <div class="field-wrapper">
+            <label for="dka-osm">血清浸透圧 (mOsm/kg)</label>
+            <input
+              type="number"
+              id="dka-osm"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 330（任意入力）"
+            />
+            <div class="field-error"></div>
+          </div>
+
+          <!-- 意識状態 -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">意識状態</div>
+            <div class="field-boolean-group">
+              <label>
+                <input type="radio" name="dka-ms" value="alert" checked />
+                清明
+              </label>
+              <label>
+                <input type="radio" name="dka-ms" value="drowsy" />
+                傾眠・軽度意識障害
+              </label>
+              <label>
+                <input type="radio" name="dka-ms" value="stupor" />
+                昏迷・昏睡
+              </label>
+            </div>
+          </div>
+        </form>
+
+        <button class="calc-button" id="dka-hhs-calc-button">DKA / HHS を評価</button>
+        <div class="score-result" id="dka-hhs-result"></div>
+        <div class="score-interpret" id="dka-hhs-interpret"></div>
+      </div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

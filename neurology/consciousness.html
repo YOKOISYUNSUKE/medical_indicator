@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>意識レベル評価（JCS / GCS / FOUR）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="consciousness.js" defer></script>
+</head>
+
+<body data-subtitle="意識レベル評価（JCS / GCS / FOUR）">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="neurology.index.html" class="back-link">神経スコア一覧に戻る</a>
+    <div class="section-title">意識レベル評価（JCS / GCS / FOUR）</div>
+
+    <div class="score-card-container">
+      <p class="score-description">
+        意識レベルを JCS、GCS、FOUR スコアの 3 つの指標で評価します。
+        臨床像・画像所見などと合わせて総合的に判断してください。
+      </p>
+
+      <!-- ▼ JCS -->
+      <div class="field-wrapper">
+        <label for="jcs-code">JCS（Japan Coma Scale）</label>
+        <select id="jcs-code">
+          <option value="">スコアを選択してください</option>
+          <option value="0">0：覚醒（意識清明）</option>
+          <option value="1">1：だるい・眠いが呼びかけで容易に覚醒（1桁：I-1）</option>
+          <option value="2">2：見当識障害・傾眠（I-2）</option>
+          <option value="3">3：意味のある応答はあるが高度混迷（I-3）</option>
+          <option value="10">10：呼びかけで開眼するが応答は鈍い（II-10）</option>
+          <option value="20">20：強い刺激で開眼（II-20）</option>
+          <option value="30">30：刺激に対してほぼ反応しない（II-30）</option>
+          <option value="100">100：痛み刺激でわずかに反応（III-100）</option>
+          <option value="200">200：痛み刺激で四肢の屈曲・伸展のみ（III-200）</option>
+          <option value="300">300：全く反応なし（III-300）</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="calc-button" id="jcs-calc-btn">JCSを評価</button>
+      <div id="jcs-result" class="score-result"></div>
+      <div id="jcs-interpret" class="score-interpret"></div>
+
+      <hr />
+
+      <!-- ▼ GCS -->
+      <div class="section-title">GCS（Glasgow Coma Scale）</div>
+
+      <div class="field-wrapper">
+        <label for="gcs-eye">E（開眼反応）</label>
+        <select id="gcs-eye">
+          <option value="">選択してください</option>
+          <option value="4">4：自然に開眼</option>
+          <option value="3">3：呼びかけで開眼</option>
+          <option value="2">2：痛み刺激で開眼</option>
+          <option value="1">1：開眼なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field-wrapper">
+        <label for="gcs-verbal">V（言語反応）</label>
+        <select id="gcs-verbal">
+          <option value="">選択してください</option>
+          <option value="5">5：見当識良好</option>
+          <option value="4">4：混乱しているが会話可能</option>
+          <option value="3">3：不適切な言葉のみ</option>
+          <option value="2">2：理解不能な発声</option>
+          <option value="1">1：発声なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field-wrapper">
+        <label for="gcs-motor">M（運動反応）</label>
+        <select id="gcs-motor">
+          <option value="">選択してください</option>
+          <option value="6">6：指示に従う</option>
+          <option value="5">5：痛みの部位を認識して払いのける</option>
+          <option value="4">4：痛みから逃避</option>
+          <option value="3">3：異常屈曲（除皮質硬直）</option>
+          <option value="2">2：伸展（除脳硬直）</option>
+          <option value="1">1：反応なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="calc-button" id="gcs-calc-btn">GCSを計算</button>
+      <div id="gcs-result" class="score-result"></div>
+      <div id="gcs-interpret" class="score-interpret"></div>
+
+      <hr />
+
+      <!-- ▼ FOURスコア -->
+      <div class="section-title">FOURスコア</div>
+
+      <div class="field-wrapper">
+        <label for="four-eye">E（開眼）</label>
+        <select id="four-eye">
+          <option value="">選択してください</option>
+          <option value="4">4：自発開眼</option>
+          <option value="3">3：会話で開眼</option>
+          <option value="2">2：痛みで開眼</option>
+          <option value="1">1：痛みに対し眼球運動のみ</option>
+          <option value="0">0：反応なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field-wrapper">
+        <label for="four-motor">M（運動）</label>
+        <select id="four-motor">
+          <option value="">選択してください</option>
+          <option value="4">4：親指を挙げるなど命令に応じる</option>
+          <option value="3">3：痛み刺激の部位を認識して動かす</option>
+          <option value="2">2：痛みから逃避</option>
+          <option value="1">1：屈曲・伸展など異常肢位</option>
+          <option value="0">0：反応なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field-wrapper">
+        <label for="four-brainstem">B（脳幹反射）</label>
+        <select id="four-brainstem">
+          <option value="">選択してください</option>
+          <option value="4">4：瞳孔・角膜・咳反射すべてあり</option>
+          <option value="3">3：いずれか 1 つ欠如</option>
+          <option value="2">2：2 つ欠如</option>
+          <option value="1">1：3 つすべて欠如、瞳孔は固定</option>
+          <option value="0">0：脳幹反射なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field-wrapper">
+        <label for="four-resp">R（呼吸パターン）</label>
+        <select id="four-resp">
+          <option value="">選択してください</option>
+          <option value="4">4：自発呼吸、人工呼吸器不要</option>
+          <option value="3">3：チェーンストークス呼吸など異常呼吸</option>
+          <option value="2">2：人工呼吸管理だが自発呼吸あり</option>
+          <option value="1">1：人工呼吸管理、自発呼吸わずか</option>
+          <option value="0">0：自発呼吸なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="calc-button" id="four-calc-btn">FOURスコアを計算</button>
+      <div id="four-result" class="score-result"></div>
+      <div id="four-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!-- rheumatology/sle_activity.html -->
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SLE疾患活動性 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- 共通ヘッダー/フッター読込 -->
+    <script src="../js/include.js" defer></script>
+    <!-- 共通スコアユーティリティ -->
+    <script src="../js/score-utils.js" defer></script>
+    <!-- このページ専用JS -->
+    <script src="sle_activity.js" defer></script>
+  </head>
+
+  <!-- data-subtitle に、このページ固有のサブタイトルを書く -->
+  <body data-subtitle="SLE疾患活動性（SLEDAI-2K &amp; BILAG-2004）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main>
+      <div class="wrapper">
+        <div class="score-card-container">
+          <a href="rheumatology.index.html" class="back-link">← 膠原病スコア一覧に戻る</a>
+
+          <div class="score-title">SLE疾患活動性</div>
+          <div class="score-subtitle">
+            SLEDAI-2K と BILAG-2004（数値スコア）を同時に算出します。
+          </div>
+
+          <!-- 入力フォーム -->
+          <form id="sle_activity_form" onsubmit="return false;">
+            <!-- SLEDAI-2K 入力ブロック -->
+            <section class="field-section">
+              <div class="boolean-section-title">
+                SLEDAI-2K（過去10日間の活動性）
+              </div>
+
+              <!-- 神経・血管系（8点項目） -->
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_seizure" />
+                  <span>けいれん（Seizure）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_psychosis" />
+                  <span>精神病（Psychosis）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_obs" />
+                  <span>器質性脳症（OBS）</span>
+                </label>
+              </div>
+
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_visual" />
+                  <span>視力障害（Visual disturbance）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_cranial" />
+                  <span>脳神経障害（Cranial nerve disorder）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_headache" />
+                  <span>ループス頭痛（Lupus headache）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_cva" />
+                  <span>脳血管障害（CVA）</span>
+                </label>
+              </div>
+
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_vasculitis" />
+                  <span>血管炎（Vasculitis）</span>
+                </label>
+              </div>
+
+              <!-- 筋骨格・腎・尿路（4点項目） -->
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_arthritis" />
+                  <span>関節炎（Arthritis）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_myositis" />
+                  <span>筋炎（Myositis）</span>
+                </label>
+              </div>
+
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_urinary_casts" />
+                  <span>尿円柱（Urinary casts）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_hematuria" />
+                  <span>血尿（Hematuria）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_proteinuria" />
+                  <span>蛋白尿（Proteinuria）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_pyuria" />
+                  <span>膿尿（Pyuria）</span>
+                </label>
+              </div>
+
+              <!-- 皮膚・漿膜・補体/抗DNA（2点項目） -->
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_rash" />
+                  <span>新規皮疹（Rash）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_alopecia" />
+                  <span>脱毛（Alopecia）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_mucosal" />
+                  <span>口腔・鼻咽頭潰瘍（Mucosal ulcers）</span>
+                </label>
+              </div>
+
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_pleurisy" />
+                  <span>胸膜炎（Pleurisy）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_pericarditis" />
+                  <span>心膜炎（Pericarditis）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_low_complement" />
+                  <span>低補体（Low complement）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_increased_dna" />
+                  <span>抗DNA抗体上昇（↑DNA binding）</span>
+                </label>
+              </div>
+
+              <!-- 全身・血液（1点項目） -->
+              <div class="field-boolean-group field-boolean-group--row">
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_fever" />
+                  <span>発熱（Fever）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_thrombocytopenia" />
+                  <span>血小板減少（Thrombocytopenia）</span>
+                </label>
+                <label class="field-boolean">
+                  <input type="checkbox" id="sledai_leukopenia" />
+                  <span>白血球減少（Leukopenia）</span>
+                </label>
+              </div>
+
+              <div class="small-note">
+                ※ SLEDAI-2K は各項目の有無と重み付け（1〜8点）から合計スコアを算出します。<br />
+                ※ 評価期間は「直近10日間」が推奨されています。
+              </div>
+            </section>
+
+            <!-- BILAG-2004 入力ブロック -->
+            <section class="field-section">
+              <div class="boolean-section-title">
+                BILAG-2004（臓器別グレード入力）
+              </div>
+
+              <div class="small-note">
+                各臓器・系統ごとに、臨床評価に基づいた BILAG グレード（A–E）を選択してください。<br />
+                本ツールでは推奨される数値化スキーム A=12, B=8, C=1, D/E=0 により総スコアを算出します。
+              </div>
+
+              <div class="form-grid">
+                <div class="form-row">
+                  <label for="bilag_general">全身症状（General）</label>
+                  <select id="bilag_general">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A（非常に活動性）</option>
+                    <option value="B">B（中等度活動性）</option>
+                    <option value="C">C（軽度活動性）</option>
+                    <option value="D">D（既往だが現在は非活動）</option>
+                    <option value="E">E（既往なし）</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_mucocutaneous">皮膚・粘膜（Mucocutaneous）</label>
+                  <select id="bilag_mucocutaneous">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_neuro">神経精神（Neuropsychiatric）</label>
+                  <select id="bilag_neuro">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_musculoskeletal">筋骨格（Musculoskeletal）</label>
+                  <select id="bilag_musculoskeletal">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_cardioresp">心肺（Cardiorespiratory）</label>
+                  <select id="bilag_cardioresp">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_vasculitis">血管炎（Vasculitis）</label>
+                  <select id="bilag_vasculitis">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_renal">腎（Renal）</label>
+                  <select id="bilag_renal">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_haem">血液（Haematological）</label>
+                  <select id="bilag_haem">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="bilag_other">その他（Others）</label>
+                  <select id="bilag_other">
+                    <option value="">-- 選択 --</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" id="sle_activity_calc">
+                計算
+              </button>
+              <button type="button" class="btn btn-secondary" id="sle_activity_reset">
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <!-- 結果表示 -->
+          <div id="sle_results" class="result-area">
+            <div class="result-card" id="card_sledai">
+              <div class="result-title">SLEDAI-2K</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                SLEDAI-2K 合計スコアと活動性カテゴリー（0:寛解, 1–5:軽度, 6–10:中等度, 11–19:高度, ≥20:非常に高度）を表示します。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_bilag">
+              <div class="result-title">BILAG-2004 数値スコア</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                各系統の BILAG グレード（A–E）から、A=12, B=8, C=1, D/E=0 により総スコアと最大グレードを表示します。
+              </div>
+            </div>
+          </div>
+
+          <div class="result-warning">
+            ※ 本ツールの計算結果は参考値です。診断・治療方針は必ず臨床医の総合判断で行ってください。<br />
+            ※ BILAG のグレード自体の判定は原法に従って別途評価してください。本画面では「既に付与済みのグレード」を数値化します。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>消化器スコア一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/sortable-init.js" defer></script>
+</head>
+
+<body data-subtitle="消化器スコア一覧">
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a href="../index.html" class="back-link">診療科一覧へ戻る</a>
+    <div class="section-title">消化器スコア</div>
+
+    <div class="score-list" data-sortable-id="gastro-scores">
+      <button class="score-card" data-id="cp"
+              onclick="location.href='child-pugh.html'">
+        <div class="score-name">Child-Pugh</div>
+        <div class="score-desc">肝硬変重症度評価</div>
+      </button>
+
+      <button class="score-card" data-id="meld"
+              onclick="location.href='meld.html'">
+        <div class="score-name">MELDスコア</div>
+        <div class="score-desc">肝不全重症度</div>
+      </button>
+
+      <button class="score-card" data-id="glasgow"
+              onclick="location.href='glasgow-pancreas.html'">
+        <div class="score-name">Glasgow-Imrie</div>
+        <div class="score-desc">急性膵炎重症度</div>
+      </button>
+    </div>
+  </main>
+
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

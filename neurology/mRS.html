@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>mRS（改訂Rankin Scale）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="mrs.js" defer></script>
+</head>
+
+<body data-subtitle="mRS（改訂Rankin Scale）">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="neurology.index.html" class="back-link">神経スコア一覧に戻る</a>
+    <div class="section-title">mRS（改訂Rankin Scale）</div>
+
+    <div class="score-card-container">
+      <p class="score-description">
+        脳卒中後の日常生活動作（ADL）の自立度と予後を評価するスケールです。
+        もっとも適切な1つを選択してください。
+      </p>
+
+      <div class="field-wrapper">
+        <label>スコアを選択</label>
+        <div>
+          <label>
+            <input type="radio" name="mrs" value="0" />
+            0：症状なし（まったく障害なし）
+          </label><br />
+          <label>
+            <input type="radio" name="mrs" value="1" />
+            1：症状はあるが、日常生活に支障なし（従来の活動はすべて可能）
+          </label><br />
+          <label>
+            <input type="radio" name="mrs" value="2" />
+            2：軽度の障害（若干の制限はあるが、身の回りは自立）
+          </label><br />
+          <label>
+            <input type="radio" name="mrs" value="3" />
+            3：中等度の障害（歩行や身の回りに一部介助が必要）
+          </label><br />
+          <label>
+            <input type="radio" name="mrs" value="4" />
+            4：中等度〜重度の障害（歩行・身の回りに相当の介助が必要）
+          </label><br />
+          <label>
+            <input type="radio" name="mrs" value="5" />
+            5：重度の障害（常時の介護を要し、寝たきりに近い）
+          </label><br />
+          <label>
+            <input type="radio" name="mrs" value="6" />
+            6：死亡
+          </label>
+        </div>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="calc-button" id="mrs-calc-btn">mRSを決定</button>
+
+      <div id="mrs-result" class="score-result"></div>
+      <div id="mrs-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

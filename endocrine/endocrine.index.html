@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>内分泌・代謝 | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+   <link rel="manifest" href="../manifest.webmanifest" />
+   <meta name="theme-color" content="#ffffff" />
+　<link rel="apple-touch-icon" href="../icons/icon-192.png" />
+  <script src="../js/include.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script> <!-- ★ -->
+  <script src="../js/sortable-init.js" defer></script> 
+　<script src="../js/pwa-register.js" defer></script>
+</head>
+
+<body data-subtitle="内分泌・代謝スコア一覧">
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a class="back-link" href="../index.html">← 診療科一覧に戻る</a>
+
+    <div class="section-title">内分泌・代謝スコア</div>
+
+    <div class="score-list" data-sortable-id="score-endocrine">
+      <!-- Burch–Wartofsky Point Scale -->
+      <a class="score-card" data-id="score-thyroid-crisis" href="thyroid_storm.html">
+        <div class="score-name">Burch–Wartofsky</div>
+        <div class="score-desc">甲状腺クリーシス評価スコア</div>
+      </a>
+
+      <!-- DKA / HHS 重症度 -->
+      <a class="score-card" data-id="score-dka-hhs" href="dka_hhs.html">
+        <div class="score-name">DKA / HHS Severity</div>
+        <div class="score-desc">DKA 重症度と HHS の判定</div>
+      </a>
+
+      <!-- 副腎不全シンプル評価 -->
+      <a class="score-card" data-id="score-adrenal-insuff" href="adrenal_insuff.html">
+        <div class="score-name">副腎不全評価（簡易）</div>
+        <div class="score-desc">電解質・血圧・リスク因子による簡易評価</div>
+      </a>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

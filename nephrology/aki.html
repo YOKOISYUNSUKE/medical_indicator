@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>急性腎障害 (AKI) スコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通JS（ヘッダー/フッター include） -->
+  <script src="../js/include.js" defer></script>
+
+
+  <!-- 共通JS（スコア用ユーティリティ） -->
+  <script src="../js/score-utils.js" defer></script>
+
+  <!-- AKI専用JS（HTMLと同じフォルダ） -->
+  <script src="aki.js" defer></script>
+
+</head>
+<body data-subtitle="AKI (急性腎障害) スコア">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="nephrology.index.html" class="back-link">← 腎疾患スコア一覧に戻る</a>
+
+    <div class="section-title" style="margin-top: 12px;">
+      急性腎障害 (AKI) - KDIGO ステージ簡易計算
+    </div>
+
+    <div class="score-card-container">
+      <section class="score-card">
+        <div class="score-name">血清クレアチニンベースの AKI ステージ</div>
+        <div class="score-desc">
+          KDIGO 基準に基づき、ベースラインCrと現在のCr、RRT有無、および尿量からステージを簡易判定します。
+        </div>
+
+        <!-- ベースラインCr -->
+        <div class="field-wrapper">
+          <label for="aki-baseline-cr">ベースラインCr (mg/dL)</label>
+          <input
+            id="aki-baseline-cr"
+            type="number"
+            step="0.01"
+            inputmode="decimal"
+            placeholder="例: 0.9"
+          />
+        </div>
+
+        <!-- 現在のCr -->
+        <div class="field-wrapper">
+          <label for="aki-current-cr">現在のCr (mg/dL)</label>
+          <input
+            id="aki-current-cr"
+            type="number"
+            step="0.01"
+            inputmode="decimal"
+            placeholder="例: 2.1"
+          />
+        </div>
+
+        <!-- RRT有無 -->
+        <div class="field-wrapper">
+          <label>
+            <input type="checkbox" id="aki-rrt" />
+            すでに腎代替療法 (RRT) を開始している
+          </label>
+        </div>
+
+        <hr style="margin: 8px 0;" />
+
+        <!-- 尿量ベース（任意入力） -->
+        <div class="score-desc" style="margin-bottom: 6px;">
+          尿量からの判定も行う場合は、以下 3 項目すべてを入力してください（任意）。
+        </div>
+
+        <div class="field-wrapper">
+          <label for="aki-weight-kg">体重 (kg)</label>
+          <input
+            id="aki-weight-kg"
+            type="number"
+            step="0.1"
+            inputmode="decimal"
+            placeholder="例: 60"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="aki-urine-volume">経過中の尿量合計 (mL)</label>
+          <input
+            id="aki-urine-volume"
+            type="number"
+            step="1"
+            inputmode="decimal"
+            placeholder="例: 300"
+          />
+        </div>
+
+        <div class="field-wrapper">
+          <label for="aki-urine-hours">観察時間 (時間)</label>
+          <input
+            id="aki-urine-hours"
+            type="number"
+            step="1"
+            inputmode="decimal"
+            placeholder="例: 6"
+          />
+        </div>
+
+        <!-- 計算ボタン -->
+        <button id="calc-aki-btn" class="calc-button">
+          スコア計算
+        </button>
+
+        <!-- 結果表示 -->
+        <div id="aki-stage-result" class="score-result"></div>
+        <div id="aki-stage-interpret" class="score-interpret"></div>
+        <div id="aki-stage-detail" class="score-interpret"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>NIHSSスコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="nihss.js" defer></script>
+</head>
+
+<body data-subtitle="NIHSSスコア">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="neurology.index.html" class="back-link">神経スコア一覧に戻る</a>
+    <div class="section-title">NIHSS（National Institutes of Health Stroke Scale）</div>
+
+    <div class="score-card-container">
+      <p class="score-description">
+        急性期脳梗塞などの神経学的重症度を評価するスケールです（0〜42点）。
+        各項目でもっとも適切な選択肢を選び、合計点を算出します。
+      </p>
+
+      <!-- ▼ 1a. 意識レベル（全体の印象） -->
+      <div class="field-wrapper">
+        <label for="nihss-1a">1a 意識レベル</label>
+        <select id="nihss-1a">
+          <option value="">選択してください</option>
+          <option value="0">0：清明</option>
+          <option value="1">1：軽度低下（呼びかけで覚醒）</option>
+          <option value="2">2：高度低下（強い刺激で一時覚醒）</option>
+          <option value="3">3：昏睡（反応なし）</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 1b. 意識レベル：質問 -->
+      <div class="field-wrapper">
+        <label for="nihss-1b">1b 質問（年齢・月など）</label>
+        <select id="nihss-1b">
+          <option value="">選択してください</option>
+          <option value="0">0：2問とも正答</option>
+          <option value="1">1：1問のみ正答</option>
+          <option value="2">2：両方不正解 / 応答なし</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 1c. 意識レベル：指示 -->
+      <div class="field-wrapper">
+        <label for="nihss-1c">1c 指示（目を閉じる・手足を動かす）</label>
+        <select id="nihss-1c">
+          <option value="">選択してください</option>
+          <option value="0">0：2つの指示を正しく行う</option>
+          <option value="1">1：1つだけ行う</option>
+          <option value="2">2：どちらも行えない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 2. 共同偏視（眼球運動） -->
+      <div class="field-wrapper">
+        <label for="nihss-2">2 眼球運動</label>
+        <select id="nihss-2">
+          <option value="">選択してください</option>
+          <option value="0">0：正常</option>
+          <option value="1">1：部分的障害（水平性のみなど）</option>
+          <option value="2">2：著明な共同偏視 / 全く動かない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 3. 視野 -->
+      <div class="field-wrapper">
+        <label for="nihss-3">3 視野</label>
+        <select id="nihss-3">
+          <option value="">選択してください</option>
+          <option value="0">0：正常</option>
+          <option value="1">1：部分的欠損（象限半盲など）</option>
+          <option value="2">2：完全半盲</option>
+          <option value="3">3：両側性高度障害 / 皮質盲</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 4. 顔面麻痺 -->
+      <div class="field-wrapper">
+        <label for="nihss-4">4 顔面麻痺</label>
+        <select id="nihss-4">
+          <option value="">選択してください</option>
+          <option value="0">0：対称</option>
+          <option value="1">1：軽度〜中等度（口角の軽度下垂など）</option>
+          <option value="2">2：重度（片側完全麻痺）</option>
+          <option value="3">3：両側高度麻痺</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 5a. 上肢運動 左 -->
+      <div class="field-wrapper">
+        <label for="nihss-5a">5a 上肢運動（左）</label>
+        <select id="nihss-5a">
+          <option value="">選択してください</option>
+          <option value="0">0：10秒以上保持、ドリフトなし</option>
+          <option value="1">1：10秒以内にドリフトするがベッドは離れない</option>
+          <option value="2">2：ベッドから離れるが完全に落下</option>
+          <option value="3">3：軽い動きのみ認める</option>
+          <option value="4">4：全く動かない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 5b. 上肢運動 右 -->
+      <div class="field-wrapper">
+        <label for="nihss-5b">5b 上肢運動（右）</label>
+        <select id="nihss-5b">
+          <option value="">選択してください</option>
+          <option value="0">0：10秒以上保持、ドリフトなし</option>
+          <option value="1">1：10秒以内にドリフトするがベッドは離れない</option>
+          <option value="2">2：ベッドから離れるが完全に落下</option>
+          <option value="3">3：軽い動きのみ認める</option>
+          <option value="4">4：全く動かない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 6a. 下肢運動 左 -->
+      <div class="field-wrapper">
+        <label for="nihss-6a">6a 下肢運動（左）</label>
+        <select id="nihss-6a">
+          <option value="">選択してください</option>
+          <option value="0">0：5秒以上保持、ドリフトなし</option>
+          <option value="1">1：5秒以内にドリフトするがベッドは離れない</option>
+          <option value="2">2：ベッドから離れるが完全に落下</option>
+          <option value="3">3：軽い動きのみ認める</option>
+          <option value="4">4：全く動かない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 6b. 下肢運動 右 -->
+      <div class="field-wrapper">
+        <label for="nihss-6b">6b 下肢運動（右）</label>
+        <select id="nihss-6b">
+          <option value="">選択してください</option>
+          <option value="0">0：5秒以上保持、ドリフトなし</option>
+          <option value="1">1：5秒以内にドリフトするがベッドは離れない</option>
+          <option value="2">2：ベッドから離れるが完全に落下</option>
+          <option value="3">3：軽い動きのみ認める</option>
+          <option value="4">4：全く動かない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 7. 失調 -->
+      <div class="field-wrapper">
+        <label for="nihss-7">7 失調</label>
+        <select id="nihss-7">
+          <option value="">選択してください</option>
+          <option value="0">0：なし</option>
+          <option value="1">1：一側の四肢に認める</option>
+          <option value="2">2：両側の四肢に認める</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 8. 感覚 -->
+      <div class="field-wrapper">
+        <label for="nihss-8">8 感覚</label>
+        <select id="nihss-8">
+          <option value="">選択してください</option>
+          <option value="0">0：正常</option>
+          <option value="1">1：軽度〜中等度低下</option>
+          <option value="2">2：高度低下 / 無感覚</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 9. 失語 -->
+      <div class="field-wrapper">
+        <label for="nihss-9">9 言語（失語）</label>
+        <select id="nihss-9">
+          <option value="">選択してください</option>
+          <option value="0">0：正常</option>
+          <option value="1">1：軽度〜中等度失語</option>
+          <option value="2">2：重度失語（ごく一部の理解・発語のみ）</option>
+          <option value="3">3：全失語 / 発語不能</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 10. 構音障害 -->
+      <div class="field-wrapper">
+        <label for="nihss-10">10 構音障害</label>
+        <select id="nihss-10">
+          <option value="">選択してください</option>
+          <option value="0">0：正常</option>
+          <option value="1">1：軽度〜中等度の構音障害</option>
+          <option value="2">2：発語不能 / 他者が理解できない</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- ▼ 11. 消去現象・無視 -->
+      <div class="field-wrapper">
+        <label for="nihss-11">11 消去現象・半側無視</label>
+        <select id="nihss-11">
+          <option value="">選択してください</option>
+          <option value="0">0：なし</option>
+          <option value="1">1：軽度（触覚・視覚刺激で一部無視）</option>
+          <option value="2">2：高度（明らかな半側無視）</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="calc-button" id="nihss-calc-btn">NIHSSを計算</button>
+
+      <div id="nihss-result" class="score-result"></div>
+      <div id="nihss-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

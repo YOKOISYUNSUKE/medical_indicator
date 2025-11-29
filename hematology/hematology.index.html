@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>血液スコア一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <!-- ▼ ここから PWA 用に追加 ▼ -->
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- iOS ホーム画面アイコン -->
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+  <!-- ▲ ここまで PWA 用に追加 ▲ -->
+
+  <script src="../js/include.js" defer></script>
+  <!-- 並び替え用 -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+  <script src="../js/sortable-init.js" defer></script>
+  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
+  <script src="../js/pwa-register.js" defer></script>
+  <!-- ▲ ここまで追加 ▲ -->
+</head>
+<body data-subtitle="血液スコア一覧">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a href="../index.html" class="back-link">診療科一覧に戻る</a>
+
+    <div class="section-title">スコア一覧</div>
+
+    <!-- 並び替え対象コンテナ -->
+    <div class="score-list" data-sortable-id="hematology-scores">
+      <!-- IPSS -->
+      <button
+        class="score-card"
+        data-id="score-ipss"
+        onclick="location.href='ipss.html'">
+        <div class="score-name">IPSS</div>
+        <div class="score-desc">骨髄異形成症候群(MDS)</div>
+      </button>
+
+      <!-- Sokal -->
+      <button
+        class="score-card"
+        data-id="score-sokal"
+        onclick="location.href='sokal.html'">
+        <div class="score-name">Sokalスコア</div>
+        <div class="score-desc">慢性骨髄性白血病(CML)</div>
+      </button>
+    </div>
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

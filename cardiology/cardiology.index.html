@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>循環器スコア一覧</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- ▼ ここから PWA 用に追加 ▼ -->
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- iOS ホーム画面アイコン -->
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+  <!-- ▲ ここまで PWA 用に追加 ▲ -->
+
+  <script src="../js/include.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+<script src="../js/sortable-init.js" defer></script>
+  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
+  <script src="../js/pwa-register.js" defer></script>
+  <!-- ▲ ここまで追加 ▲ -->
+</head>
+<body data-subtitle="循環器スコア一覧">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+<main>
+  <a href="../index.html" class="back-link">診療科一覧に戻る</a>
+
+  <div class="section-title">スコアを選択</div>
+
+<div class="score-list" data-sortable-id="cardiology-scores">
+  <button
+    class="score-card"
+    data-id="score-grace"
+    onclick="location.href='grace.html'">
+    <div class="score-name">GRACEスコア</div>
+    <div class="score-desc">急性冠症候群(ACS)入院中死亡リスク評価</div>
+  </button>
+
+  <button
+    class="score-card"
+    data-id="score-cha2ds2-vasc"
+    onclick="location.href='cha2ds2-vasc.html'">
+    <div class="score-name">CHA₂DS₂-VASc</div>
+    <div class="score-desc">心房細動患者の脳卒中リスク評価</div>
+  </button>
+
+  <button
+    class="score-card"
+    data-id="score-has-bled"
+    onclick="location.href='has-bled.html'">
+    <div class="score-name">HAS-BLED</div>
+    <div class="score-desc">抗凝固療法中の出血リスク評価</div>
+  </button>
+  <!-- 追加：HEART Score -->
+  <button
+    class="score-card"
+    data-id="score-heart"
+    onclick="location.href='heart.html'">
+    <div class="score-name">HEARTスコア</div>
+    <div class="score-desc">胸痛患者の短期心血管イベントリスク評価</div>
+  </button>
+
+
+  <!-- 追加：SYNTAX（簡易版） -->
+  <button
+    class="score-card"
+    data-id="score-syntax"
+    onclick="location.href='syntax.html'">
+    <div class="score-name">SYNTAXスコア（簡易）</div>
+    <div class="score-desc">冠動脈造影で算出済みSYNTAXスコアのリスク分類</div>
+  </button>
+
+  <!-- 追加：RCRI -->
+  <button
+    class="score-card"
+    data-id="score-rcri"
+    onclick="location.href='rcri.html'">
+    <div class="score-name">RCRI</div>
+    <div class="score-desc">非心臓手術の心血管合併症リスク評価</div>
+  </button>
+
+</div>
+</main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

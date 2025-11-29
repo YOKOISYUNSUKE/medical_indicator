@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>GRACEスコア（入院中・6ヶ月死亡）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS（分割後） -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+
+  <!-- このスコア専用の計算JSがあればここに -->
+   <script src="grace.js" defer></script>
+</head>
+
+<!-- data-subtitle に、このページ固有のサブタイトルを書く -->
+<body data-subtitle="	GRACEスコア計算">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+<main class="wrapper">
+  <div class="score-card-container">
+    <a href="cardiology.index.html" class="back-link">循環器スコア一覧に戻る</a>
+
+    <div class="section-title">入力項目</div>
+
+
+    <div class="score-card">
+      <div class="score-name">患者情報</div>
+
+      <div class="field-wrapper">
+        <label for="grace-age">年齢（歳）</label>
+        <input
+          type="number"
+          id="grace-age"
+          min="18"
+          max="110"
+        />
+      </div>
+
+      <div class="field-wrapper">
+        <label for="grace-hr">心拍数（回/分）</label>
+        <input
+          type="number"
+          id="grace-hr"
+          min="20"
+          max="250"
+        />
+      </div>
+
+      <div class="field-wrapper">
+        <label for="grace-sbp">収縮期血圧（mmHg）</label>
+        <input
+          type="number"
+          id="grace-sbp"
+          min="50"
+          max="260"
+        />
+      </div>
+
+      <div class="field-wrapper">
+        <label for="grace-cre">初回血清Cr（mg/dL）</label>
+        <input
+          type="number"
+          id="grace-cre"
+          min="0"
+          max="10"
+          step="0.01"
+        />
+      </div>
+
+      <div class="field-wrapper">
+        <label for="grace-killip">Killip分類</label>
+        <select id="grace-killip">
+          <option value="1">I</option>
+          <option value="2">II</option>
+          <option value="3">III</option>
+          <option value="4">IV</option>
+        </select>
+      </div>
+
+      <div class="boolean-section-title">入院時所見</div>
+      <div class="field-boolean-group field-boolean-group--row">
+        <label for="grace-arrest">
+          <input type="checkbox" id="grace-arrest" />
+          入院時心停止あり
+        </label>
+
+        <label for="grace-st">
+          <input type="checkbox" id="grace-st" />
+          ST変化あり（偏位）
+        </label>
+
+        <label for="grace-marker">
+          <input type="checkbox" id="grace-marker" />
+          心筋逸脱酵素／トロポニン上昇あり
+        </label>
+      </div>
+
+
+      <!-- ▼ 計算ボタン 2 種類 ▼ -->
+      <button
+        type="button"
+        class="calc-button"
+        onclick="calculateGrace()"
+      >
+        入院中死亡リスク（GRACE）を計算
+      </button>
+
+      <button
+        type="button"
+        class="calc-button"
+        onclick="calculateGrace6m()"
+        style="margin-top:8px;"
+      >
+        6ヶ月死亡リスク（GRACE）を計算
+      </button>
+
+      <!-- ▼ 結果表示欄 ▼ -->
+      <div id="grace-result" class="score-result"></div>
+      <div id="grace-6m-result" class="score-result"></div>
+
+    </div>
+
+    <p style="margin-top:8px; font-size:0.8rem; color:#666;">
+      ※ GRACE 1.0 のポイントテーブルを用いた簡易版です。<br>
+      正確なリスク推定には原著論文・公式ノモグラムやオンライン電卓を併用してください。
+    </p>
+  </div>
+</main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ABCD2スコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="abcd2.js" defer></script>
+</head>
+
+<body data-subtitle="ABCD2スコア">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="neurology.index.html" class="back-link">神経スコア一覧に戻る</a>
+    <div class="section-title">ABCD2スコア（TIA後早期脳卒中リスク）</div>
+
+    <div class="score-card-container">
+      <p class="score-description">
+        一過性脳虚血発作（TIA）後 2 日以内の脳卒中リスクを評価するスコアです（0〜7点）。
+        Age, Blood pressure, Clinical features, Duration, Diabetes の5項目から構成されます。
+      </p>
+
+      <!-- Age -->
+      <div class="field-wrapper">
+        <label for="abcd2-age">年齢</label>
+        <input
+          id="abcd2-age"
+          type="number"
+          inputmode="decimal"
+          step="1"
+          placeholder="例: 72"
+        />
+        <div class="field-error"></div>
+      </div>
+
+      <!-- Blood pressure -->
+      <div class="field-wrapper">
+        <label>来院時血圧</label>
+        <div>
+          <input
+            id="abcd2-sbp"
+            type="number"
+            inputmode="decimal"
+            step="1"
+            placeholder="収縮期 (mmHg)"
+          />
+          <br />
+          <input
+            id="abcd2-dbp"
+            type="number"
+            inputmode="decimal"
+            step="1"
+            placeholder="拡張期 (mmHg)"
+          />
+        </div>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- Clinical features -->
+      <div class="field-wrapper">
+        <label for="abcd2-clinical">臨床症状</label>
+        <select id="abcd2-clinical">
+          <option value="">もっとも近いものを選択</option>
+          <option value="2">片麻痺あり（言語症状の有無を問わず）</option>
+          <option value="1">片麻痺なし・言語障害のみ</option>
+          <option value="0">その他（運動症状・言語障害なし）</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- Duration -->
+      <div class="field-wrapper">
+        <label for="abcd2-duration">症状持続時間（分）</label>
+        <input
+          id="abcd2-duration"
+          type="number"
+          inputmode="decimal"
+          step="1"
+          placeholder="例: 45"
+        />
+        <div class="field-error"></div>
+      </div>
+
+      <!-- Diabetes -->
+      <div class="field-wrapper">
+        <label>
+          <input type="checkbox" id="abcd2-diabetes" />
+          糖尿病あり
+        </label>
+      </div>
+
+      <button class="calc-button" id="abcd2-calc-btn">ABCD2スコアを計算</button>
+
+      <div id="abcd2-result" class="score-result"></div>
+      <div id="abcd2-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

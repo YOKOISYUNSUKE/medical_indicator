@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>強直性脊椎炎活動性 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- PWA 関連 -->
+    <link rel="manifest" href="../manifest.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+    <!-- 共通 JS -->
+    <script src="../js/include.js" defer></script>
+    <script src="../js/score-utils.js" defer></script>
+    <script src="../js/pwa-register.js" defer></script>
+
+    <!-- ページ固有 JS -->
+    <script src="as_activity.js" defer></script>
+  </head>
+  <body data-subtitle="強直性脊椎炎の疾患活動性（BASDAI / ASDAS）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main class="wrapper">
+      <a href="rheumatology.index.html" class="back-link">← 膠原病スコア一覧に戻る</a>
+
+      <div class="score-card-container">
+        <section class="score-card">
+          <div class="score-name">強直性脊椎炎活動性</div>
+          <div class="score-desc">
+            BASDAI と ASDAS-CRP / ASDAS-ESR を算出します。<br />
+            0〜10 の NRS は「0＝なし」「10＝最重度」で評価してください。
+          </div>
+
+          <!-- BASDAI 質問項目 -->
+          <div class="section-title" style="margin-top: 8px;">BASDAI 項目（0〜10）</div>
+
+          <div class="field-wrapper">
+            <label for="basdai-q1">Q1: 全身倦怠感・疲労感</label>
+            <input id="basdai-q1" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basdai-q2">Q2: 頚部〜背部〜腰部の痛み</label>
+            <input id="basdai-q2" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basdai-q3">Q3: 末梢関節の痛み・腫脹</label>
+            <input id="basdai-q3" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basdai-q4">Q4: 付着部炎（アキレス腱など）の痛み</label>
+            <input id="basdai-q4" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basdai-q5">Q5: 朝のこわばりの持続時間</label>
+            <input id="basdai-q5" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basdai-q6">Q6: 朝のこわばりの強さ</label>
+            <input id="basdai-q6" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <!-- ASDAS 用 患者全般評価 -->
+          <div class="section-title" style="margin-top: 8px;">ASDAS 追加項目</div>
+
+          <div class="field-wrapper">
+            <label for="asdas-patient-global">
+              患者全般評価（疾患活動性の自己評価, 0〜10）
+            </label>
+            <input id="asdas-patient-global" type="number" inputmode="decimal" step="0.5" min="0" max="10" />
+          </div>
+
+          <!-- 炎症マーカー -->
+          <div class="section-title" style="margin-top: 8px;">炎症マーカー</div>
+
+          <div class="field-wrapper">
+            <label for="asdas-crp">
+              CRP（mg/L）<span style="font-size:0.8rem;">※ 未入力可（ASDAS-CRP のみ未算出）</span>
+            </label>
+            <input
+              id="asdas-crp"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="50"
+            />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="asdas-esr">
+              ESR（mm/h）<span style="font-size:0.8rem;">※ 未入力可（ASDAS-ESR のみ未算出）</span>
+            </label>
+            <input
+              id="asdas-esr"
+              type="number"
+              inputmode="decimal"
+              step="1"
+              min="0"
+              max="150"
+            />
+          </div>
+          <!-- ▼ ここから BASMI 追加（前後5行つき） -->
+          <div class="section-title" style="margin-top: 16px;">BASMI（Bath AS Metrology Index）</div>
+          <p style="font-size:0.85rem; margin:4px 0 8px;">
+            頚椎回旋・Tragus–Wall 距離・腰椎側屈・修正 Schober・内果間距離の 5 つの測定から 0〜10 の指標を算出します。<br />
+            測定は実地の手技に依存するため、実際の評価はリハ・理学療法スタッフ等と連携してください。
+          </p>
+
+          <div class="field-wrapper">
+            <label for="basmi-cervical-rotation-right">頚椎回旋 右（度）</label>
+            <input
+              id="basmi-cervical-rotation-right"
+              type="number"
+              inputmode="decimal"
+              step="0.5"
+              min="0"
+              max="120"
+            />
+          </div>
+          <div class="field-wrapper">
+            <label for="basmi-cervical-rotation-left">頚椎回旋 左（度）</label>
+            <input
+              id="basmi-cervical-rotation-left"
+              type="number"
+              inputmode="decimal"
+              step="0.5"
+              min="0"
+              max="120"
+            />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basmi-tragus-wall-right">Tragus–Wall 距離 右（cm）</label>
+            <input
+              id="basmi-tragus-wall-right"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="50"
+            />
+          </div>
+          <div class="field-wrapper">
+            <label for="basmi-tragus-wall-left">Tragus–Wall 距離 左（cm）</label>
+            <input
+              id="basmi-tragus-wall-left"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="50"
+            />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basmi-lumbar-sideflex-right">腰椎側屈 右（cm）</label>
+            <input
+              id="basmi-lumbar-sideflex-right"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="30"
+            />
+          </div>
+          <div class="field-wrapper">
+            <label for="basmi-lumbar-sideflex-left">腰椎側屈 左（cm）</label>
+            <input
+              id="basmi-lumbar-sideflex-left"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="30"
+            />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basmi-mod-schober">
+              修正 Schober（屈曲時の増加距離, cm）
+            </label>
+            <input
+              id="basmi-mod-schober"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="10"
+            />
+          </div>
+
+          <div class="field-wrapper">
+            <label for="basmi-intermalleolar">
+              内果間距離（cm）
+            </label>
+            <input
+              id="basmi-intermalleolar"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0"
+              max="150"
+            />
+          </div>
+
+
+          <button id="calc-as-activity" class="calc-button">
+            スコアを計算する
+          </button>
+
+          <div id="as-activity-result" class="score-result"></div>
+          <div id="as-activity-interpret" class="score-interpret"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

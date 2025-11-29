@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>HINTS検査</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="hints.js" defer></script>
+</head>
+
+<body data-subtitle="HINTS検査">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="neurology.index.html" class="back-link">神経スコア一覧に戻る</a>
+    <div class="section-title">HINTS（めまいの中枢/末梢鑑別）</div>
+
+    <div class="score-card-container">
+      <p class="score-description">
+        急性持続性めまい（acute vestibular syndrome）に対して、Head Impulse、
+        Nystagmus, Test of Skew の 3 つの所見から中枢/末梢性を推定するためのツールです。
+        ベッドサイド診察の結果を選択してください。
+      </p>
+
+      <!-- Head Impulse -->
+      <div class="field-wrapper">
+        <label for="hints-hi">Head Impulse Test</label>
+        <select id="hints-hi">
+          <option value="">結果を選択してください</option>
+          <option value="peripheral">
+            補正サッカードあり（異常 Head Impulse：末梢性を示唆）
+          </option>
+          <option value="central">
+            補正サッカードなし（正常 Head Impulse：中枢性を示唆）
+          </option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- Nystagmus -->
+      <div class="field-wrapper">
+        <label for="hints-nys">眼振</label>
+        <select id="hints-nys">
+          <option value="">結果を選択してください</option>
+          <option value="peripheral">
+            一方向性水平眼振のみ（末梢性を示唆）
+          </option>
+          <option value="central">
+            方向交代性 / 垂直性 / 純回旋性眼振あり（中枢性を示唆）
+          </option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <!-- Test of Skew -->
+      <div class="field-wrapper">
+        <label for="hints-skew">Test of Skew</label>
+        <select id="hints-skew">
+          <option value="">結果を選択してください</option>
+          <option value="peripheral">
+            偏倚なし（カバーテストで再配列なし）
+          </option>
+          <option value="central">
+            垂直方向の再配列あり（skew deviation：中枢性を示唆）
+          </option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="calc-button" id="hints-calc-btn">HINTS結果を判定</button>
+
+      <div id="hints-result" class="score-result"></div>
+      <div id="hints-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SSc分類基準 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- 共通ヘッダー/フッター読込 -->
+    <script src="../js/include.js" defer></script>
+    <!-- 共通スコアユーティリティ -->
+    <script src="../js/score-utils.js" defer></script>
+    <!-- このスコア専用の計算JS -->
+    <script src="ssc_classification.js" defer></script>
+  </head>
+
+  <body data-subtitle="SSc分類基準（2013 ACR/EULAR）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main>
+      <div class="wrapper">
+        <div class="score-card-container">
+          <a href="rheumatology.index.html" class="back-link">
+            ← 膠原病スコア一覧に戻る
+          </a>
+
+          <div class="score-title">SSc分類基準（2013 ACR/EULAR）</div>
+          <div class="score-subtitle">
+            2013 ACR/EULAR 分類基準に基づき、スコア合計 9 点以上で
+            「SSc と分類」されます。<br />
+            皮膚硬化が両手で MCP 関節を越える場合は、それだけで十分条件となります。
+          </div>
+
+          <!-- 入力フォーム -->
+          <form id="ssc_classification_form" onsubmit="return false;">
+            <!-- 十分条件 -->
+            <div class="section-title" style="margin-top: 12px;">
+              十分条件（これのみで SSc と分類）
+            </div>
+            <div class="field-wrapper field-boolean-group">
+              <div class="boolean-section-title">
+                十分条件
+              </div>
+              <label>
+                <input
+                  type="checkbox"
+                  id="skin_proximal_mcp"
+                />
+                両手の指の皮膚硬化が中手指節関節（MCP）より近位に及ぶ
+              </label>
+            </div>
+
+            <!-- ポイント加算項目 -->
+            <div class="section-title" style="margin-top: 16px;">
+              ポイント加算項目（十分条件がない場合はこちらで加算）
+            </div>
+
+            <div class="form-grid">
+              <!-- 指の皮膚硬化 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">
+                  指の皮膚硬化（高い方のみカウント）
+                </div>
+                <label>
+                  <input
+                    type="radio"
+                    name="skin_fingers"
+                    value="0"
+                    checked
+                  />
+                  なし（0点）
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="skin_fingers"
+                    value="2"
+                  />
+                  腫脹指（puffy fingers, 2点）
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="skin_fingers"
+                    value="4"
+                  />
+                  強皮指（sclerodactyly, 4点）
+                </label>
+              </div>
+
+              <!-- 指先病変 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">
+                  指先病変（高い方のみカウント）
+                </div>
+                <label>
+                  <input
+                    type="radio"
+                    name="fingertip_lesions"
+                    value="0"
+                    checked
+                  />
+                  なし（0点）
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="fingertip_lesions"
+                    value="2"
+                  />
+                  デジタル潰瘍（digital tip ulcers, 2点）
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="fingertip_lesions"
+                    value="3"
+                  />
+                  指尖部陥凹瘢痕（pitting scars, 3点）
+                </label>
+              </div>
+
+              <!-- 毛細血管拡張・毛細血管異常 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">
+                  毛細血管異常
+                </div>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="telangiectasia"
+                  />
+                  毛細血管拡張（telangiectasia, 2点）
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="nailfold_abnormal"
+                  />
+                  爪郭毛細血管異常（nailfold capillaroscopy 異常, 2点）
+                </label>
+              </div>
+
+              <!-- 肺高血圧 / 間質性肺疾患 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">
+                  肺高血圧 / 間質性肺疾患（いずれかあれば 2点）
+                </div>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="pah"
+                  />
+                  肺動脈性肺高血圧（PAH）
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="ild"
+                  />
+                  間質性肺疾患（ILD）
+                </label>
+              </div>
+
+              <!-- レイノー現象 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">
+                  レイノー現象
+                </div>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="raynaud"
+                  />
+                  レイノー現象（3点）
+                </label>
+              </div>
+
+              <!-- SSc関連自己抗体 -->
+              <div class="field-wrapper field-boolean-group">
+                <div class="boolean-section-title">
+                  SSc関連自己抗体
+                </div>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="ssc_autoantibodies"
+                  />
+                  SSc 関連自己抗体あり（抗セントロメア / 抗 Scl-70 /
+                  抗 RNA ポリメラーゼ III など, 3点）
+                </label>
+              </div>
+            </div>
+
+            <div class="small-note">
+              ※ 2013 ACR/EULAR 分類基準に基づくポイント制です。<br />
+              ※ 十分条件（MCP 近位の皮膚硬化）が陽性の場合は、その時点で 9 点とみなし SSc と分類します。
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="calculateSScClassification()"
+              >
+                計算
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="clearSScClassification()"
+              >
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <!-- 結果表示 -->
+          <div id="ssc_classification_result" class="result-area">
+            <div class="result-card">
+              <div class="result-title">SSc分類スコア</div>
+              <div class="result-value" id="ssc_score_value">--</div>
+              <div class="result-category" id="ssc_score_category"></div>
+              <div class="result-message" id="ssc_score_message">
+                2013 ACR/EULAR 分類基準では、合計スコアが 9 点以上で
+                SSc と分類されます。
+              </div>
+            </div>
+          </div>
+
+          <div class="result-warning">
+            ※ 本ツールは分類基準の理解・教育を目的とした参考値です。<br />
+            ※ 最終的な診断・治療方針は、必ず臨床医の総合判断に基づいて決定してください。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      © 医療電算機 v0.1
+    </footer>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

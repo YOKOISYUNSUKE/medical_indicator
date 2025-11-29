@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>CHA₂DS₂-VAScスコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS（分割後） -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+
+  <!-- このスコア専用の計算JS -->
+  <script src="cha2ds2-vasc.js" defer></script>
+</head>
+
+<!-- data-subtitle に、このページ固有のサブタイトルを書く -->
+<body data-subtitle="心房細動患者の脳卒中リスク">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+<main class="wrapper">
+  <div class="score-card-container">
+    <a href="cardiology.index.html" class="back-link">循環器スコア一覧に戻る</a>
+
+    <div class="section-title">入力項目</div>
+
+    <div class="score-card">
+      <div class="score-name">患者情報</div>
+
+      <div class="field-wrapper">
+        <label for="cha-age">年齢（歳）</label>
+        <input
+          type="number"
+          id="cha-age"
+          min="18"
+          max="110"
+        />
+      </div>
+
+      <div class="field-wrapper">
+        <label for="cha-sex">性別</label>
+        <select id="cha-sex">
+          <option value="male">男性</option>
+          <option value="female">女性</option>
+        </select>
+      </div>
+
+      <div class="boolean-section-title">危険因子</div>
+      <div class="field-boolean-group">
+        <label for="cha-chf">
+          <input type="checkbox" id="cha-chf" />
+          うっ血性心不全 / 左室機能低下あり
+        </label>
+
+        <label for="cha-ht">
+          <input type="checkbox" id="cha-ht" />
+          高血圧（治療中を含む）
+        </label>
+
+        <label for="cha-dm">
+          <input type="checkbox" id="cha-dm" />
+          糖尿病
+        </label>
+
+        <label for="cha-stroke">
+          <input type="checkbox" id="cha-stroke" />
+          脳卒中 / TIA / 血栓塞栓症の既往
+        </label>
+
+        <label for="cha-vascular">
+          <input type="checkbox" id="cha-vascular" />
+          血管疾患（心筋梗塞、PAD、大動脈プラークなど）
+        </label>
+      </div>
+
+      <button
+        type="button"
+        class="calc-button"
+        onclick="calculateCHA2DS2Vasc()"
+      >
+        CHA₂DS₂-VAScを計算
+      </button>
+
+      <div
+        id="cha-result"
+        class="score-result"
+      ></div>
+    </div>
+
+
+    <p style="margin-top:8px; font-size:0.8rem; color:#666;">
+      ※ スコア 0（男性）/1（女性）: 低リスク、スコア上昇に伴い脳卒中リスクが高まります。  
+      実際の抗凝固導入判断は最新ガイドラインに従ってください。
+    </p>
+  </div>
+</main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

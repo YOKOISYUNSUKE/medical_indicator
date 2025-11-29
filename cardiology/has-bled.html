@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>HAS-BLEDスコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS（分割後） -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+  <!-- このスコア専用の計算JSがあればここに -->
+   <script src="has-bled.js" defer></script>
+</head>
+
+<!-- data-subtitle に、このページ固有のサブタイトルを書く -->
+<body data-subtitle="HAS BLED スコア計算">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+<main class="wrapper">
+  <div class="score-card-container">
+    <a href="cardiology.index.html" class="back-link">循環器スコア一覧に戻る</a>
+
+    <div class="section-title">入力項目</div>
+
+
+    <div class="score-card">
+      <div class="score-name">リスク因子</div>
+
+      <div class="field-boolean-group">
+        <label for="has-hypertension">
+          <input type="checkbox" id="has-hypertension" />
+          収縮期血圧 &gt; 160 mmHg の高血圧
+        </label>
+
+        <label for="has-renal">
+          <input type="checkbox" id="has-renal" />
+          腎機能障害（透析・移植・Cr&gt;2.26mg/dL 等）
+        </label>
+
+        <label for="has-liver">
+          <input type="checkbox" id="has-liver" />
+          肝機能障害（重度肝疾患・検査値著明異常 等）
+        </label>
+
+        <label for="has-stroke">
+          <input type="checkbox" id="has-stroke" />
+          脳卒中の既往
+        </label>
+
+        <label for="has-bleeding">
+          <input type="checkbox" id="has-bleeding" />
+          大出血の既往 / 出血傾向
+        </label>
+
+        <label for="has-labile">
+          <input type="checkbox" id="has-labile" />
+          INR不安定（TTR&lt;60% 等）
+        </label>
+
+        <label for="has-elderly">
+          <input type="checkbox" id="has-elderly" />
+          高齢（65歳以上）
+        </label>
+
+        <label for="has-drugs">
+          <input type="checkbox" id="has-drugs" />
+          抗血小板薬・NSAIDs 併用
+        </label>
+
+        <label for="has-alcohol">
+          <input type="checkbox" id="has-alcohol" />
+          多量飲酒（8ドリンク/週以上）
+        </label>
+      </div>
+
+      <button
+        type="button"
+        class="calc-button"
+        onclick="calculateHASBLED()"
+      >
+        HAS-BLEDを計算
+      </button>
+
+      <div
+        id="has-result"
+        class="score-result"
+      ></div>
+    </div>
+
+
+    <p style="margin-top:8px; font-size:0.8rem; color:#666;">
+      ※ 0–1: 低リスク、2: 中等度、3以上: 高リスクとされますが、  
+      「高リスク＝抗凝固禁忌」ではなく、修正可能な因子の見直しに用いられます。
+    </p>
+  </div>
+</main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

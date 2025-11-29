@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>MELDスコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="meld.js" defer></script>
+</head>
+
+<body data-subtitle="MELDスコア">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="gastroenterology.index.html" class="back-link">消化器スコア一覧に戻る</a>
+    <div class="section-title">MELDスコア（肝不全重症度）</div>
+
+    <div class="score-card-container">
+      <!-- 総ビリルビン -->
+      <div class="field-wrapper">
+        <label for="meld-tbil">総ビリルビン (mg/dL)</label>
+        <input
+          id="meld-tbil"
+          type="number"
+          step="0.1"
+          inputmode="decimal"
+          placeholder="例: 3.0"
+        />
+      </div>
+
+      <!-- クレアチニン -->
+      <div class="field-wrapper">
+        <label for="meld-cre">クレアチニン (mg/dL)</label>
+        <input
+          id="meld-cre"
+          type="number"
+          step="0.1"
+          inputmode="decimal"
+          placeholder="例: 1.2"
+        />
+      </div>
+
+      <!-- PT-INR -->
+      <div class="field-wrapper">
+        <label for="meld-inr">PT-INR</label>
+        <input
+          id="meld-inr"
+          type="number"
+          step="0.01"
+          inputmode="decimal"
+          placeholder="例: 1.8"
+        />
+      </div>
+
+      <!-- 透析の有無 -->
+      <div class="field-wrapper">
+        <label>
+          <input type="checkbox" id="meld-dialysis" />
+          最近 1 週間で 2 回以上の透析を施行
+        </label>
+      </div>
+
+      <button class="calc-button" id="meld-calc-btn">MELDスコアを計算</button>
+
+      <div id="meld-result" class="score-result"></div>
+      <div id="meld-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Child-Pughスコア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="child-pugh.js" defer></script>
+</head>
+
+<body data-subtitle="Child-Pughスコア">
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <a href="gastroenterology.index.html" class="back-link">消化器スコア一覧に戻る</a>
+    <div class="section-title">Child-Pughスコア（肝硬変重症度）</div>
+
+    <div class="score-card-container">
+      <!-- 総ビリルビン -->
+      <div class="field-wrapper">
+        <label for="cp-tbil">総ビリルビン (mg/dL)</label>
+        <input
+          id="cp-tbil"
+          type="number"
+          step="0.1"
+          inputmode="decimal"
+          placeholder="例: 2.5"
+        />
+      </div>
+
+      <!-- アルブミン -->
+      <div class="field-wrapper">
+        <label for="cp-alb">アルブミン (g/dL)</label>
+        <input
+          id="cp-alb"
+          type="number"
+          step="0.1"
+          inputmode="decimal"
+          placeholder="例: 3.0"
+        />
+      </div>
+
+      <!-- PT-INR -->
+      <div class="field-wrapper">
+        <label for="cp-inr">PT-INR</label>
+        <input
+          id="cp-inr"
+          type="number"
+          step="0.01"
+          inputmode="decimal"
+          placeholder="例: 1.8"
+        />
+      </div>
+
+      <!-- 腹水 -->
+      <div class="field-wrapper">
+        <label for="cp-ascites">腹水</label>
+        <select id="cp-ascites">
+          <option value="1">なし</option>
+          <option value="2">少量 / コントロール良好</option>
+          <option value="3">難治性 / 中等量以上</option>
+        </select>
+      </div>
+
+      <!-- 肝性脳症 -->
+      <div class="field-wrapper">
+        <label for="cp-he">肝性脳症</label>
+        <select id="cp-he">
+          <option value="1">なし</option>
+          <option value="2">Grade I–II（傾眠・見当識障害など）</option>
+          <option value="3">Grade III–IV（昏睡レベル）</option>
+        </select>
+      </div>
+
+      <button class="calc-button" id="cp-calc-btn">Child-Pughスコアを計算</button>
+
+      <div id="cp-result" class="score-result"></div>
+      <div id="cp-interpret" class="score-interpret"></div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

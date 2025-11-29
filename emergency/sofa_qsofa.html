@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>SOFA / qSOFA | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS（分割後） -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+  <!-- このスコア専用の計算JSがあればここに -->
+</head>
+
+<!-- data-subtitle に、このページ固有のサブタイトルを書く -->
+<body data-subtitle="SOFA / qSOFA スコア計算">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <div class="wrapper">
+      <div class="score-card-container">
+        <a href="emergency.index.html" class="back-link">← 救急スコア一覧に戻る</a>
+
+        <div class="score-title">SOFA / qSOFA</div>
+        <div class="score-subtitle">
+          ベッドサイドで簡便に評価する qSOFA と、臓器別に評価する SOFA を同じ画面で扱います。
+          SOFA は呼吸・凝固・肝・心血管・中枢神経・腎の 6 項目を臓器別に入力して合計スコアを算出します。
+        </div>
+
+        <!-- qSOFA 入力 -->
+        <div class="section-label">qSOFA 入力</div>
+        <form id="qsofa_form" onsubmit="return false;">
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="q_rr">呼吸数 RR (/分)</label>
+              <input id="q_rr" type="number" min="0" />
+            </div>
+            <div class="form-row">
+              <label for="q_sbp">収縮期血圧 SBP (mmHg)</label>
+              <input id="q_sbp" type="number" min="0" />
+            </div>
+            <div class="form-row">
+              <label for="q_gcs">GCS 合計</label>
+              <input id="q_gcs" type="number" min="3" max="15" />
+            </div>
+          </div>
+
+          <div class="small-note">
+            qSOFA 条件：<br />
+            ・RR ≥ 22 /min<br />
+            ・SBP ≤ 100 mmHg<br />
+            ・GCS &lt; 15<br />
+            上記 3 項目のうち該当数（0–3点）で評価します。
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" onclick="calculateQSOFA()">
+              qSOFA計算
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearQSOFA()">
+              クリア
+            </button>
+          </div>
+        </form>
+
+        <!-- SOFA 臓器別入力 -->
+        <div class="section-label">
+          SOFA 臓器別入力
+          <small>（基準は原法に準じた代表的なカットオフ）</small>
+        </div>
+
+        <form id="sofa_organ_form" onsubmit="return false;">
+          <!-- 呼吸 -->
+          <div class="section-label">① 呼吸：PaO₂ / FiO₂ 比</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="sofa_pao2">PaO₂ (mmHg)</label>
+              <input id="sofa_pao2" type="number" min="0" step="1" />
+            </div>
+            <div class="form-row">
+              <label for="sofa_fio2">FiO₂ (%)</label>
+              <input id="sofa_fio2" type="number" min="21" max="100" step="1" />
+            </div>
+            <div class="form-row">
+              <label>人工呼吸器管理</label>
+              <div class="check-row">
+                <input id="sofa_vent" type="checkbox" />
+                <span>人工呼吸器あり</span>
+              </div>
+            </div>
+          </div>
+          <div class="small-note">
+            スコア目安：<br />
+            0点：PaO₂/FiO₂ ≥ 400<br />
+            1点：&lt; 400<br />
+            2点：&lt; 300<br />
+            3点：&lt; 200 かつ人工呼吸器あり<br />
+            4点：&lt; 100 かつ人工呼吸器あり
+          </div>
+
+          <!-- 凝固 -->
+          <div class="section-label">② 凝固：血小板数</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="sofa_plt">血小板数 (×10³/μL)</label>
+              <input id="sofa_plt" type="number" min="0" step="1" />
+            </div>
+          </div>
+          <div class="small-note">
+            スコア目安：<br />
+            0点：≥150<br />
+            1点：&lt;150<br />
+            2点：&lt;100<br />
+            3点：&lt;50<br />
+            4点：&lt;20
+          </div>
+
+          <!-- 肝 -->
+          <div class="section-label">③ 肝：総ビリルビン</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="sofa_bil">総ビリルビン (mg/dL)</label>
+              <input id="sofa_bil" type="number" min="0" step="0.1" />
+            </div>
+          </div>
+          <div class="small-note">
+            スコア目安：<br />
+            0点：&lt;1.2<br />
+            1点：1.2–1.9<br />
+            2点：2.0–5.9<br />
+            3点：6.0–11.9<br />
+            4点：≥12.0
+          </div>
+
+          <!-- 心血管 -->
+          <div class="section-label">④ 心血管：血圧 / 昇圧薬</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="sofa_map">平均血圧 MAP (mmHg)</label>
+              <input id="sofa_map" type="number" min="0" step="1" />
+            </div>
+            <div class="form-row">
+              <label for="sofa_cvs_cat">昇圧薬カテゴリ（最も高いもの）</label>
+              <select id="sofa_cvs_cat">
+                <option value="0">昇圧薬なし</option>
+                <option value="1">MAP &lt; 70 mmHg（昇圧薬なし）</option>
+                <option value="2">ドブタミン任意 または ドパミン ≤ 5 μg/kg/min</option>
+                <option value="3">ドパミン &gt;5–15 または アドレナリン/ノルアドレナリン ≤ 0.1 μg/kg/min</option>
+                <option value="4">ドパミン &gt;15 または アドレナリン/ノルアドレナリン &gt; 0.1 μg/kg/min</option>
+              </select>
+            </div>
+          </div>
+          <div class="small-note">
+            スコアは、MAP と昇圧薬の情報から「より重い方」で評価します。<br />
+            例：MAP 60 &amp; 昇圧薬なし → 1点 / ノルアドレナリン 0.05 → 3点 など。
+          </div>
+
+          <!-- 中枢神経 -->
+          <div class="section-label">⑤ 中枢神経：GCS</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="sofa_gcs">GCS 合計</label>
+              <input id="sofa_gcs" type="number" min="3" max="15" />
+            </div>
+          </div>
+          <div class="small-note">
+            スコア目安：<br />
+            0点：15<br />
+            1点：13–14<br />
+            2点：10–12<br />
+            3点：6–9<br />
+            4点：&lt;6
+          </div>
+
+          <!-- 腎 -->
+          <div class="section-label">⑥ 腎：Cr / 尿量</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="sofa_cr">血清クレアチニン (mg/dL)</label>
+              <input id="sofa_cr" type="number" min="0" step="0.1" />
+            </div>
+            <div class="form-row">
+              <label for="sofa_urine">尿量 (mL/日)</label>
+              <input id="sofa_urine" type="number" min="0" step="1" />
+            </div>
+          </div>
+          <div class="small-note">
+            クレアチニンによるスコア目安：<br />
+            0点：&lt;1.2<br />
+            1点：1.2–1.9<br />
+            2点：2.0–3.4<br />
+            3点：3.5–4.9<br />
+            4点：≥5.0<br />
+            尿量が 500 &lt;= x &lt; 200 mL/日 の場合も、それぞれ 3点・4点の基準となります（より重い方を採用）。
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" onclick="calculateSOFAOrgan()">
+              SOFA臓器別計算
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearSOFAOrgan()">
+              SOFAクリア
+            </button>
+          </div>
+        </form>
+
+        <!-- 結果表示 -->
+        <div class="result-area">
+          <div class="result-card" id="card_qsofa">
+            <div class="result-title">qSOFA</div>
+            <div class="result-value">--</div>
+            <div class="result-category"></div>
+            <div class="result-message">
+              RR、SBP、GCS から算出されるベッドサイド評価スコアです。
+            </div>
+          </div>
+
+          <div class="result-card" id="card_sofa_total">
+            <div class="result-title">SOFA 合計スコア</div>
+            <div class="result-value">--</div>
+            <div class="result-category"></div>
+            <div class="result-message">
+              6 臓器のスコアの合計です。入力されていない臓器がある場合は参考値として扱ってください。
+            </div>
+          </div>
+
+          <div class="result-card" id="card_sofa_detail">
+            <div class="result-title">SOFA 臓器別内訳</div>
+            <div class="result-value">—</div>
+            <div class="result-category"></div>
+            <div class="result-message">
+              呼吸：-- 点
+              凝固：-- 点
+              肝：-- 点
+              心血管：-- 点
+              中枢神経：-- 点
+              腎：-- 点
+            </div>
+          </div>
+        </div>
+
+        <div class="result-warning">
+          ※ 本ツールは教育・参考用です。公式 SOFA スコアの基準に準じていますが、施設ごとの運用差や除外条件を反映していない可能性があります。<br />
+          ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 医療電算機 v0.1
+  </footer>
+
+  <script>
+    // 共通：数値取得
+    function getNumberOrNaN(id) {
+      const el = document.getElementById(id);
+      if (!el) return NaN;
+      const v = el.value.trim();
+      if (v === "") return NaN;
+      return Number(v);
+    }
+
+    function setResult(cardId, value, categoryText, extraMessage) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+      const v = card.querySelector(".result-value");
+      const c = card.querySelector(".result-category");
+      const m = card.querySelector(".result-message");
+
+      if (value == null) {
+        if (v) v.textContent = "--";
+      } else if (v) {
+        v.textContent = value;
+      }
+      if (c) c.textContent = categoryText || "";
+      if (m && extraMessage) m.textContent = extraMessage;
+    }
+
+    // ======================
+    // qSOFA
+    // ======================
+    function calculateQSOFA() {
+      const rr = getNumberOrNaN("q_rr");
+      const sbp = getNumberOrNaN("q_sbp");
+      const gcs = getNumberOrNaN("q_gcs");
+
+      if (isNaN(rr) && isNaN(sbp) && isNaN(gcs)) {
+        setResult(
+          "card_qsofa",
+          null,
+          "",
+          "qSOFA の計算に必要な値が入力されていません。RR, SBP, GCS を確認してください。"
+        );
+        return;
+      }
+
+      let score = 0;
+      if (!isNaN(rr) && rr >= 22) score++;
+      if (!isNaN(sbp) && sbp <= 100) score++;
+      if (!isNaN(gcs) && gcs < 15) score++;
+
+      let category = "";
+      let msg = "";
+      if (score >= 2) {
+        category = "高リスク（2点以上）";
+        msg = "敗血症が疑われる患者で 2点以上の場合、予後不良リスクが高いとされます。";
+      } else {
+        category = "0–1点";
+        msg = "qSOFA スコアは 0–1点です。臨床像や他のスコアも含めて総合判断してください。";
+      }
+
+      setResult("card_qsofa", score.toString(), `スコア：${category}`, msg);
+    }
+
+    function clearQSOFA() {
+      const form = document.getElementById("qsofa_form");
+      if (form) form.reset();
+      setResult(
+        "card_qsofa",
+        null,
+        "",
+        "RR、SBP、GCS から算出されるベッドサイド評価スコアです。"
+      );
+    }
+
+    // ======================
+    // SOFA 臓器別
+    // ======================
+    function calcResp() {
+      const pao2 = getNumberOrNaN("sofa_pao2");
+      const fio2 = getNumberOrNaN("sofa_fio2");
+      const vent = document.getElementById("sofa_vent")?.checked ?? false;
+
+      if (isNaN(pao2) || isNaN(fio2) || fio2 <= 0) {
+        return { score: null, text: "入力不足" };
+      }
+
+      const ratio = pao2 / (fio2 / 100);
+      let s = 0;
+      if (ratio < 100 && vent) s = 4;
+      else if (ratio < 200 && vent) s = 3;
+      else if (ratio < 300) s = 2;
+      else if (ratio < 400) s = 1;
+      else s = 0;
+
+      return {
+        score: s,
+        text: `PaO₂/FiO₂ ≈ ${ratio.toFixed(0)}`
+      };
+    }
+
+    function calcCoag() {
+      const plt = getNumberOrNaN("sofa_plt");
+      if (isNaN(plt)) return { score: null, text: "入力不足" };
+
+      let s = 0;
+      if (plt < 20) s = 4;
+      else if (plt < 50) s = 3;
+      else if (plt < 100) s = 2;
+      else if (plt < 150) s = 1;
+      else s = 0;
+
+      return {
+        score: s,
+        text: `血小板 ${plt.toFixed(0)} ×10³/μL`
+      };
+    }
+
+    function calcLiver() {
+      const bil = getNumberOrNaN("sofa_bil");
+      if (isNaN(bil)) return { score: null, text: "入力不足" };
+
+      let s = 0;
+      if (bil >= 12) s = 4;
+      else if (bil >= 6) s = 3;
+      else if (bil >= 2) s = 2;
+      else if (bil >= 1.2) s = 1;
+      else s = 0;
+
+      return {
+        score: s,
+        text: `総ビリルビン ${bil.toFixed(1)} mg/dL`
+      };
+    }
+
+    function calcCVS() {
+      const map = getNumberOrNaN("sofa_map");
+      const cat = document.getElementById("sofa_cvs_cat")?.value ?? "0";
+
+      // MAP のみから最低限のスコア
+      let scoreFromMap = 0;
+      if (!isNaN(map) && map < 70) scoreFromMap = 1;
+
+      // 昇圧薬カテゴリによるスコア
+      let scoreFromDrug = 0;
+      const catNum = Number(cat);
+      if (!isNaN(catNum)) scoreFromDrug = catNum;
+
+      const s = Math.max(scoreFromMap, scoreFromDrug);
+
+      if (isNaN(map) && catNum === 0) {
+        return { score: null, text: "入力不足" };
+      }
+
+      let detail = [];
+      if (!isNaN(map)) detail.push(`MAP ${map.toFixed(0)} mmHg`);
+      if (catNum > 0) {
+        const label = {
+          1: "昇圧薬なし・MAP<70",
+          2: "ドブタミン任意 or ドパミン≤5",
+          3: "ドパミン>5–15 or Ad/NA≤0.1",
+          4: "ドパミン>15 or Ad/NA>0.1"
+        }[catNum] || "";
+        if (label) detail.push(label);
+      }
+
+      return {
+        score: s,
+        text: detail.join(" / ") || "入力不足"
+      };
+    }
+
+    function calcCNS() {
+      const gcs = getNumberOrNaN("sofa_gcs");
+      if (isNaN(gcs)) return { score: null, text: "入力不足" };
+
+      let s = 0;
+      if (gcs < 6) s = 4;
+      else if (gcs <= 9) s = 3;
+      else if (gcs <= 12) s = 2;
+      else if (gcs <= 14) s = 1;
+      else s = 0;
+
+      return {
+        score: s,
+        text: `GCS ${gcs.toFixed(0)}`
+      };
+    }
+
+    function calcRenal() {
+      const cr = getNumberOrNaN("sofa_cr");
+      const urine = getNumberOrNaN("sofa_urine");
+
+      if (isNaN(cr) && isNaN(urine)) {
+        return { score: null, text: "入力不足" };
+      }
+
+      let scoreCr = 0;
+      if (!isNaN(cr)) {
+        if (cr >= 5) scoreCr = 4;
+        else if (cr >= 3.5) scoreCr = 3;
+        else if (cr >= 2) scoreCr = 2;
+        else if (cr >= 1.2) scoreCr = 1;
+        else scoreCr = 0;
+      } else {
+        scoreCr = 0;
+      }
+
+      let scoreUrine = 0;
+      if (!isNaN(urine)) {
+        if (urine < 200) scoreUrine = 4;
+        else if (urine < 500) scoreUrine = 3;
+        else scoreUrine = 0;
+      }
+
+      const s = Math.max(scoreCr, scoreUrine);
+
+      let detail = [];
+      if (!isNaN(cr)) detail.push(`Cr ${cr.toFixed(1)} mg/dL`);
+      if (!isNaN(urine)) detail.push(`尿量 ${urine.toFixed(0)} mL/日`);
+
+      return {
+        score: s,
+        text: detail.join(" / ") || "入力不足"
+      };
+    }
+
+    function calculateSOFAOrgan() {
+      const resp = calcResp();
+      const coag = calcCoag();
+      const liver = calcLiver();
+      const cvs = calcCVS();
+      const cns = calcCNS();
+      const renal = calcRenal();
+
+      const organs = [resp, coag, liver, cvs, cns, renal];
+
+      let total = 0;
+      let missing = 0;
+      organs.forEach((o) => {
+        if (o.score == null) missing++;
+        else total += o.score;
+      });
+
+      let category = "";
+      let msg = "";
+
+      if (missing === 0) {
+        category = "全6臓器入力済み";
+        msg = "全ての臓器スコアを合計した SOFA スコアです。数値が高いほど臓器障害が重いとされます。";
+      } else if (missing < 6) {
+        category = `一部臓器未入力（${missing} 臓器）`;
+        msg = "未入力の臓器は 0 点としては扱わず、合計スコアは参考値として解釈してください。";
+      } else {
+        category = "";
+        msg = "SOFA 計算に必要な値が入力されていません。";
+      }
+
+      if (missing === 6) {
+        setResult("card_sofa_total", null, "", msg);
+      } else {
+        setResult("card_sofa_total", total.toString(), category, msg);
+      }
+
+      // 臓器別内訳
+      const names = ["呼吸", "凝固", "肝", "心血管", "中枢神経", "腎"];
+      const scores = [resp, coag, liver, cvs, cns, renal];
+
+      const detailLines = scores.map((o, i) => {
+        const sText = o.score == null ? "--" : `${o.score} 点`;
+        return `${names[i]}：${sText}（${o.text}）`;
+      });
+
+      const detailMsg = detailLines.join("\n");
+
+      setResult(
+        "card_sofa_detail",
+        "内訳",
+        "",
+        detailMsg
+      );
+    }
+
+    function clearSOFAOrgan() {
+      const form = document.getElementById("sofa_organ_form");
+      if (form) form.reset();
+
+      setResult(
+        "card_sofa_total",
+        null,
+        "",
+        "6 臓器のスコアの合計です。入力されていない臓器がある場合は参考値として扱ってください。"
+      );
+
+      setResult(
+        "card_sofa_detail",
+        "—",
+        "",
+        "呼吸：-- 点\n凝固：-- 点\n肝：-- 点\n心血管：-- 点\n中枢神経：-- 点\n腎：-- 点"
+      );
+    }
+  </script>
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

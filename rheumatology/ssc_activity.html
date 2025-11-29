@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SSc活動性（改訂EUSTAR） | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- 共通ヘッダー/フッター読込 -->
+    <script src="../js/include.js" defer></script>
+    <!-- 共通スコアユーティリティ -->
+    <script src="../js/score-utils.js" defer></script>
+    <!-- このスコア専用JS -->
+    <script src="ssc_activity.js" defer></script>
+  </head>
+
+  <body data-subtitle="SSc活動性（改訂 EUSTAR Index）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main>
+      <div class="wrapper">
+        <div class="score-card-container">
+          <a href="rheumatology.index.html" class="back-link">
+            ← 膠原病スコア一覧に戻る
+          </a>
+
+          <div class="score-title">SSc活動性（改訂 EUSTAR Index）</div>
+          <div class="score-subtitle">
+            改訂 EUSTAR 活動性インデックス（0–10点）を算出します。<br />
+            合計スコアが 2.5 点以上で「活動性 / 高度活動」と判定されます。
+          </div>
+
+          <!-- 入力フォーム -->
+          <form id="ssc_activity_form" onsubmit="return false;">
+            <div class="form-grid">
+              <!-- Δ-skin / デジタル潰瘍 / 腱摩擦音：横並び Boolean グループ -->
+              <div class="field-wrapper field-boolean-group field-boolean-group--row">
+                <div class="boolean-section-title">
+                  活動性を示す臨床所見
+                </div>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="delta_skin"
+                  />
+                  Δ-skin：過去 1 か月で皮膚症状が悪化（1.5点）
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="digital_ulcers_active"
+                  />
+                  活動性デジタル潰瘍あり（1.5点）
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    id="tendon_friction_rubs"
+                  />
+                  腱摩擦音あり（tendon friction rubs, 2.25点）
+                </label>
+              </div>
+
+              <!-- mRSS -->
+              <div class="field-wrapper">
+                <label for="mrss">
+                  modified Rodnan Skin Score（mRSS, 0–51）
+                </label>
+                <input
+                  id="mrss"
+                  type="number"
+                  min="0"
+                  max="51"
+                  step="1"
+                />
+              </div>
+
+              <!-- CRP -->
+              <div class="field-wrapper">
+                <label for="crp">
+                  CRP（mg/dL）
+                  <span style="font-size: 0.8em;">※ 1 mg/dL 超で 2.25点</span>
+                </label>
+                <input
+                  id="crp"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+
+              <!-- DLCO -->
+              <div class="field-wrapper">
+                <label for="dlco">
+                  DLCO（％予測値）
+                  <span style="font-size: 0.8em;">※ 70％未満で 1.0点</span>
+                </label>
+                <input
+                  id="dlco"
+                  type="number"
+                  min="0"
+                  max="200"
+                  step="1"
+                />
+              </div>
+            </div>
+
+            <div class="small-note">
+              ※ 改訂 EUSTAR activity index（2016/2017）の項目と重み付けに基づいています。<br />
+              ※ mRSS ≤18 の場合は <code>mRSS × 0.084</code> で寄与点を計算します。
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="calculateSScActivity()"
+              >
+                計算
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="clearSScActivity()"
+              >
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <!-- 結果表示 -->
+          <div id="ssc_activity_result" class="result-area">
+            <div class="result-card">
+              <div class="result-title">改訂 EUSTAR 活動性スコア</div>
+              <div class="result-value" id="ssc_activity_value">--</div>
+              <div class="result-category" id="ssc_activity_category"></div>
+              <div class="result-message" id="ssc_activity_message">
+                改訂 EUSTAR 活動性インデックスでは、2.5 点以上を活動性／高度活動として扱います。
+              </div>
+            </div>
+          </div>
+
+          <div class="result-warning">
+            ※ 計算結果は疾患活動性の目安であり、診断や治療方針を直接決定するものではありません。<br />
+            ※ 必ず臨床経過・画像・検査値を含めた総合判断を行ってください。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      © 医療電算機 v0.1
+    </footer>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

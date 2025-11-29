@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>強直性脊椎炎分類 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- PWA 関連 -->
+    <link rel="manifest" href="../manifest.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+    <!-- 共通 JS -->
+    <script src="../js/include.js" defer></script>
+    <script src="../js/score-utils.js" defer></script>
+    <script src="../js/pwa-register.js" defer></script>
+
+    <!-- ページ固有 JS -->
+    <script src="as_classification.js" defer></script>
+  </head>
+  <body data-subtitle="強直性脊椎炎の分類（修正 New York 基準）">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main class="wrapper">
+      <a href="rheumatology.index.html" class="back-link">← 膠原病スコア一覧に戻る</a>
+
+      <div class="score-card-container">
+        <section class="score-card">
+          <div class="score-name">強直性脊椎炎分類</div>
+          <div class="score-desc">
+            修正 New York 基準：<br />
+            画像上の仙腸関節炎 ＋ 臨床項目（少なくとも1つ）で「definite AS」。
+          </div>
+
+          <!-- 画像所見 -->
+          <div class="boolean-section-title">画像所見</div>
+          <div class="field-boolean-group">
+            <label>
+              <input type="checkbox" id="as-radiologic" />
+              仙腸関節 X線 / MRI で明らかな仙腸関節炎あり
+              （両側 Grade≧2 または片側 Grade 3–4 を含む）
+            </label>
+          </div>
+
+          <!-- 臨床項目 -->
+          <div class="boolean-section-title">臨床項目（少なくとも1つ）</div>
+          <div class="field-boolean-group">
+            <label>
+              <input type="checkbox" id="as-clinical-back-pain" />
+              3か月以上持続する腰背部痛（運動で改善・安静で改善しない）
+            </label>
+            <label>
+              <input type="checkbox" id="as-clinical-lumbar-limit" />
+              矢状面・前額面での腰椎可動域制限
+            </label>
+            <label>
+              <input type="checkbox" id="as-clinical-chest-expansion" />
+              同年齢・同性の正常値と比べた胸郭拡張の制限
+            </label>
+          </div>
+
+          <div id="as-classification-result" class="score-result"></div>
+          <div id="as-classification-interpret" class="score-interpret"></div>
+
+          <!-- ▼ ここから ASAS axial SpA 基準（新規追加・前後5行つき） -->
+          <div class="section-title" style="margin-top: 16px;">
+            ASAS axial SpA 基準
+          </div>
+          <p style="font-size:0.85rem; margin:4px 0 8px;">
+            慢性腰背部痛（3か月以上）かつ発症年齢 &lt; 45歳 を基本条件とし、<br />
+            画像アームまたは HLA-B27 アームのいずれかを満たす場合に axial SpA と分類します。
+          </p>
+
+          <div class="boolean-section-title">基本条件</div>
+          <div class="field-boolean-group">
+            <label>
+              <input type="checkbox" id="asas-chronic-backpain" />
+              3か月以上持続する腰背部痛
+            </label>
+            <label>
+              <input type="checkbox" id="asas-onset-before-45" />
+              症状出現時の年齢 &lt; 45歳
+            </label>
+          </div>
+
+          <div class="boolean-section-title">HLA-B27</div>
+          <div class="field-boolean-group">
+            <label>
+              <input type="checkbox" id="asas-hla-b27" />
+              HLA-B27 陽性
+            </label>
+          </div>
+
+          <div class="boolean-section-title">SpA features（ASAS 定義にもとづく特徴）</div>
+          <div class="field-boolean-group field-boolean-group--row">
+            <label>
+              <input type="checkbox" id="asas-feature-infl-backpain" />
+              炎症性腰背部痛
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-arthritis" />
+              末梢関節炎
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-enthesitis" />
+              付着部炎（例：アキレス腱付着部）
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-uveitis" />
+              ブドウ膜炎
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-dactylitis" />
+              ダクチリティス
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-psoriasis" />
+              乾癬
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-ibd" />
+              炎症性腸疾患（Crohn 病 / 潰瘍性大腸炎）
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-good-nsaid" />
+              NSAIDs への良好な反応
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-family-history" />
+              一親等家族に SpA 関連疾患の既往
+            </label>
+            <label>
+              <input type="checkbox" id="asas-feature-elevated-crp" />
+              CRP 上昇
+            </label>
+          </div>
+
+          <!-- ASAS axial SpA 判定結果 -->
+          <div id="asas-axspa-result" class="score-result"></div>
+          <div id="asas-axspa-interpret" class="score-interpret"></div>
+          <!-- ▲ ここまで ASAS axial SpA 基準 -->
+
+          <button id="calc-as-classification" class="calc-button">
+            分類を判定する（修正 New York / ASAS）
+          </button>
+
+        </section>
+      </div>
+    </main>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

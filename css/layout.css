@@ -1,0 +1,36 @@
+/* ------------------------
+   layout.css : 配置・グリッド
+------------------------- */
+
+/* スコア計算ページの中央揃え共通設定 */
+.wrapper {
+  display: flex;
+  flex-direction: column;  /* 追加: 縦方向に積む */
+  align-items: center;     /* 追加: 中央揃え */
+}
+
+.score-card-container {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 診療科グリッド（スマホでは基本2列） */
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2列固定 */
+  gap: 16px 14px;   
+  justify-items: center;
+}
+
+/* スコア一覧グリッド（スマホでは2列） */
+.score-list {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2列固定 */
+  gap: 12px;
+  justify-items: center;
+}

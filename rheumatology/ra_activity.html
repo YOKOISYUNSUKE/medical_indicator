@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>RA疾患活動性 | 医療電算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 共通CSS（分割後） -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- 共通ヘッダー/フッター読込 -->
+    <script src="../js/include.js" defer></script>
+    <!-- 共通スコアユーティリティ -->
+    <script src="../js/score-utils.js" defer></script>
+    <!-- このスコア専用の計算JS -->
+    <script src="ra_activity.js" defer></script>
+  </head>
+
+  <!-- data-subtitle に、このページ固有のサブタイトルを書く -->
+  <body data-subtitle="RA疾患活動性">
+    <!-- 共通ヘッダー -->
+    <div data-include="../partials/header.html"></div>
+
+    <main>
+      <div class="wrapper">
+        <div class="score-card-container">
+          <a href="rheumatology.index.html" class="back-link">← 膠原病スコア一覧に戻る</a>
+
+          <div class="score-title">RA疾患活動性</div>
+          <div class="score-subtitle">
+            上部の共通入力から、DAS28 (ESR/CRP)、CDAI、SDAI を同時に算出します。
+          </div>
+
+          <!-- 入力フォーム（画面上方） -->
+          <form id="ra_activity_form" onsubmit="return false;">
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="tjc">圧痛関節数 (TJC28)</label>
+                <input id="tjc" type="number" min="0" max="28" />
+              </div>
+              <div class="form-row">
+                <label for="sjc">腫脹関節数 (SJC28)</label>
+                <input id="sjc" type="number" min="0" max="28" />
+              </div>
+              <div class="form-row">
+                <label for="esr">ESR (mm/時)</label>
+                <input id="esr" type="number" min="1" />
+              </div>
+              <div class="form-row">
+                <label for="crp">CRP (mg/dL)</label>
+                <input id="crp" type="number" min="0" step="0.1" />
+              </div>
+              <div class="form-row">
+                <label for="gh">患者全般評価 GH (0–100 mm VAS)</label>
+                <input id="gh" type="number" min="0" max="100" />
+              </div>
+              <div class="form-row">
+                <label for="pt">患者全般評価 Pt (0–10)</label>
+                <input id="pt" type="number" min="0" max="10" step="0.1" />
+              </div>
+              <div class="form-row">
+                <label for="ph">医師全般評価 Ph (0–10)</label>
+                <input id="ph" type="number" min="0" max="10" step="0.1" />
+              </div>
+            </div>
+
+            <div class="small-note">
+              ※ DAS28 では GH（0–100 mm VAS）、CDAI/SDAI では Pt/Ph（0–10）を使用します。<br />
+              ※ CRP, SDAI は mg/dL 単位、DAS28-CRP は CRP(mg/dL) を mg/L に換算して使用します。
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" onclick="calculateAllScores()">
+                計算
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="clearAll()">
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <!-- 結果表示（画面下方） -->
+          <div id="ra_results" class="result-area">
+            <div class="result-card" id="card_das28_esr">
+              <div class="result-title">DAS28 (ESR)</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                圧痛/腫脹関節数、ESR、GH から算出される疾患活動性スコア。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_das28_crp">
+              <div class="result-title">DAS28 (CRP)</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                圧痛/腫脹関節数、CRP、GH から算出される疾患活動性スコア。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_cdai">
+              <div class="result-title">CDAI</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                TJC28 + SJC28 + Pt + Ph により算出される臨床的疾患活動性指標。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_sdai">
+              <div class="result-title">SDAI</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                CDAI に CRP(mg/dL) を加えた疾患活動性指標。
+              </div>
+            </div>
+          </div>
+
+          <div class="result-warning">
+            ※ 計算結果は参考値です。診断・治療方針は必ず臨床医の総合判断で行ってください。<br />
+            ※ 単位（ESR: mm/時, CRP: mg/dL, GH: 0–100 mm, Pt/Ph: 0–10）に注意してください。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 共通フッター -->
+    <div data-include="../partials/footer.html"></div>
+  </body>
+</html>

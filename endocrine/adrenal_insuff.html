@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>副腎不全評価（簡易） | 内分泌・代謝</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="adrenal_insuff.js" defer></script>
+</head>
+
+<body data-subtitle="副腎不全評価（シンプル版）">
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <a class="back-link" href="endocrine.index.html">← 内分泌・代謝スコア一覧に戻る</a>
+
+    <div class="section-title">副腎不全評価（簡易版）</div>
+
+    <div class="wrapper">
+      <div class="score-card-container">
+        <form id="ai-form">
+          <!-- 血圧 -->
+          <div class="field-wrapper">
+            <label for="ai-sbp">収縮期血圧 SBP (mmHg)</label>
+            <input
+              type="number"
+              id="ai-sbp"
+              inputmode="numeric"
+              step="1"
+              placeholder="例: 85"
+            />
+          </div>
+
+          <!-- Na -->
+          <div class="field-wrapper">
+            <label for="ai-na">Na (mEq/L)</label>
+            <input
+              type="number"
+              id="ai-na"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 128"
+            />
+          </div>
+
+          <!-- K -->
+          <div class="field-wrapper">
+            <label for="ai-k">K (mEq/L)</label>
+            <input
+              type="number"
+              id="ai-k"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 5.8"
+            />
+          </div>
+
+          <!-- ランダムコルチゾール -->
+          <div class="field-wrapper">
+            <label for="ai-cort">血中コルチゾール（ランダム, μg/dL）</label>
+            <input
+              type="number"
+              id="ai-cort"
+              inputmode="decimal"
+              step="0.1"
+              placeholder="例: 2.5（任意入力）"
+            />
+          </div>
+
+          <!-- リスク因子（Boolean グループ） -->
+          <div class="field-wrapper">
+            <div class="boolean-section-title">リスク因子</div>
+            <div class="field-boolean-group field-boolean-group--row">
+              <label>
+                <input type="checkbox" id="ai-risk-steroid" />
+                長期ステロイド内服 / 中止直後
+              </label>
+              <label>
+                <input type="checkbox" id="ai-risk-autoimmune" />
+                自己免疫疾患の既往・合併
+              </label>
+              <label>
+                <input type="checkbox" id="ai-risk-adrenal" />
+                副腎疾患の既往（手術・腫瘍など）
+              </label>
+              <label>
+                <input type="checkbox" id="ai-risk-infection" />
+                重症感染・敗血症
+              </label>
+            </div>
+          </div>
+        </form>
+
+        <button class="calc-button" id="ai-calc-button">副腎不全リスクを評価</button>
+        <div class="score-result" id="ai-score"></div>
+        <div class="score-interpret" id="ai-interpret"></div>
+      </div>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>
