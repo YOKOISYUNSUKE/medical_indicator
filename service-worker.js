@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = "medcalc-cache-v11.29.1";
+const CACHE_NAME = "medcalc-cache-v11.29.2";
 
 // 初期キャッシュに乗せるファイル一覧
 const OFFLINE_ASSETS = [
@@ -78,4 +78,5 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
 
