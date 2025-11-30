@@ -1,7 +1,7 @@
 // js/sortable-init.js
 
-// 直近でドラッグされたカードを覚えておく
-// （ドラッグ完了直後の「誤クリック遷移」を 1 回だけ防ぐ）
+// 直近で「実際に並び順を変えた」カードを覚えておく
+// （並べ替え直後の誤タップ遷移を 1 回だけ防ぐ）
 let lastDraggedItem = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.warn("SortableJS is not loaded.");
     return;
   }
+
 
   // 並べ替え対象のコンテナを全て取得
   const containers = document.querySelectorAll("[data-sortable-id]");
@@ -30,14 +31,28 @@ document.addEventListener("DOMContentLoaded", () => {
       ghostClass: "sortable-ghost",
       chosenClass: "sortable-chosen",
 
-      // ドラッグ開始時にどのカードを掴んだか記録
-      onStart(evt) {
-        lastDraggedItem = evt.item;
+      // 並べ替え開始時はいったんフラグをクリア
+      onStart() {
+        lastDraggedItem = null;
+      },
+
+      // 並べ替え終了時に「実際に位置が変わったカード」だけ記録
+      onEnd(evt) {
+        if (
+          typeof evt.oldIndex === "number" &&
+          typeof evt.newIndex === "number" &&
+          evt.oldIndex !== evt.newIndex
+        ) {
+          lastDraggedItem = evt.item;
+        } else {
+          lastDraggedItem = null;
+        }
       },
 
       // 並び順の保存
       store: {
         get() {
+
           try {
             const order = localStorage.getItem(storageKey);
             if (!order) return [];
@@ -59,11 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // --- ここから：ドラッグ後 1 回だけクリックをキャンセルする処理 ---
+  // --- ここから：並べ替え直後 1 回だけクリックをキャンセルする処理 ---
   document.addEventListener(
     "click",
     (e) => {
-      // 直近でドラッグされたカードがなければ何もしない
+      // 直近で「位置が変わる並べ替え」に使われたカードがなければ何もしない
       if (!lastDraggedItem) return;
 
       const card = e.target.closest(".dept-card, .score-card");
@@ -74,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // 「直前にドラッグしたカード」に対する最初のクリックならキャンセル
+      // 「直前に並べ替えで移動したカード」に対する最初のクリックならキャンセル
       if (card === lastDraggedItem) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -85,5 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     true // キャプチャフェーズで実行 -> main.js や inline onclick より先に動く
   );
-  // --- ここまで ---
 });
