@@ -41,6 +41,12 @@ const RANGE_PRESETS = {
   LUMBAR_SIDE_FLEXION_CM:      { min: 0,   max: 30 },  // BASMI 腰椎側屈 (cm)
   MOD_SCHOBER_CM:              { min: 0,   max: 10 },  // BASMI 修正 Schober 増加距離 (cm)
   INTERMALLEOLAR_DISTANCE_CM:  { min: 0,   max: 150 }, // BASMI 内果間距離 (cm)
+  // ▼ ここから追加：APACHE II 向けレンジ
+  MEAN_ARTERIAL_PRESSURE: { min: 20,  max: 200 }, // MAP (mmHg)
+  HEMATOCRIT:             { min: 5,   max: 80 },  // Ht (%)
+  PH_ARTERIAL:            { min: 6.8, max: 7.8 }, // 動脈血 pH
+  AADO2:                  { min: 0,   max: 700 }, // A–a DO₂ (mmHg)
+  // ▲ ここまで追加
 };
 
 /**

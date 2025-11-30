@@ -228,6 +228,25 @@ button.btn-secondary {
   border: none;
 }
 
+/* 並び替えモードトグル専用の軽い調整 */
+.reorder-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  padding-inline: 10px;
+}
+
+.reorder-toggle.is-active {
+  font-weight: 600;
+  box-shadow: 0 0 0 1px #4f8cff inset;
+}
+
+.reorder-toggle-icon {
+  font-size: 0.9rem;
+}
+
+
 .btn-primary:hover,
 .calc-button:hover {
   opacity: 0.9;

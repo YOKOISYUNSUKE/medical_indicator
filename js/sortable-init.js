@@ -4,6 +4,10 @@
 // （並べ替え直後の誤タップ遷移を 1 回だけ防ぐ）
 let lastDraggedItem = null;
 
+// 並び替えモードのオン/オフ状態（false: 通常モード, true: 並び替えモード）
+let isReorderMode = false;
+
+
 document.addEventListener("DOMContentLoaded", () => {
   // SortableJS が読み込まれていなければ何もしない
   if (typeof Sortable === "undefined") {
@@ -11,9 +15,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // 並べ替えインスタンスを保持（モード切替用）
+  const sortableInstances = [];
+
+  // 並び替えモードの適用関数
+  function applyReorderMode(enabled) {
+    isReorderMode = enabled;
+
+    // 並び替えモード ON のときだけドラッグを有効化
+    sortableInstances.forEach((instance) => {
+      instance.option("disabled", !enabled);
+    });
+
+    // 必要なら全体にクラスを付けてスタイル切り替え
+    document.documentElement.classList.toggle("reorder-mode-active", enabled);
+  }
 
   // 並べ替え対象のコンテナを全て取得
   const containers = document.querySelectorAll("[data-sortable-id]");
+
 
   containers.forEach((container) => {
     const sortableId = container.getAttribute("data-sortable-id");
@@ -23,13 +43,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const storageKey = `medcalc-order:${location.pathname}#${sortableId}`;
 
     // SortableJS を初期化
-    new Sortable(container, {
+    const sortable = new Sortable(container, {
       animation: 150,
       dataIdAttr: "data-id",
       draggable: ".dept-card, .score-card",
       handle: ".dept-card, .score-card",
       ghostClass: "sortable-ghost",
       chosenClass: "sortable-chosen",
+
+      // 並べ替え開始時はいったんフラグをクリア
+      onStart() {
+        lastDraggedItem = null;
+      },
+
 
       // 並べ替え開始時はいったんフラグをクリア
       onStart() {
@@ -67,21 +93,58 @@ document.addEventListener("DOMContentLoaded", () => {
             const order = sortable.toArray(); // data-id の配列
             localStorage.setItem(storageKey, order.join("|"));
           } catch (e) {
-            console.warn("Failed to save sort order:", e);
+          console.warn("Failed to save sort order:", e);
           }
         },
       },
     });
+
+    // 並び替えモード切替用にインスタンスを保持
+    sortableInstances.push(sortable);
   });
+
+  // 初期状態：並び替えモード OFF（ドラッグ無効）
+  applyReorderMode(false);
+
+  // 並び替えモード トグルボタンを初期化
+  const reorderToggle = document.querySelector("[data-reorder-toggle]");
+  if (reorderToggle) {
+    const labelElem = reorderToggle.querySelector("[data-reorder-toggle-label]");
+
+    const updateToggleLabel = () => {
+      const modeText = isReorderMode ? "ON" : "OFF";
+      if (labelElem) {
+        labelElem.textContent = `並び替えモード：${modeText}`;
+      }
+      reorderToggle.classList.toggle("is-active", isReorderMode);
+      reorderToggle.setAttribute("aria-pressed", String(isReorderMode));
+    };
+
+    // 初期表示
+    updateToggleLabel();
+
+    reorderToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      applyReorderMode(!isReorderMode);
+      updateToggleLabel();
+    });
+  }
 
   // --- ここから：並べ替え直後 1 回だけクリックをキャンセルする処理 ---
   document.addEventListener(
     "click",
     (e) => {
+      const card = e.target.closest(".dept-card, .score-card");
+
+      // 並び替えモード中は、カードのクリックによる遷移を常に止める
+      if (card && isReorderMode) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
+
       // 直近で「位置が変わる並べ替え」に使われたカードがなければ何もしない
       if (!lastDraggedItem) return;
-
-      const card = e.target.closest(".dept-card, .score-card");
 
       // どのカードもクリックされていなければ、フラグだけ消して終了
       if (!card) {
@@ -101,3 +164,4 @@ document.addEventListener("DOMContentLoaded", () => {
     true // キャプチャフェーズで実行 -> main.js や inline onclick より先に動く
   );
 });
+

@@ -36,6 +36,20 @@
   <main>
     <div class="section-title">診療科を選択</div>
 
+<!-- ▼ 並び替えモードトグル：コンテナのすぐ上あたりに挿入 -->
+<div class="list-header">
+  <button
+    class="btn-secondary reorder-toggle"
+    type="button"
+    data-reorder-toggle
+    aria-pressed="false"
+  >
+    <span class="reorder-toggle-icon">⇅</span>
+    <span data-reorder-toggle-label>並び替えモード：OFF</span>
+  </button>
+</div>
+
+
     <!-- 追加: data-sortable-id -->
     <div class="dept-grid" data-sortable-id="dept-grid">
       <button class="dept-card" data-dept="emergency" data-id="dept-emergency">
@@ -43,10 +57,12 @@
         <div class="dept-desc">DICスコア、SOFAなどの救急関連スコア</div>
       </button>
 
+
       <button class="dept-card" data-dept="rheumatology" data-id="dept-rheumatology">
         <div class="dept-name">膠原病</div>
         <div class="dept-desc">DAS28、CDAI、SDAI などの疾患活動性スコア</div>
       </button>
+
 
       <button class="dept-card" data-dept="cardiology" data-id="dept-cardiology">
         <div class="dept-name">循環器</div>
