@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = "medcalc-cache-v11.30.0";
+const CACHE_NAME = "medcalc-cache-v11.30.1";
 
 // 初期キャッシュに乗せるファイル一覧
 const OFFLINE_ASSETS = [
