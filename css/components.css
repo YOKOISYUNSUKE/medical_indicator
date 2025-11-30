@@ -4,7 +4,7 @@
 
 /* 診療科カード */
 .dept-card {
-  background: #ffffff;
+  background: #fbfbf7;
   border-radius: 12px;
   padding: 14px 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -23,10 +23,6 @@
   max-width: 200px;
 }
 
-/* ボタンタグとして使うときの初期化 */
-button.dept-card {
-  background: none;
-}
 
 /* ホバー・フォーカス */
 .dept-card:hover {
@@ -55,7 +51,7 @@ button.dept-card {
 
 /* スコアカード */
 .score-card {
-  background: #ffffff;
+  background: #fbfbf7;
   border-radius: 12px;
   padding: 16px 14px;  
   min-height: 160px;
@@ -83,6 +79,12 @@ button.dept-card {
   margin-bottom: 4px;
 }
 
+.dept-card:active,
+.score-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+
 .score-desc {
   font-size: 0.8rem;
   color: #666;
@@ -100,7 +102,7 @@ button.dept-card {
   padding: 6px 12px;
   border-radius: 8px;
   border: none;
-  background: #4f8cff;
+  background: #8fc5ff;
   color: #ffffff;
   font-size: 0.9rem;
   cursor: pointer;
@@ -211,4 +213,30 @@ button.dept-card {
 .score-card.sortable-ghost {
   opacity: 0.6;
 }
+/* --- ボタン統一カラー（薄いブルー） --- */
+.btn-primary,
+button.btn-primary {
+  background: #8fc5ff;
+  color: #fff;
+  border: none;
+}
+
+.btn-secondary,
+button.btn-secondary {
+  background: #d9ecff; /* さらに薄いブルー */
+  color: #333;
+  border: none;
+}
+
+.btn-primary:hover,
+.calc-button:hover {
+  opacity: 0.9;
+  background: #79b8ff;
+}
+
+.btn-secondary:hover {
+  opacity: 0.9;
+  background: #c7e2ff;
+}
+
 
