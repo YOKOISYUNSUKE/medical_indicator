@@ -16,6 +16,7 @@
   <!-- 共通スコアユーティリティ -->
   <script src="../js/score-utils.js" defer></script>
   <!-- このスコア専用の計算JSがあればここに -->
+  <script src="sofa_qsofa.js" defer></script>
 </head>
 
 <!-- data-subtitle に、このページ固有のサブタイトルを書く -->
@@ -69,7 +70,14 @@
             </button>
           </div>
         </form>
-
+        <div class="result-card" id="card_qsofa">
+          <div class="result-title">qSOFA</div>
+          <div class="result-value">--</div>
+          <div class="result-category"></div>
+          <div class="result-message">
+            RR、SBP、GCS から算出されるベッドサイド評価スコアです。
+          </div>
+        </div>
         <!-- SOFA 臓器別入力 -->
         <div class="section-label">
           SOFA 臓器別入力
@@ -213,15 +221,6 @@
 
         <!-- 結果表示 -->
         <div class="result-area">
-          <div class="result-card" id="card_qsofa">
-            <div class="result-title">qSOFA</div>
-            <div class="result-value">--</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              RR、SBP、GCS から算出されるベッドサイド評価スコアです。
-            </div>
-          </div>
-
           <div class="result-card" id="card_sofa_total">
             <div class="result-title">SOFA 合計スコア</div>
             <div class="result-value">--</div>
@@ -257,307 +256,6 @@
   <footer>
     © 医療電算機 v0.1
   </footer>
-
-  <script>
-    // 共通：数値取得
-    function getNumberOrNaN(id) {
-      const el = document.getElementById(id);
-      if (!el) return NaN;
-      const v = el.value.trim();
-      if (v === "") return NaN;
-      return Number(v);
-    }
-
-    function setResult(cardId, value, categoryText, extraMessage) {
-      const card = document.getElementById(cardId);
-      if (!card) return;
-      const v = card.querySelector(".result-value");
-      const c = card.querySelector(".result-category");
-      const m = card.querySelector(".result-message");
-
-      if (value == null) {
-        if (v) v.textContent = "--";
-      } else if (v) {
-        v.textContent = value;
-      }
-      if (c) c.textContent = categoryText || "";
-      if (m && extraMessage) m.textContent = extraMessage;
-    }
-
-    // ======================
-    // qSOFA
-    // ======================
-    function calculateQSOFA() {
-      const rr = getNumberOrNaN("q_rr");
-      const sbp = getNumberOrNaN("q_sbp");
-      const gcs = getNumberOrNaN("q_gcs");
-
-      if (isNaN(rr) && isNaN(sbp) && isNaN(gcs)) {
-        setResult(
-          "card_qsofa",
-          null,
-          "",
-          "qSOFA の計算に必要な値が入力されていません。RR, SBP, GCS を確認してください。"
-        );
-        return;
-      }
-
-      let score = 0;
-      if (!isNaN(rr) && rr >= 22) score++;
-      if (!isNaN(sbp) && sbp <= 100) score++;
-      if (!isNaN(gcs) && gcs < 15) score++;
-
-      let category = "";
-      let msg = "";
-      if (score >= 2) {
-        category = "高リスク（2点以上）";
-        msg = "敗血症が疑われる患者で 2点以上の場合、予後不良リスクが高いとされます。";
-      } else {
-        category = "0–1点";
-        msg = "qSOFA スコアは 0–1点です。臨床像や他のスコアも含めて総合判断してください。";
-      }
-
-      setResult("card_qsofa", score.toString(), `スコア：${category}`, msg);
-    }
-
-    function clearQSOFA() {
-      const form = document.getElementById("qsofa_form");
-      if (form) form.reset();
-      setResult(
-        "card_qsofa",
-        null,
-        "",
-        "RR、SBP、GCS から算出されるベッドサイド評価スコアです。"
-      );
-    }
-
-    // ======================
-    // SOFA 臓器別
-    // ======================
-    function calcResp() {
-      const pao2 = getNumberOrNaN("sofa_pao2");
-      const fio2 = getNumberOrNaN("sofa_fio2");
-      const vent = document.getElementById("sofa_vent")?.checked ?? false;
-
-      if (isNaN(pao2) || isNaN(fio2) || fio2 <= 0) {
-        return { score: null, text: "入力不足" };
-      }
-
-      const ratio = pao2 / (fio2 / 100);
-      let s = 0;
-      if (ratio < 100 && vent) s = 4;
-      else if (ratio < 200 && vent) s = 3;
-      else if (ratio < 300) s = 2;
-      else if (ratio < 400) s = 1;
-      else s = 0;
-
-      return {
-        score: s,
-        text: `PaO₂/FiO₂ ≈ ${ratio.toFixed(0)}`
-      };
-    }
-
-    function calcCoag() {
-      const plt = getNumberOrNaN("sofa_plt");
-      if (isNaN(plt)) return { score: null, text: "入力不足" };
-
-      let s = 0;
-      if (plt < 20) s = 4;
-      else if (plt < 50) s = 3;
-      else if (plt < 100) s = 2;
-      else if (plt < 150) s = 1;
-      else s = 0;
-
-      return {
-        score: s,
-        text: `血小板 ${plt.toFixed(0)} ×10³/μL`
-      };
-    }
-
-    function calcLiver() {
-      const bil = getNumberOrNaN("sofa_bil");
-      if (isNaN(bil)) return { score: null, text: "入力不足" };
-
-      let s = 0;
-      if (bil >= 12) s = 4;
-      else if (bil >= 6) s = 3;
-      else if (bil >= 2) s = 2;
-      else if (bil >= 1.2) s = 1;
-      else s = 0;
-
-      return {
-        score: s,
-        text: `総ビリルビン ${bil.toFixed(1)} mg/dL`
-      };
-    }
-
-    function calcCVS() {
-      const map = getNumberOrNaN("sofa_map");
-      const cat = document.getElementById("sofa_cvs_cat")?.value ?? "0";
-
-      // MAP のみから最低限のスコア
-      let scoreFromMap = 0;
-      if (!isNaN(map) && map < 70) scoreFromMap = 1;
-
-      // 昇圧薬カテゴリによるスコア
-      let scoreFromDrug = 0;
-      const catNum = Number(cat);
-      if (!isNaN(catNum)) scoreFromDrug = catNum;
-
-      const s = Math.max(scoreFromMap, scoreFromDrug);
-
-      if (isNaN(map) && catNum === 0) {
-        return { score: null, text: "入力不足" };
-      }
-
-      let detail = [];
-      if (!isNaN(map)) detail.push(`MAP ${map.toFixed(0)} mmHg`);
-      if (catNum > 0) {
-        const label = {
-          1: "昇圧薬なし・MAP<70",
-          2: "ドブタミン任意 or ドパミン≤5",
-          3: "ドパミン>5–15 or Ad/NA≤0.1",
-          4: "ドパミン>15 or Ad/NA>0.1"
-        }[catNum] || "";
-        if (label) detail.push(label);
-      }
-
-      return {
-        score: s,
-        text: detail.join(" / ") || "入力不足"
-      };
-    }
-
-    function calcCNS() {
-      const gcs = getNumberOrNaN("sofa_gcs");
-      if (isNaN(gcs)) return { score: null, text: "入力不足" };
-
-      let s = 0;
-      if (gcs < 6) s = 4;
-      else if (gcs <= 9) s = 3;
-      else if (gcs <= 12) s = 2;
-      else if (gcs <= 14) s = 1;
-      else s = 0;
-
-      return {
-        score: s,
-        text: `GCS ${gcs.toFixed(0)}`
-      };
-    }
-
-    function calcRenal() {
-      const cr = getNumberOrNaN("sofa_cr");
-      const urine = getNumberOrNaN("sofa_urine");
-
-      if (isNaN(cr) && isNaN(urine)) {
-        return { score: null, text: "入力不足" };
-      }
-
-      let scoreCr = 0;
-      if (!isNaN(cr)) {
-        if (cr >= 5) scoreCr = 4;
-        else if (cr >= 3.5) scoreCr = 3;
-        else if (cr >= 2) scoreCr = 2;
-        else if (cr >= 1.2) scoreCr = 1;
-        else scoreCr = 0;
-      } else {
-        scoreCr = 0;
-      }
-
-      let scoreUrine = 0;
-      if (!isNaN(urine)) {
-        if (urine < 200) scoreUrine = 4;
-        else if (urine < 500) scoreUrine = 3;
-        else scoreUrine = 0;
-      }
-
-      const s = Math.max(scoreCr, scoreUrine);
-
-      let detail = [];
-      if (!isNaN(cr)) detail.push(`Cr ${cr.toFixed(1)} mg/dL`);
-      if (!isNaN(urine)) detail.push(`尿量 ${urine.toFixed(0)} mL/日`);
-
-      return {
-        score: s,
-        text: detail.join(" / ") || "入力不足"
-      };
-    }
-
-    function calculateSOFAOrgan() {
-      const resp = calcResp();
-      const coag = calcCoag();
-      const liver = calcLiver();
-      const cvs = calcCVS();
-      const cns = calcCNS();
-      const renal = calcRenal();
-
-      const organs = [resp, coag, liver, cvs, cns, renal];
-
-      let total = 0;
-      let missing = 0;
-      organs.forEach((o) => {
-        if (o.score == null) missing++;
-        else total += o.score;
-      });
-
-      let category = "";
-      let msg = "";
-
-      if (missing === 0) {
-        category = "全6臓器入力済み";
-        msg = "全ての臓器スコアを合計した SOFA スコアです。数値が高いほど臓器障害が重いとされます。";
-      } else if (missing < 6) {
-        category = `一部臓器未入力（${missing} 臓器）`;
-        msg = "未入力の臓器は 0 点としては扱わず、合計スコアは参考値として解釈してください。";
-      } else {
-        category = "";
-        msg = "SOFA 計算に必要な値が入力されていません。";
-      }
-
-      if (missing === 6) {
-        setResult("card_sofa_total", null, "", msg);
-      } else {
-        setResult("card_sofa_total", total.toString(), category, msg);
-      }
-
-      // 臓器別内訳
-      const names = ["呼吸", "凝固", "肝", "心血管", "中枢神経", "腎"];
-      const scores = [resp, coag, liver, cvs, cns, renal];
-
-      const detailLines = scores.map((o, i) => {
-        const sText = o.score == null ? "--" : `${o.score} 点`;
-        return `${names[i]}：${sText}（${o.text}）`;
-      });
-
-      const detailMsg = detailLines.join("\n");
-
-      setResult(
-        "card_sofa_detail",
-        "内訳",
-        "",
-        detailMsg
-      );
-    }
-
-    function clearSOFAOrgan() {
-      const form = document.getElementById("sofa_organ_form");
-      if (form) form.reset();
-
-      setResult(
-        "card_sofa_total",
-        null,
-        "",
-        "6 臓器のスコアの合計です。入力されていない臓器がある場合は参考値として扱ってください。"
-      );
-
-      setResult(
-        "card_sofa_detail",
-        "—",
-        "",
-        "呼吸：-- 点\n凝固：-- 点\n肝：-- 点\n心血管：-- 点\n中枢神経：-- 点\n腎：-- 点"
-      );
-    }
-  </script>
   <!-- 共通フッター -->
   <div data-include="../partials/footer.html"></div>
 </body>

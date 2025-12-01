@@ -9,21 +9,14 @@
   <link rel="stylesheet" href="../css/layout.css" />
   <link rel="stylesheet" href="../css/components.css" />
   <link rel="stylesheet" href="../css/responsive.css" />
-  <!-- ▼ ここから PWA 用に追加 ▼ -->
-  <link rel="manifest" href="../manifest.webmanifest" />
-  <meta name="theme-color" content="#ffffff" />
-
-  <!-- iOS ホーム画面アイコン -->
-  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
-  <!-- ▲ ここまで PWA 用に追加 ▲ -->
-
+   <link rel="manifest" href="../manifest.webmanifest" />
+   <meta name="theme-color" content="#ffffff" />
+　<link rel="apple-touch-icon" href="../icons/icon-192.png" />
   <script src="../js/include.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
-<script src="../js/sortable-init.js" defer></script>
-  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
-  <script src="../js/pwa-register.js" defer></script>
-  <!-- ▲ ここまで追加 ▲ -->
-  </head>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script> <!-- ★ -->
+  <script src="../js/sortable-init.js" defer></script> 
+　<script src="../js/pwa-register.js" defer></script>
+</head>
 <body data-subtitle="膠原病スコア一覧">
   <!-- 共通ヘッダー -->
   <div data-include="../partials/header.html"></div>
@@ -32,9 +25,30 @@
     <main>
       <a href="../index.html" class="back-link">← 診療科一覧に戻る</a>
 
-      <div class="section-title" style="margin-top: 12px;">
-        自己免疫性疾患スコア
-      </div>
+  <div class="section-title">自己免疫性疾患スコア</div>
+
+  <div class="list-header">
+    <fieldset class="reorder-mode-group" data-reorder-toggle>
+      <legend class="reorder-mode-legend">モード</legend>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="off"
+          checked
+        />
+        選択
+      </label>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="on"
+        />
+        並び替え
+      </label>
+    </fieldset>
+  </div>
 
       <div class="score-list" data-sortable-id="rheumatology-scores">
         <!-- RA分類基準 -->

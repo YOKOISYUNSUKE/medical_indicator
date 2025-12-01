@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>APACHE II | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+  <!-- APACHE II 専用JS -->
+  <script src="apache_ii.js" defer></script>
+</head>
+
+<body data-subtitle="APACHE II スコア計算">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <div class="wrapper">
+      <div class="score-card-container">
+        <a href="emergency.index.html" class="back-link">← 救急スコア一覧に戻る</a>
+
+        <div class="score-title">APACHE II</div>
+        <div class="score-subtitle">
+          ICU 入室後24時間以内の最も異常な生理学的指標 12項目と年齢・慢性疾患から重症度を評価するスコアです。
+          各項目を入力すると Acute Physiology Score（APS）、年齢ポイント、慢性健康ポイントを自動で合計します。
+        </div>
+
+        <!-- 入力フォーム -->
+        <form id="apache_form" onsubmit="return false;">
+
+          <div class="section-label">基本情報</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="apache_age">年齢 (歳)</label>
+              <input id="apache_age" type="number" min="0" max="120" />
+            </div>
+            <div class="form-row">
+              <label for="apache_gcs">GCS 合計</label>
+              <input id="apache_gcs" type="number" min="3" max="15" />
+            </div>
+          </div>
+
+          <div class="small-note">
+            GCS ポイント = 15 − 実測 GCS。<br />
+            例：GCS 10 の場合、5点を APS に加算します。
+          </div>
+
+          <div class="section-label">急性生理学的指標（APS）</div>
+
+          <!-- 体温・血圧・心拍・呼吸 -->
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="apache_temp">体温・中枢 (℃)</label>
+              <input id="apache_temp" type="number" step="0.1" />
+            </div>
+            <div class="form-row">
+              <label for="apache_map">平均血圧 MAP (mmHg)</label>
+              <input id="apache_map" type="number" />
+            </div>
+            <div class="form-row">
+              <label for="apache_hr">心拍数 (/分)</label>
+              <input id="apache_hr" type="number" />
+            </div>
+            <div class="form-row">
+              <label for="apache_rr">呼吸数 (/分)</label>
+              <input id="apache_rr" type="number" />
+            </div>
+          </div>
+
+          <!-- 酸素化モード選択 -->
+          <div class="section-label">酸素化</div>
+          <div class="small-note">
+            APACHE II では FiO₂ に応じて以下のどちらかで評価します：<br />
+            ・FiO₂ &lt; 0.5 の場合：PaO₂ (mmHg)<br />
+            ・FiO₂ ≥ 0.5 の場合：A–a DO₂ (mmHg)
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label>評価モード</label>
+              <div class="field-boolean-group field-boolean-group--row">
+                <label>
+                  <input type="radio" name="apache_o2_mode" value="pao2" checked />
+                  PaO₂ で評価（FiO₂ &lt; 0.5）
+                </label>
+                <label>
+                  <input type="radio" name="apache_o2_mode" value="aado2" />
+                  A–a DO₂ で評価（FiO₂ ≥ 0.5）
+                </label>
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="apache_pao2">PaO₂ (mmHg)</label>
+              <input id="apache_pao2" type="number" />
+            </div>
+            <div class="form-row">
+              <label for="apache_aado2">A–a DO₂ (mmHg)</label>
+              <input id="apache_aado2" type="number" />
+            </div>
+          </div>
+
+          <!-- pH -->
+          <div class="section-label">酸塩基</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="apache_ph">動脈血 pH</label>
+              <input id="apache_ph" type="number" step="0.01" />
+            </div>
+          </div>
+
+          <!-- 電解質・腎機能・血算 -->
+          <div class="section-label">電解質・腎機能・血算</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="apache_na">Na (mEq/L)</label>
+              <input id="apache_na" type="number" />
+            </div>
+            <div class="form-row">
+              <label for="apache_k">K (mEq/L)</label>
+              <input id="apache_k" type="number" step="0.1" />
+            </div>
+            <div class="form-row">
+              <label for="apache_cre">Cr (mg/dL)</label>
+              <input id="apache_cre" type="number" step="0.1" />
+            </div>
+            <div class="form-row">
+              <label for="apache_ht">Ht (%)</label>
+              <input id="apache_ht" type="number" step="0.1" />
+            </div>
+            <div class="form-row">
+              <label for="apache_wbc">白血球 (×10³/μL)</label>
+              <input id="apache_wbc" type="number" step="0.1" />
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <span class="boolean-section-title">腎不全の急性増悪</span>
+              <div class="field-boolean-group">
+                <label>
+                  <input id="apache_arf" type="checkbox" />
+                  急性腎不全あり（Cr のポイントを2倍）
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 慢性健康状態 -->
+          <div class="section-label">慢性健康状態ポイント</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="apache_chronic">該当するカテゴリー</label>
+              <select id="apache_chronic">
+                <option value="0">慢性臓器不全・免疫不全なし / 評価しない</option>
+                <option value="2">選択的手術後で慢性臓器不全 or 免疫不全あり（+2点）</option>
+                <option value="5">非手術 or 緊急手術後で慢性臓器不全 or 免疫不全あり（+5点）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" onclick="calculateApacheII()">
+              APACHE II 計算
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearApacheII()">
+              クリア
+            </button>
+          </div>
+        </form>
+
+        <!-- 結果表示 -->
+        <div class="result-area">
+          <div class="result-card" id="card_apache_total">
+            <div class="result-title">APACHE II 合計</div>
+            <div class="result-value">--</div>
+            <div class="result-category"></div>
+            <div class="result-message">
+              Acute Physiology Score（APS）+ 年齢ポイント + 慢性健康ポイントの合計です。
+              スコアが高いほど予後不良リスクが高いとされます。
+            </div>
+          </div>
+
+          <div class="result-card" id="card_apache_detail">
+            <div class="result-title">内訳</div>
+            <div class="result-value">—</div>
+            <div class="result-category"></div>
+            <div class="result-message">
+              APS：-- 点 / 年齢ポイント：-- 点 / 慢性健康ポイント：-- 点
+            </div>
+          </div>
+        </div>
+
+        <div class="result-warning">
+          ※ 本ツールは教育・参考用です。原法の APACHE II スコアを参考に実装していますが、
+          施設ごとの運用や個別の臨床状況を完全には反映しません。<br />
+          ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 医療電算機 v0.1
+  </footer>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

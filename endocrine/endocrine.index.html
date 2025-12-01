@@ -26,6 +26,29 @@
 
     <div class="section-title">内分泌・代謝スコア</div>
 
+  <div class="list-header">
+    <fieldset class="reorder-mode-group" data-reorder-toggle>
+      <legend class="reorder-mode-legend">モード</legend>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="off"
+          checked
+        />
+        選択
+      </label>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="on"
+        />
+        並び替え
+      </label>
+    </fieldset>
+  </div>
+
     <div class="score-list" data-sortable-id="score-endocrine">
       <!-- Burch–Wartofsky Point Scale -->
       <a class="score-card" data-id="score-thyroid-crisis" href="thyroid_storm.html">

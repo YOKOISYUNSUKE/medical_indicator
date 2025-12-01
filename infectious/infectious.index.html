@@ -5,28 +5,17 @@
   <title>感染症 | 医療電算機</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 共通CSS（1つ上の階層の css フォルダ） -->
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/layout.css" />
   <link rel="stylesheet" href="../css/components.css" />
   <link rel="stylesheet" href="../css/responsive.css" />
-  <!-- ▼ ここから PWA 用に追加 ▼ -->
-  <link rel="manifest" href="../manifest.webmanifest" />
-  <meta name="theme-color" content="#ffffff" />
-
-  <!-- iOS ホーム画面アイコン -->
-  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
-  <!-- ▲ ここまで PWA 用に追加 ▲ -->
-
-  <!-- 共通JS -->
+   <link rel="manifest" href="../manifest.webmanifest" />
+   <meta name="theme-color" content="#ffffff" />
+　<link rel="apple-touch-icon" href="../icons/icon-192.png" />
   <script src="../js/include.js" defer></script>
-
-  <!-- 並び替え用ライブラリ & 初期化スクリプト -->
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
-  <script src="../js/sortable-init.js" defer></script>
-  <!-- ▼ ここから PWA 登録用スクリプトを追加 ▼ -->
-  <script src="../js/pwa-register.js" defer></script>
-  <!-- ▲ ここまで追加 ▲ -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script> <!-- ★ -->
+  <script src="../js/sortable-init.js" defer></script> 
+　<script src="../js/pwa-register.js" defer></script>
 </head>
 
 <body data-subtitle="感染症スコア一覧">
@@ -37,6 +26,29 @@
     <a href="../index.html" class="back-link">診療科一覧に戻る</a>
 
     <div class="section-title">スコア一覧</div>
+
+  <div class="list-header">
+    <fieldset class="reorder-mode-group" data-reorder-toggle>
+      <legend class="reorder-mode-legend">モード</legend>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="off"
+          checked
+        />
+        選択
+      </label>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="on"
+        />
+        並び替え
+      </label>
+    </fieldset>
+  </div>
 
     <!-- 並べ替え対象コンテナ -->
     <div class="score-list" data-sortable-id="infectious-scores">

@@ -32,9 +32,30 @@
     <a href="../index.html" class="back-link">← 診療科一覧に戻る</a>
 
 
-    <div class="section-title" style="margin-top: 12px;">
-      救急スコア
-    </div>
+  <div class="section-title">救急スコア</div>
+  <div class="list-header">
+    <fieldset class="reorder-mode-group" data-reorder-toggle>
+      <legend class="reorder-mode-legend">モード</legend>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="off"
+          checked
+        />
+        選択
+      </label>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="on"
+        />
+        並び替え
+      </label>
+    </fieldset>
+  </div>
+
     <!-- 追加: data-sortable-id -->
     <div class="score-list" data-sortable-id="emergency-scores">
       <!-- SOFA/qSOFA 同じ窓 -->
@@ -50,6 +71,13 @@
         <div class="score-name">SIRS / 急性期DIC</div>
         <div class="score-desc">
           SIRS スコアと、日本の急性期DIC診断基準（厚生労働省ルート、日本救急医学会）に基づくDICスコアを同一画面で計算します。
+        </div>
+      </button>
+
+      <button class="score-card" onclick="location.href='apache_ii.html'">
+        <div class="score-name">APACHE II</div>
+        <div class="score-desc">
+          ICU 入室後24時間以内の最重度のバイタル・検査値と年齢・慢性疾患から重症度を評価するスコアです。
         </div>
       </button>
     </div>
