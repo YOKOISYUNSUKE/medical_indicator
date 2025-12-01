@@ -228,23 +228,38 @@ button.btn-secondary {
   border: none;
 }
 
-/* 並び替えモードトグル専用の軽い調整 */
-.reorder-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  padding-inline: 10px;
-}
-
-.reorder-toggle.is-active {
-  font-weight: 600;
-  box-shadow: 0 0 0 1px #4f8cff inset;
-}
-
-.reorder-toggle-icon {
-  font-size: 0.9rem;
-}
+ /* 並び替えモード（ラジオボタン） */
+ .reorder-mode-group {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   font-size: 0.8rem;
+   margin-bottom: 6px;
+ }
+ /* ▼ ここを追加（list-header の距離を縮める） */
+ .list-header {
+   margin-bottom: 8px;      /* 距離を適切に短縮 */
+   margin-top: 4px;         /* 上側の余白も少なく */
+ }
+ 
+ .reorder-mode-legend {
+   font-weight: 600;
+   margin-right: 4px;
+ }
+ 
+ .reorder-mode-option {
+   display: inline-flex;
+   align-items: center;
+   gap: 4px;
+   padding: 3px 8px;
+   border-radius: 999px;
+   border: 1px solid #d0d7de;
+   cursor: pointer;
+ }
+ 
+ .reorder-mode-option input[type="radio"] {
+   margin: 0;
+ }
 
 
 .btn-primary:hover,

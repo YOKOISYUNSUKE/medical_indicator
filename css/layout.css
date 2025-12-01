@@ -34,3 +34,10 @@
   gap: 12px;
   justify-items: center;
 }
+
+/* index.html のみ：診療科カードを上に詰める */
+body[data-subtitle] .dept-grid {
+  margin-top: 6px;     /* デフォルトより詰める */
+  gap: 12px 14px;       /* 通常16→12に微調整 */
+}
+

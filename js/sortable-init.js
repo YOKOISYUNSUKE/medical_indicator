@@ -103,32 +103,36 @@ document.addEventListener("DOMContentLoaded", () => {
     sortableInstances.push(sortable);
   });
 
-  // 初期状態：並び替えモード OFF（ドラッグ無効）
-  applyReorderMode(false);
+   // 初期状態：並び替えモード OFF（ドラッグ無効）
+   applyReorderMode(false);
+ 
+   // 並び替えモード ラジオボタンを初期化
+   const reorderToggle = document.querySelector("[data-reorder-toggle]");
+   if (reorderToggle) {
+     const radios = reorderToggle.querySelectorAll(
+       'input[type="radio"][name="reorder-mode"]'
+     );
+ 
+     const applyModeFromDom = () => {
+       let enabled = false;
+       radios.forEach((radio) => {
+         if (radio.checked && radio.value === "on") {
+           enabled = true;
+         }
+       });
+       applyReorderMode(enabled);
+     };
+ 
+     // 初期表示（HTML 側の checked を反映）
+     applyModeFromDom();
+ 
+     radios.forEach((radio) => {
+       radio.addEventListener("change", () => {
+         applyModeFromDom();
+       });
+     });
+   }
 
-  // 並び替えモード トグルボタンを初期化
-  const reorderToggle = document.querySelector("[data-reorder-toggle]");
-  if (reorderToggle) {
-    const labelElem = reorderToggle.querySelector("[data-reorder-toggle-label]");
-
-    const updateToggleLabel = () => {
-      const modeText = isReorderMode ? "ON" : "OFF";
-      if (labelElem) {
-        labelElem.textContent = `並び替えモード：${modeText}`;
-      }
-      reorderToggle.classList.toggle("is-active", isReorderMode);
-      reorderToggle.setAttribute("aria-pressed", String(isReorderMode));
-    };
-
-    // 初期表示
-    updateToggleLabel();
-
-    reorderToggle.addEventListener("click", (e) => {
-      e.preventDefault();
-      applyReorderMode(!isReorderMode);
-      updateToggleLabel();
-    });
-  }
 
   // --- ここから：並べ替え直後 1 回だけクリックをキャンセルする処理 ---
   document.addEventListener(

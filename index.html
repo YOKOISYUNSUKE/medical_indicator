@@ -36,18 +36,35 @@
   <main>
     <div class="section-title">診療科を選択</div>
 
-<!-- ▼ 並び替えモードトグル：コンテナのすぐ上あたりに挿入 -->
-<div class="list-header">
-  <button
-    class="btn-secondary reorder-toggle"
-    type="button"
-    data-reorder-toggle
-    aria-pressed="false"
-  >
-    <span class="reorder-toggle-icon">⇅</span>
-    <span data-reorder-toggle-label>並び替えモード：OFF</span>
-  </button>
-</div>
+
+  <!-- ▼ 並び替えモード ラジオ：ここを新規挿入 -->
+  <div class="list-header">
+    <fieldset class="reorder-mode-group" data-reorder-toggle>
+      <legend class="reorder-mode-legend">モード</legend>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="off"
+          checked
+        />
+        選択
+      </label>
+      <label class="reorder-mode-option">
+        <input
+          type="radio"
+          name="reorder-mode"
+          value="on"
+        />
+        並び替え
+      </label>
+    </fieldset>
+  </div>
+  <!-- ▲ 挿入ここまで -->
+
+
+</main>
+
 
 
     <!-- 追加: data-sortable-id -->
