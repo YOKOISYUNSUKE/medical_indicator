@@ -11,14 +11,21 @@
   <link rel="stylesheet" href="../css/components.css" />
   <link rel="stylesheet" href="../css/responsive.css" />
 
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
   <!-- 共通ヘッダー/フッター読込 -->
   <script src="../js/include.js" defer></script>
   <!-- 共通スコアユーティリティ -->
   <script src="../js/score-utils.js" defer></script>
+  <!-- PWA サービスワーカー登録 -->
+  <script src="../js/pwa-register.js" defer></script>
 
-  <!-- このスコア専用の計算JSがあればここに -->
+  <!-- このスコア専用の計算JS -->
   <script src="pneumonia.js" defer></script>
 </head>
+
 
 <!-- data-subtitle に、このページ固有のサブタイトルを書く -->
 <body data-subtitle="肺炎重症度計算">
@@ -42,42 +49,43 @@
             <p style="margin-bottom: 8px;">
               以下の項目に該当するものにチェックしてください。
             </p>
-            <div style="margin-left: 4px; margin-top: 4px;">
-              <label style="display:block; margin-bottom:4px;">
+            <div class="field-boolean-group" style="margin-top: 4px;">
+              <label>
                 <input type="checkbox" id="adrop-age" />
                 Age：男性≧70歳 / 女性≧75歳
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="adrop-dehydration" />
                 Dehydration：BUN ≧ 21 mg/dL など脱水所見
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="adrop-resp" />
                 Respiration：SpO₂≦90% または PaO₂≦60 Torr
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="adrop-orientation" />
                 Orientation：意識障害あり
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="adrop-pressure" />
                 Pressure：収縮期血圧≦90 mmHg
               </label>
             </div>
 
             <button type="button"
-                    onclick="calculateADROP()"
-                    style="margin-top: 10px; padding: 6px 10px; border-radius: 8px; border: 1px solid #4f8cff; background:#4f8cff; color:#fff; font-size:0.85rem; cursor:pointer;">
+                    class="calc-button"
+                    onclick="calculateADROP()">
               A-DROP を計算
             </button>
 
-            <div id="adrop-result" style="margin-top: 10px; font-weight:600;">
+            <div id="adrop-result" class="score-result">
               スコア：-　重症度：
             </div>
-            <div id="adrop-detail" style="margin-top: 4px; font-size:0.8rem; color:#555;">
+            <div id="adrop-detail" class="score-interpret">
             </div>
           </div>
         </div>
+
 
         <!-- CURB-65 -->
         <div class="section-title" style="margin-top: 24px;">CURB-65</div>
@@ -86,42 +94,43 @@
             <p style="margin-bottom: 8px;">
               以下の項目に該当するものにチェックしてください。
             </p>
-            <div style="margin-left: 4px; margin-top: 4px;">
-              <label style="display:block; margin-bottom:4px;">
+            <div class="field-boolean-group" style="margin-top: 4px;">
+              <label>
                 <input type="checkbox" id="curb-confusion" />
                 C：Confusion（意識障害）
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="curb-urea" />
                 U：Urea＞20 mg/dL（BUN＞7 mmol/L）
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="curb-rr" />
                 R：Respiratory rate ≧ 30 / 分
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="curb-bp" />
                 B：Blood pressure：収縮期＜90 または 拡張期≦60 mmHg
               </label>
-              <label style="display:block; margin-bottom:4px;">
+              <label>
                 <input type="checkbox" id="curb-age" />
                 65：Age ≧ 65 歳
               </label>
             </div>
 
             <button type="button"
-                    onclick="calculateCURB65()"
-                    style="margin-top: 10px; padding: 6px 10px; border-radius: 8px; border: 1px solid #4f8cff; background:#4f8cff; color:#fff; font-size:0.85rem; cursor:pointer;">
+                    class="calc-button"
+                    onclick="calculateCURB65()">
               CURB-65 を計算
             </button>
 
-            <div id="curb-result" style="margin-top: 10px; font-weight:600;">
+            <div id="curb-result" class="score-result">
               スコア：-　重症度：
             </div>
-            <div id="curb-detail" style="margin-top: 4px; font-size:0.8rem; color:#555;">
+            <div id="curb-detail" class="score-interpret">
             </div>
           </div>
         </div>
+
 
         <!-- PSI -->
         <div class="section-title" style="margin-top: 24px;">PSI（Pneumonia Severity Index / PORT）</div>
@@ -137,124 +146,138 @@
 
             <!-- Demographics -->
             <div style="margin-top: 6px; margin-left:4px;">
-              <div style="margin-bottom:4px; font-weight:600;">1. 年齢・性別・居住状況</div>
-              <div style="margin-bottom:4px;">
-                年齢：
-                <input type="number" id="psi-age" min="0" max="120" style="width:80px;" />
-                歳
+              <div class="boolean-section-title">1. 年齢・性別・居住状況</div>
+              <div class="field-wrapper" style="align-items:center;">
+                <label for="psi-age">年齢</label>
+                <input
+                  type="number"
+                  id="psi-age"
+                  inputmode="numeric"
+                  style="width: 100px; margin-top: 4px;"
+                />
               </div>
-              <div style="margin-bottom:4px;">
-                性別：
-                <label style="margin-right:8px;">
-                  <input type="radio" name="psi-sex" value="male" checked /> 男性
+              <div class="field-boolean-group" style="margin-top: 4px;">
+                <label>
+                  <input type="radio" name="psi-sex" value="male" checked />
+                  男性
                 </label>
                 <label>
-                  <input type="radio" name="psi-sex" value="female" /> 女性
+                  <input type="radio" name="psi-sex" value="female" />
+                  女性
                 </label>
               </div>
-              <label style="display:block; margin-bottom:6px;">
-                <input type="checkbox" id="psi-nursing" />
-                介護・療養型施設入所中（nursing home resident）
-              </label>
+              <div class="field-boolean-group" style="margin-top: 6px;">
+                <label>
+                  <input type="checkbox" id="psi-nursing" />
+                  介護・療養型施設入所中（nursing home resident）
+                </label>
+              </div>
             </div>
 
             <!-- Comorbidities -->
             <div style="margin-top: 8px; margin-left:4px;">
-              <div style="margin-bottom:4px; font-weight:600;">2. 基礎疾患</div>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-neoplastic" />
-                悪性腫瘍の既往（neoplastic disease）
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-liver" />
-                慢性肝疾患（肝硬変など）
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-chf" />
-                うっ血性心不全
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-cvd" />
-                脳血管疾患の既往
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-renal" />
-                慢性腎疾患
-              </label>
+              <div class="boolean-section-title">2. 基礎疾患</div>
+              <div class="field-boolean-group">
+                <label>
+                  <input type="checkbox" id="psi-neoplastic" />
+                  悪性腫瘍の既往（neoplastic disease）
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-liver" />
+                  慢性肝疾患（肝硬変など）
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-chf" />
+                  うっ血性心不全
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-cvd" />
+                  脳血管疾患の既往
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-renal" />
+                  慢性腎疾患
+                </label>
+              </div>
             </div>
 
             <!-- Physical exam -->
             <div style="margin-top: 8px; margin-left:4px;">
-              <div style="margin-bottom:4px; font-weight:600;">3. 身体所見</div>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-ams" />
-                意識障害あり（altered mental status）
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-pulse125" />
-                脈拍 ≥ 125 /分
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-rr30" />
-                呼吸数 ＞ 30 /分
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-sbp90" />
-                収縮期血圧 &lt; 90 mmHg
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-temp-extreme" />
-                体温 &lt; 35℃ または ≥ 40℃
-              </label>
+              <div class="boolean-section-title">3. 身体所見</div>
+              <div class="field-boolean-group">
+                <label>
+                  <input type="checkbox" id="psi-ams" />
+                  意識障害あり（altered mental status）
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-pulse125" />
+                  脈拍 ≥ 125 /分
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-rr30" />
+                  呼吸数 ＞ 30 /分
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-sbp90" />
+                  収縮期血圧 &lt; 90 mmHg
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-temp-extreme" />
+                  体温 &lt; 35℃ または ≥ 40℃
+                </label>
+              </div>
             </div>
 
             <!-- Labs & radiology -->
             <div style="margin-top: 8px; margin-left:4px;">
-              <div style="margin-bottom:4px; font-weight:600;">4. 検査所見</div>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-ph-low" />
-                動脈血 pH &lt; 7.35
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-bun-high" />
-                BUN ≥ 30 mg/dL（9 mmol/L）
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-na-low" />
-                Na &lt; 130 mmol/L
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-glu-high" />
-                血糖 ≥ 250 mg/dL（14 mmol/L）
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-hct-low" />
-                ヘマトクリット &lt; 30%
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-pao2-low" />
-                PaO₂ &lt; 60 mmHg
-              </label>
-              <label style="display:block; margin-bottom:2px;">
-                <input type="checkbox" id="psi-effusion" />
-                胸部 X 線で胸水あり（pleural effusion）
-              </label>
+              <div class="boolean-section-title">4. 検査所見</div>
+              <div class="field-boolean-group">
+                <label>
+                  <input type="checkbox" id="psi-ph-low" />
+                  動脈血 pH &lt; 7.35
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-bun-high" />
+                  BUN ≥ 30 mg/dL（9 mmol/L）
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-na-low" />
+                  Na &lt; 130 mmol/L
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-glu-high" />
+                  血糖 ≥ 250 mg/dL（14 mmol/L）
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-hct-low" />
+                  ヘマトクリット &lt; 30%
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-pao2-low" />
+                  PaO₂ &lt; 60 mmHg
+                </label>
+                <label>
+                  <input type="checkbox" id="psi-effusion" />
+                  胸部 X 線で胸水あり（pleural effusion）
+                </label>
+              </div>
             </div>
 
             <button type="button"
-                    onclick="calculatePSI()"
-                    style="margin-top: 10px; padding: 6px 10px; border-radius: 8px; border: 1px solid #4f8cff; background:#4f8cff; color:#fff; font-size:0.85rem; cursor:pointer;">
+                    class="calc-button"
+                    onclick="calculatePSI()">
               PSI を計算
             </button>
 
-            <div id="psi-result" style="margin-top: 10px; font-weight:600;">
+            <div id="psi-result" class="score-result">
               PSIスコア：-　リスククラス：
             </div>
-            <div id="psi-detail" style="margin-top: 4px; font-size:0.8rem; color:#555;">
+            <div id="psi-detail" class="score-interpret">
             </div>
 
           </div>
         </div>
+
 
       </div>
     </div>

@@ -72,14 +72,30 @@ function calculateCURB65() {
 function calculatePSI() {
   // 1. 入力値取得
   const ageInput = document.getElementById("psi-age");
-  const age = Number(ageInput.value);
+  
+
+   let age;
+   // score-utils.js が正常に読み込まれている場合は共通ヘルパーを使用
+   if (typeof parseNumericInput === "function" && typeof RANGE_PRESETS !== "undefined") {
+     const parsed = parseNumericInput(ageInput, RANGE_PRESETS.AGE);
+     age = parsed.value;
+     if (parsed.error) {
+       // parseNumericInput 内でエラー表示・スタイルが付与されるのでここでは何もしない
+       return;
+     }
+   } else {
+     // フォールバック：単純な数値パース（古いブラウザや score-utils.js 不読み込み時でも動かす）
+     age = Number(ageInput.value);
+     if (!age || Number.isNaN(age) || age <= 0) {
+       alert("PSI：年齢を入力してください。");
+       ageInput.focus();
+       return;
+     }
+   }
+
   const sexEl = document.querySelector("input[name='psi-sex']:checked");
   const sex = sexEl ? sexEl.value : "male";
 
-  if (isNaN(age) || age <= 0) {
-    alert("PSI：年齢を入力してください。");
-    return;
-  }
 
   const hasNursing = document.getElementById("psi-nursing").checked;
 
