@@ -15,19 +15,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // 並べ替えインスタンスを保持（モード切替用）
+  // モード制御フラグ（ローカルスコープに宣言）
+  let isReorderMode = false;
+  let lastDraggedItem = null;
   const sortableInstances = [];
 
-  // 並び替えモードの適用関数
   function applyReorderMode(enabled) {
     isReorderMode = enabled;
 
-    // 並び替えモード ON のときだけドラッグを有効化
     sortableInstances.forEach((instance) => {
       instance.option("disabled", !enabled);
     });
 
-    // 必要なら全体にクラスを付けてスタイル切り替え
     document.documentElement.classList.toggle("reorder-mode-active", enabled);
   }
 
@@ -56,11 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
         lastDraggedItem = null;
       },
 
-
-      // 並べ替え開始時はいったんフラグをクリア
-      onStart() {
-        lastDraggedItem = null;
-      },
 
       // 並べ替え終了時に「実際に位置が変わったカード」だけ記録
       onEnd(evt) {

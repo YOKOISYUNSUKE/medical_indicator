@@ -89,11 +89,26 @@
   font-size: 0.8rem;
   color: #666;
   line-height: 1.4;
+  text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 3;     /* ← スマホでの長文化軽減 */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.field-boolean-group {
+  margin-left: auto;
+  margin-right: auto;
+}
+.score-result,
+.score-interpret {
+  text-align: center;
+}
+.calc-button {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
 
 
 /* スコア計算ボタン */
