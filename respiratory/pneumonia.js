@@ -1,281 +1,292 @@
-// 肺炎重症度スコア計算 JS
-// A-DROP / CURB-65 / PSI
-// score-utils.js の Boolean / 数値ヘルパーを積極的に利用する実装
+// pneumonia.js
+// 肺炎重症度：A-DROP / CURB-65 / PSI（Fine スコア）
+// score-utils.js の RANGE_PRESETS / parseNumericInput を利用
 
-// 1. Boolean入力を 1/0 に変換するヘルパー
-function boolFlag(id) {
-  const el = document.getElementById(id);
-  if (!el) return 0;
-
-  // score-utils.js が読み込まれている場合
-  if (typeof parseBooleanInput === "function") {
-    return parseBooleanInput(el);
-  }
-  return el.checked ? 1 : 0;
-}
-
-// 2. スコア表示用の共通ヘルパー（リスク色も付与）
-function setScoreResult(resultEl, baseClassName, severityClass, text) {
-  if (!resultEl) return;
-  resultEl.className = baseClassName; // まずリセット
-  if (severityClass) {
-    resultEl.classList.add(severityClass);
-  }
-  resultEl.textContent = text;
-}
-
-// 3. A-DROP 計算
-function calculateADROP() {
-  const score =
-    boolFlag("adrop-age") +
-    boolFlag("adrop-dehydration") +
-    boolFlag("adrop-resp") +
-    boolFlag("adrop-orientation") +
-    boolFlag("adrop-pressure");
-
-  let severity = "";
-  let detail = "";
-  let riskClass = "";
-
-  if (score === 0) {
-    severity = "軽症";
-    detail = "通常は外来治療が可能とされます。";
-    riskClass = "risk-low";
-  } else if (score === 1 || score === 2) {
-    severity = "中等症";
-    detail = "原則として入院が推奨されるレベルです。";
-    riskClass = "risk-mid";
-  } else if (score === 3) {
-    severity = "重症";
-    detail = "集中治療の適応も含めて検討される重症度です。";
-    riskClass = "risk-high";
-  } else {
-    severity = "超重症";
-    detail = "ICU 管理を含めた積極的治療が検討されます。";
-    riskClass = "risk-high";
-  }
-
-  const result = document.getElementById("adrop-result");
-  const detailEl = document.getElementById("adrop-detail");
-
-  setScoreResult(
-    result,
-    "score-result",
-    riskClass,
-    `スコア：${score}　重症度：${severity}`
-  );
-  if (detailEl) {
-    detailEl.textContent = detail;
-  }
-}
-
-// 4. CURB-65 計算
-function calculateCURB65() {
-  const score =
-    boolFlag("curb-confusion") +
-    boolFlag("curb-urea") +
-    boolFlag("curb-rr") +
-    boolFlag("curb-bp") +
-    boolFlag("curb-age");
-
-  let severity = "";
-  let detail = "";
-  let riskClass = "";
-
-  if (score <= 1) {
-    severity = "低リスク";
-    detail =
-      "多くは外来フォローで良いとされますが、全身状態や基礎疾患を考慮してください。";
-    riskClass = "risk-low";
-  } else if (score === 2) {
-    severity = "中等度リスク";
-    detail = "入院または厳密な外来フォローが推奨されます。";
-    riskClass = "risk-mid";
-  } else {
-    severity = "高リスク";
-    detail =
-      "入院治療が推奨され、スコア 4–5 では ICU など高次医療の検討が必要です。";
-    riskClass = "risk-high";
-  }
-
-  const result = document.getElementById("curb-result");
-  const detailEl = document.getElementById("curb-detail");
-
-  setScoreResult(
-    result,
-    "score-result",
-    riskClass,
-    `スコア：${score}　重症度：${severity}`
-  );
-  if (detailEl) {
-    detailEl.textContent = detail;
-  }
-}
-
-// 5. PSI（Pneumonia Severity Index）計算
-function calculatePSI() {
-  const ageInput = document.getElementById("psi-age");
-  if (!ageInput) {
-    alert("PSI：年齢入力が見つかりません（id=psi-age）。");
-    return;
-  }
-
-  let age = null;
-  let parseOk = true;
-
-  if (
-    typeof parseNumericInput === "function" &&
-    typeof RANGE_PRESETS !== "undefined"
-  ) {
-    const parsed = parseNumericInput(ageInput, RANGE_PRESETS.AGE);
-    age = parsed.value;
-    if (parsed.error) {
-      parseOk = false;
-    }
-  } else {
-    const v = Number(ageInput.value);
-    if (!v || Number.isNaN(v) || v <= 0) {
-      alert("PSI：年齢を入力してください。");
-      ageInput.focus();
-      parseOk = false;
-    } else {
-      age = v;
-    }
-  }
-
-  if (!parseOk || age == null) {
-    return;
-  }
-
-  const sexEl = document.querySelector("input[name='psi-sex']:checked");
-  const sex = sexEl ? sexEl.value : "male";
-
-  const hasNursing = boolFlag("psi-nursing");
-
-  const hasNeoplastic = boolFlag("psi-neoplastic");
-  const hasLiver = boolFlag("psi-liver");
-  const hasCHF = boolFlag("psi-chf");
-  const hasCVD = boolFlag("psi-cvd");
-  const hasRenal = boolFlag("psi-renal");
-
-  const hasAMS = boolFlag("psi-ams");
-  const hasPulse125 = boolFlag("psi-pulse125");
-  const hasRR30 = boolFlag("psi-rr30");
-  const hasSBP90 = boolFlag("psi-sbp90");
-  const hasTempExtreme = boolFlag("psi-temp-extreme");
-
-  const hasPhLow = boolFlag("psi-ph-low");
-  const hasBUNHigh = boolFlag("psi-bun-high");
-  const hasNaLow = boolFlag("psi-na-low");
-  const hasGluHigh = boolFlag("psi-glu-high");
-  const hasHctLow = boolFlag("psi-hct-low");
-  const hasPaO2Low = boolFlag("psi-pao2-low");
-  const hasEffusion = boolFlag("psi-effusion");
-
-  const step1HasRisk =
-    age > 50 ||
-    !!(
-      hasAMS ||
-      hasPulse125 ||
-      hasRR30 ||
-      hasSBP90 ||
-      hasTempExtreme ||
-      hasNeoplastic ||
-      hasCHF ||
-      hasCVD ||
-      hasRenal ||
-      hasLiver
-    );
-
-  let score = 0;
-  let riskClass = "";
-  let recommendation = "";
-  let riskColorClass = "";
-
-  if (!step1HasRisk) {
-    riskClass = "I（最軽症）";
-    score = 0;
-    recommendation = "PSI クラス I：原法では外来治療が推奨される層です。";
-    riskColorClass = "risk-low";
-  } else {
-    if (sex === "male") {
-      score += age;
-    } else {
-      score += Math.max(age - 10, 0);
-    }
-
-    if (hasNursing) score += 10;
-
-    if (hasNeoplastic) score += 30;
-    if (hasLiver) score += 20;
-    if (hasCHF) score += 10;
-    if (hasCVD) score += 10;
-    if (hasRenal) score += 10;
-
-    if (hasAMS) score += 20;
-    if (hasPulse125) score += 10;
-    if (hasRR30) score += 20;
-    if (hasSBP90) score += 20;
-    if (hasTempExtreme) score += 15;
-
-    if (hasPhLow) score += 30;
-    if (hasBUNHigh) score += 20;
-    if (hasNaLow) score += 20;
-    if (hasGluHigh) score += 10;
-    if (hasHctLow) score += 10;
-    if (hasPaO2Low) score += 10;
-    if (hasEffusion) score += 10;
-
-    if (score <= 70) {
-      riskClass = "II（低リスク）";
-      recommendation = "PSI クラス II：原法では外来治療が推奨される層です。";
-      riskColorClass = "risk-low";
-    } else if (score <= 90) {
-      riskClass = "III（低〜中等度リスク）";
-      recommendation = "PSI クラス III：外来か短期入院観察を検討する層です。";
-      riskColorClass = "risk-mid";
-    } else if (score <= 130) {
-      riskClass = "IV（中等度〜高リスク）";
-      recommendation = "PSI クラス IV：入院加療が推奨される層です。";
-      riskColorClass = "risk-high";
-    } else {
-      riskClass = "V（高リスク）";
-      recommendation =
-        "PSI クラス V：入院加療（しばしば ICU を含めて）が推奨される層です。";
-      riskColorClass = "risk-high";
-    }
-  }
-
-  const resultEl = document.getElementById("psi-result");
-  const detailEl = document.getElementById("psi-detail");
-
-  setScoreResult(
-    resultEl,
-    "score-result",
-    riskColorClass,
-    `PSIスコア：${score}　リスククラス：${riskClass}`
-  );
-
-  if (detailEl) {
-    detailEl.textContent =
-      recommendation +
-      " 実際の入院適応や治療方針の決定では、全身状態・社会的要因・各国のガイドライン等も必ず併せて評価してください。";
-  }
-}
-
-// 6. ボタンと関数を接続（スマホでの誤タップを減らすため、イベントリスナー方式）
 document.addEventListener("DOMContentLoaded", () => {
-  const adropBtn = document.getElementById("adrop-calc-btn");
-  const curbBtn = document.getElementById("curb-calc-btn");
-  const psiBtn = document.getElementById("psi-calc-btn");
+  // --- 要素取得 ---
+  // A-DROP
+  const adropAge = document.getElementById("adrop-age");
+  const adropDehydration = document.getElementById("adrop-dehydration");
+  const adropResp = document.getElementById("adrop-resp");
+  const adropOrientation = document.getElementById("adrop-orientation");
+  const adropPressure = document.getElementById("adrop-pressure");
+  const adropCalcBtn = document.getElementById("adrop-calc-btn");
+  const adropResult = document.getElementById("adrop-result");
+  const adropDetail = document.getElementById("adrop-detail");
 
-  if (adropBtn) {
-    adropBtn.addEventListener("click", calculateADROP);
+  // CURB-65
+  const curbConfusion = document.getElementById("curb-confusion");
+  const curbUrea = document.getElementById("curb-urea");
+  const curbRr = document.getElementById("curb-rr");
+  const curbBp = document.getElementById("curb-bp");
+  const curbAge = document.getElementById("curb-age");
+  const curbCalcBtn = document.getElementById("curb-calc-btn");
+  const curbResult = document.getElementById("curb-result");
+  const curbDetail = document.getElementById("curb-detail");
+
+  // PSI
+  const psiAge = document.getElementById("psi-age");
+  const psiSexRadios = document.querySelectorAll('input[name="psi-sex"]');
+  const psiNursing = document.getElementById("psi-nursing");
+
+  const psiNeoplastic = document.getElementById("psi-neoplastic");
+  const psiLiver = document.getElementById("psi-liver");
+  const psiChf = document.getElementById("psi-chf");
+  const psiCvd = document.getElementById("psi-cvd");
+  const psiRenal = document.getElementById("psi-renal");
+
+  const psiAms = document.getElementById("psi-ams");
+  const psiPulse125 = document.getElementById("psi-pulse125");
+  const psiRr30 = document.getElementById("psi-rr30");
+  const psiSbp90 = document.getElementById("psi-sbp90");
+  const psiTempExtreme = document.getElementById("psi-temp-extreme");
+
+  const psiPhLow = document.getElementById("psi-ph-low");
+  const psiBunHigh = document.getElementById("psi-bun-high");
+  const psiNaLow = document.getElementById("psi-na-low");
+  const psiGluHigh = document.getElementById("psi-glu-high");
+  const psiHctLow = document.getElementById("psi-hct-low");
+  const psiPao2Low = document.getElementById("psi-pao2-low");
+  const psiEffusion = document.getElementById("psi-effusion");
+
+  const psiCalcBtn = document.getElementById("psi-calc-btn");
+  const psiResult = document.getElementById("psi-result");
+  const psiDetail = document.getElementById("psi-detail");
+
+  // --- 共通項目の連携ロジック ---
+
+  // 1) PSI 年齢 + 性別 → A-DROP 年齢 / CURB-65 Age
+  function getPsiSexValue() {
+    let val = "male";
+    psiSexRadios.forEach((r) => {
+      if (r.checked) {
+        val = r.value;
+      }
+    });
+    return val;
   }
-  if (curbBtn) {
-    curbBtn.addEventListener("click", calculateCURB65);
+
+  function updateAgeDerivedCheckboxes() {
+    if (!psiAge) return;
+
+    // 入力中はエラーを出し過ぎないよう allowEmpty: true
+    const { value } = parseNumericInput(psiAge, {
+      min: RANGE_PRESETS.AGE.min,
+      max: RANGE_PRESETS.AGE.max,
+      allowEmpty: true,
+    });
+
+    if (value == null || Number.isNaN(value)) {
+      if (adropAge) adropAge.checked = false;
+      if (curbAge) curbAge.checked = false;
+      return;
+    }
+
+    const sex = getPsiSexValue();
+    const isAdropAge =
+      (sex === "male" && value >= 70) || (sex === "female" && value >= 75);
+    const isCurbAge = value >= 65;
+
+    if (adropAge) adropAge.checked = isAdropAge;
+    if (curbAge) curbAge.checked = isCurbAge;
   }
-  if (psiBtn) {
-    psiBtn.addEventListener("click", calculatePSI);
+
+  if (psiAge) {
+    psiAge.addEventListener("input", updateAgeDerivedCheckboxes);
+  }
+  psiSexRadios.forEach((r) => {
+    r.addEventListener("change", updateAgeDerivedCheckboxes);
+  });
+
+  // 2) 意識障害（A-DROP Orientation / CURB Confusion / PSI AMS）同期
+  let syncingConsciousness = false;
+  function syncConsciousness(source) {
+    if (syncingConsciousness) return;
+    syncingConsciousness = true;
+
+    const checked = !!source.checked;
+    [adropOrientation, curbConfusion, psiAms].forEach((el) => {
+      if (el && el !== source) {
+        el.checked = checked;
+      }
+    });
+
+    syncingConsciousness = false;
+  }
+
+  [adropOrientation, curbConfusion, psiAms].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("change", () => syncConsciousness(el));
+  });
+
+  // 3) BUN/脱水関連（A-DROP Dehydration / CURB Urea / PSI BUN 高値）同期
+  let syncingBun = false;
+  function syncBun(source) {
+    if (syncingBun) return;
+    syncingBun = true;
+
+    const checked = !!source.checked;
+    [adropDehydration, curbUrea, psiBunHigh].forEach((el) => {
+      if (el && el !== source) {
+        el.checked = checked;
+      }
+    });
+
+    syncingBun = false;
+  }
+
+  [adropDehydration, curbUrea, psiBunHigh].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("change", () => syncBun(el));
+  });
+
+  // --- A-DROP 計算 ---
+  function calcADROP() {
+    let score = 0;
+    if (adropAge?.checked) score += 1;
+    if (adropDehydration?.checked) score += 1;
+    if (adropResp?.checked) score += 1;
+    if (adropOrientation?.checked) score += 1;
+    if (adropPressure?.checked) score += 1;
+
+    let severity = "";
+    let note = "";
+
+    if (score === 0) {
+      severity = "軽症";
+      note = "外来治療を基本とします。";
+    } else if (score === 1 || score === 2) {
+      severity = "中等症";
+      note = "入院治療や慎重な経過観察を検討します。";
+    } else if (score === 3) {
+      severity = "重症";
+      note = "原則入院、集中治療室の必要性も評価します。";
+    } else {
+      severity = "超重症";
+      note = "集中治療室管理を強く検討します。";
+    }
+
+    if (adropResult) {
+      adropResult.textContent = `スコア：${score}　重症度：${severity}`;
+    }
+    if (adropDetail) {
+      adropDetail.textContent = note;
+    }
+  }
+
+  if (adropCalcBtn) {
+    adropCalcBtn.addEventListener("click", calcADROP);
+  }
+
+  // --- CURB-65 計算 ---
+  function calcCURB65() {
+    let score = 0;
+    if (curbConfusion?.checked) score += 1;
+    if (curbUrea?.checked) score += 1;
+    if (curbRr?.checked) score += 1;
+    if (curbBp?.checked) score += 1;
+    if (curbAge?.checked) score += 1;
+
+    let severity = "";
+    let note = "";
+
+    if (score <= 1) {
+      severity = "低リスク (0–1)";
+      note = "多くは外来治療が可能とされますが、臨床状況を考慮してください。";
+    } else if (score === 2) {
+      severity = "中等度リスク (2)";
+      note = "入院治療を強く検討します。";
+    } else {
+      severity = "高リスク (3–5)";
+      note = "入院・集中治療室管理を含めた集中的治療を検討します。";
+    }
+
+    if (curbResult) {
+      curbResult.textContent = `スコア：${score}　重症度：${severity}`;
+    }
+    if (curbDetail) {
+      curbDetail.textContent = note;
+    }
+  }
+
+  if (curbCalcBtn) {
+    curbCalcBtn.addEventListener("click", calcCURB65);
+  }
+
+  // --- PSI (Fine スコア) 計算 ---
+  function calcPSI() {
+    if (!psiAge) return;
+
+    const { value, error } = parseNumericInput(psiAge, {
+      min: RANGE_PRESETS.AGE.min,
+      max: RANGE_PRESETS.AGE.max,
+      allowEmpty: false,
+    });
+    if (error || Number.isNaN(value)) {
+      return;
+    }
+
+    const sex = getPsiSexValue();
+    let score = 0;
+
+    // 1. 年齢・性別・施設入所
+    if (sex === "male") {
+      score += value;
+    } else {
+      score += value - 10; // 女性は年齢-10
+    }
+    if (psiNursing?.checked) score += 10;
+
+    // 2. 基礎疾患
+    if (psiNeoplastic?.checked) score += 30;
+    if (psiLiver?.checked) score += 20;
+    if (psiChf?.checked) score += 10;
+    if (psiCvd?.checked) score += 10;
+    if (psiRenal?.checked) score += 10;
+
+    // 3. 身体所見
+    if (psiAms?.checked) score += 20;
+    if (psiRr30?.checked) score += 20;
+    if (psiSbp90?.checked) score += 20;
+    if (psiTempExtreme?.checked) score += 15;
+    if (psiPulse125?.checked) score += 10;
+
+    // 4. 検査所見
+    if (psiPhLow?.checked) score += 30;
+    if (psiBunHigh?.checked) score += 20;
+    if (psiNaLow?.checked) score += 20;
+    if (psiGluHigh?.checked) score += 10;
+    if (psiHctLow?.checked) score += 10;
+    if (psiPao2Low?.checked) score += 10;
+    if (psiEffusion?.checked) score += 10;
+
+    // リスククラス
+    let riskClass = "";
+    let note = "";
+
+    if (score <= 50) {
+      riskClass = "II（低リスク）";
+      note = "多くは外来治療が可能とされる層です。";
+    } else if (score <= 70) {
+      riskClass = "III（中等度リスク）";
+      note = "短期入院や慎重な経過観察を検討します。";
+    } else if (score <= 90) {
+      riskClass = "IV（高リスク）";
+      note = "原則入院治療が推奨される層です。";
+    } else {
+      riskClass = "V（超高リスク）";
+      note = "集中治療室を含めた集中的管理を検討します。";
+    }
+
+    if (psiResult) {
+      psiResult.textContent = `PSIスコア：${score}　リスククラス：${riskClass}`;
+    }
+    if (psiDetail) {
+      psiDetail.textContent = note;
+    }
+  }
+
+  if (psiCalcBtn) {
+    psiCalcBtn.addEventListener("click", calcPSI);
   }
 });
