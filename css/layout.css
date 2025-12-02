@@ -22,7 +22,7 @@
 .dept-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2列固定 */
-  gap: 16px 14px;   
+  gap: 16px 14px;
   justify-items: center;
 }
 
@@ -35,9 +35,24 @@
   justify-items: center;
 }
 
+/* ▼ 追加：スコアカード2個を横並び中央寄せしたい場合 */
+.score-list.score-list--two {
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  justify-items: center;
+}
+
+/* ▼ 追加：スコアカード1個だけ中央揃えにしたい場合 */
+.score-list.score-list--single {
+  grid-template-columns: 1fr;
+  justify-content: center;
+  justify-items: center;
+}
+
 /* index.html のみ：診療科カードを上に詰める */
 body[data-subtitle] .dept-grid {
   margin-top: 6px;     /* デフォルトより詰める */
-  gap: 12px 14px;       /* 通常16→12に微調整 */
+  gap: 12px 14px;      /* 通常16→12に微調整 */
 }
+
 
