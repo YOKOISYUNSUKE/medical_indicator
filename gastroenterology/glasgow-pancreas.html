@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>急性膵炎スコア | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+  <!-- 共通JS -->
+  <script src="../js/include.js" defer></script>
+  <script src="../js/score-utils.js" defer></script>
+  <script src="../js/pwa-register.js" defer></script>
+
+  <!-- 急性膵炎スコア用 JS（BISAP + Glasgow + Ranson） -->
+  <script src="glasgow-pancreas.js" defer></script>
+</head>
+
+<body data-subtitle="急性膵炎スコア（BISAP / Glasgow / Ranson）">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main class="wrapper">
+    <div class="score-card-container">
+      <a href="gastroenterology.index.html" class="back-link">
+        消化器スコア一覧に戻る
+      </a>
+
+      <div class="section-title" style="margin-top: 12px;">
+        急性膵炎スコア（BISAP / Glasgow / Ranson）
+      </div>
+
+      <!-- ▼ 3カード横並び -->
+      <div class="score-list score-list--three">
+
+        <!-- BISAP スコア -->
+        <div class="score-card score-card--wide">
+          <div class="score-name">BISAP スコア</div>
+          <div class="score-desc score-desc--full">
+            急性膵炎発症早期（24時間以内）の予後予測スコア。<br />
+            BUN, 年齢, 意識障害, SIRS, 胸水の 5 項目で評価します。
+          </div>
+
+          <form id="bisap-form" class="score-form">
+            <div class="section-label">数値入力</div>
+
+            <div class="field-wrapper">
+              <label>
+                年齢（歳）
+                <input
+                  id="bisap-age"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  max="120"
+                />
+              </label>
+              <div class="small-note">＞ 60 歳で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                BUN（mg/dL）
+                <input
+                  id="bisap-bun"
+                  type="number"
+                  inputmode="decimal"
+                  min="1"
+                  max="200"
+                />
+              </label>
+              <div class="small-note">＞ 25 mg/dL で 1 点</div>
+            </div>
+
+            <div class="section-label">臨床・画像所見（該当項目をチェック）</div>
+            <div
+              class="field-boolean-group js-boolean-group"
+              id="bisap-boolean"
+              data-boolean-group="bisap_core"
+            >
+              <label>
+                <input type="checkbox" data-weight="1" id="bisap-ams" />
+                意識障害（GCS &lt; 15 など）
+              </label>
+
+              <label>
+                <input type="checkbox" data-weight="1" id="bisap-sirs" />
+                SIRS &#8805; 2 項目
+              </label>
+
+              <label>
+                <input type="checkbox" data-weight="1" id="bisap-pleural" />
+                画像で胸水あり
+              </label>
+            </div>
+
+            <button type="button" id="bisap-calc" class="calc-button">
+              BISAP スコアを計算
+            </button>
+          </form>
+
+          <div id="bisap-result" class="score-result"></div>
+          <div id="bisap-interpret" class="score-interpret"></div>
+        </div>
+
+        <!-- Glasgow-Imrie スコア -->
+        <div class="score-card score-card--wide">
+          <div class="score-name">Glasgow-Imrie スコア</div>
+          <div class="score-desc score-desc--full">
+            発症から 48 時間以内の重症度評価スコア。<br />
+            年齢・血液検査・動脈血ガスの 8 項目を用います。
+          </div>
+
+          <form id="glasgow-form" class="score-form">
+            <div class="section-label">数値入力</div>
+
+            <div class="field-wrapper">
+              <label>
+                年齢（歳）
+                <input id="g-age" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">＞ 55 歳で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                白血球 WBC（×10³/µL）
+                <input id="g-wbc" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&gt; 15 で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                血糖（mg/dL）
+                <input id="g-glucose" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&gt; 180 で 1 点（約 10 mmol/L）</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                BUN（mg/dL）
+                <input id="g-bun" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&gt; 44 で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                Ca（mg/dL）
+                <input id="g-calcium" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&lt; 8.0 で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                PaO₂（mmHg）
+                <input id="g-pao2" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&lt; 60 で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                LDH（IU/L）
+                <input id="g-ldh" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&gt; 600 で 1 点</div>
+            </div>
+
+            <div class="field-wrapper">
+              <label>
+                AST（IU/L）
+                <input id="g-ast" type="number" inputmode="decimal" />
+              </label>
+              <div class="small-note">&gt; 200 で 1 点</div>
+            </div>
+
+            <button type="button" id="glasgow-calc" class="calc-button">
+              Glasgow-Imrie を計算
+            </button>
+          </form>
+
+          <div id="glasgow-result" class="score-result"></div>
+          <div id="glasgow-interpret" class="score-interpret"></div>
+        </div>
+
+        <!-- Ranson 基準（非胆石膵炎） -->
+        <div class="score-card score-card--wide">
+          <div class="score-name">Ranson 基準（非胆石膵炎）</div>
+          <div class="score-desc score-desc--full">
+            入院時と 48 時間以内の所見から予後を層別化する古典的スコア。<br />
+            該当する項目にチェックしてください。
+          </div>
+
+          <form id="ranson-form" class="score-form">
+            <div class="section-label">入院時</div>
+            <div
+              class="field-boolean-group js-boolean-group"
+              id="ranson-boolean"
+              data-boolean-group="ranson_core"
+            >
+              <label>
+                <input type="checkbox" data-weight="1" id="r-age" />
+                年齢 &gt; 55 歳
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-wbc" />
+                WBC &gt; 16,000 /µL
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-glucose" />
+                血糖 &gt; 200 mg/dL
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-ldh" />
+                LDH &gt; 350 IU/L
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-ast" />
+                AST &gt; 250 IU/L
+              </label>
+
+              <div class="boolean-section-title">48 時間以内</div>
+
+              <label>
+                <input type="checkbox" data-weight="1" id="r-hct-fall" />
+                Ht 低下 &gt; 10 %
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-bun-rise" />
+                BUN 上昇 &gt; 5 mg/dL
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-calcium" />
+                Ca &lt; 8.0 mg/dL
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-pao2" />
+                PaO₂ &lt; 60 mmHg
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-base-deficit" />
+                Base deficit &gt; 4 mEq/L
+              </label>
+              <label>
+                <input type="checkbox" data-weight="1" id="r-fluid" />
+                体液貯留量 &gt; 6 L
+              </label>
+            </div>
+
+            <button type="button" id="ranson-calc" class="calc-button">
+              Ranson スコアを計算
+            </button>
+          </form>
+
+          <div id="ranson-result" class="score-result"></div>
+          <div id="ranson-interpret" class="score-interpret"></div>
+        </div>
+
+      </div><!-- /.score-list score-list--three -->
+    </div><!-- /.score-card-container -->
+  </main>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

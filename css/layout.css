@@ -43,6 +43,11 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* ▼ スコアカード3個を横並びにしたい場合（急性膵炎など） */
+.score-list.score-list--three {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 /* ▼ スコアカード1個だけ中央に置きたい場合（壊死性軟部組織など） */
 .score-list.score-list--single {
   grid-template-columns: 1fr;
@@ -53,6 +58,7 @@ body[data-subtitle] .dept-grid {
   margin-top: 6px;     /* デフォルトより詰める */
   gap: 12px 14px;      /* 通常16→12に微調整 */
 }
+
 
 
 
