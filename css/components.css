@@ -108,7 +108,11 @@
   margin-right: auto;
 }
 
-
+ /* スコア計算ページなど、フォームを含む場合は行数制限を解除 */
+ .score-desc--full {
+   display: block;
+   overflow: visible;
+ }
 
 
 /* スコア計算ボタン */
