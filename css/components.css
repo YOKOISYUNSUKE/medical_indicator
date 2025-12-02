@@ -66,6 +66,11 @@
   width: 100%;
   max-width: 200px;
 }
+.score-card.score-card--wide {
+  max-width: 100%;
+  cursor: default;
+}
+
 
 .score-card:hover {
   transform: translateY(-2px);

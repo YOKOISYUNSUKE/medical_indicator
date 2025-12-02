@@ -5,8 +5,8 @@
 /* スコア計算ページの中央揃え共通設定 */
 .wrapper {
   display: flex;
-  flex-direction: column;  /* 追加: 縦方向に積む */
-  align-items: center;     /* 追加: 中央揃え */
+  flex-direction: column;  /* 縦方向に積む */
+  align-items: center;     /* 中央揃え */
 }
 
 .score-card-container {
@@ -18,35 +18,34 @@
   gap: 12px;
 }
 
-/* 診療科グリッド（スマホでは基本2列） */
-.dept-grid {
+/* ▼ 共通ベース：カードグリッド（診療科インデックス & スコア一覧で共通利用） */
+.card-grid,
+.dept-grid,
+.score-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2列固定 */
-  gap: 16px 14px;
+  grid-template-columns: repeat(2, 1fr); /* 基本は2列 */
   justify-items: center;
 }
 
-/* スコア一覧グリッド（スマホでは2列） */
+/* 診療科グリッド（インデックスページ用） */
+.dept-grid {
+  gap: 16px 14px;
+}
+
+/* スコア一覧グリッド（スコアページ用） */
 .score-list {
   margin-top: 16px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2列固定 */
   gap: 12px;
-  justify-items: center;
 }
 
-/* ▼ 追加：スコアカード2個を横並び中央寄せしたい場合 */
+/* ▼ スコアカード2個を横並びにしたい場合（溶連菌・軟部組織など） */
 .score-list.score-list--two {
   grid-template-columns: repeat(2, 1fr);
-  justify-content: center;
-  justify-items: center;
 }
 
-/* ▼ 追加：スコアカード1個だけ中央揃えにしたい場合 */
+/* ▼ スコアカード1個だけ中央に置きたい場合（壊死性軟部組織など） */
 .score-list.score-list--single {
   grid-template-columns: 1fr;
-  justify-content: center;
-  justify-items: center;
 }
 
 /* index.html のみ：診療科カードを上に詰める */
@@ -54,5 +53,6 @@ body[data-subtitle] .dept-grid {
   margin-top: 6px;     /* デフォルトより詰める */
   gap: 12px 14px;      /* 通常16→12に微調整 */
 }
+
 
 

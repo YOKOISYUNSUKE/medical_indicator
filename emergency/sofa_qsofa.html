@@ -29,62 +29,55 @@
       <div class="score-card-container">
         <a href="emergency.index.html" class="back-link">← 救急スコア一覧に戻る</a>
 
-        <div class="score-title">SOFA / qSOFA</div>
-        <div class="score-subtitle">
-          ベッドサイドで簡便に評価する qSOFA と、臓器別に評価する SOFA を同じ画面で扱います。
-          SOFA は呼吸・凝固・肝・心血管・中枢神経・腎の 6 項目を臓器別に入力して合計スコアを算出します。
-        </div>
 
-        <!-- qSOFA 入力 -->
-        <div class="section-label">qSOFA 入力</div>
-        <form id="qsofa_form" onsubmit="return false;">
-          <div class="form-grid">
-            <div class="form-row">
-              <label for="q_rr">呼吸数 RR (/分)</label>
-              <input id="q_rr" type="number" min="0" />
+        <div class="score-card" style="cursor: default;">
+          <div class="score-title">SOFA / qSOFA</div>
+          <div class="score-subtitle">
+            ベッドサイドで簡便に評価する qSOFA と、臓器別に評価する SOFA を同じ画面で扱います。
+            SOFA は呼吸・凝固・肝・心血管・中枢神経・腎の 6 項目を臓器別に入力して合計スコアを算出します。
+          </div>
+
+          <!-- qSOFA 入力 -->
+          <div class="section-label">qSOFA 入力</div>
+          <form id="qsofa_form" onsubmit="return false;">
+            <div class="form-grid">
+              ...
             </div>
-            <div class="form-row">
-              <label for="q_sbp">収縮期血圧 SBP (mmHg)</label>
-              <input id="q_sbp" type="number" min="0" />
+
+            <div class="small-note">
+              qSOFA 条件：<br />
+              ・RR ≥ 22 /min<br />
+              ・SBP ≤ 100 mmHg<br />
+              ・GCS &lt; 15<br />
+              上記 3 項目のうち該当数（0–3点）で評価します。
             </div>
-            <div class="form-row">
-              <label for="q_gcs">GCS 合計</label>
-              <input id="q_gcs" type="number" min="3" max="15" />
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" onclick="calculateQSOFA()">
+                qSOFA計算
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="clearQSOFA()">
+                クリア
+              </button>
+            </div>
+          </form>
+
+          <div class="result-card" id="card_qsofa">
+            <div class="result-title">qSOFA</div>
+            <div class="result-value">--</div>
+            <div class="result-category"></div>
+            <div class="result-message">
+              RR、SBP、GCS から算出されるベッドサイド評価スコアです。
             </div>
           </div>
 
-          <div class="small-note">
-            qSOFA 条件：<br />
-            ・RR ≥ 22 /min<br />
-            ・SBP ≤ 100 mmHg<br />
-            ・GCS &lt; 15<br />
-            上記 3 項目のうち該当数（0–3点）で評価します。
+          <!-- SOFA 臓器別入力 -->
+          <div class="section-label">
+            SOFA 臓器別入力
+            <small>（基準は原法に準じた代表的なカットオフ）</small>
           </div>
 
-          <div class="form-actions">
-            <button type="button" class="btn btn-primary" onclick="calculateQSOFA()">
-              qSOFA計算
-            </button>
-            <button type="button" class="btn btn-secondary" onclick="clearQSOFA()">
-              クリア
-            </button>
-          </div>
-        </form>
-        <div class="result-card" id="card_qsofa">
-          <div class="result-title">qSOFA</div>
-          <div class="result-value">--</div>
-          <div class="result-category"></div>
-          <div class="result-message">
-            RR、SBP、GCS から算出されるベッドサイド評価スコアです。
-          </div>
-        </div>
-        <!-- SOFA 臓器別入力 -->
-        <div class="section-label">
-          SOFA 臓器別入力
-          <small>（基準は原法に準じた代表的なカットオフ）</small>
-        </div>
-
-        <form id="sofa_organ_form" onsubmit="return false;">
+          <form id="sofa_organ_form" onsubmit="return false;">
           <!-- 呼吸 -->
           <div class="section-label">① 呼吸：PaO₂ / FiO₂ 比</div>
           <div class="form-grid">
@@ -219,37 +212,37 @@
           </div>
         </form>
 
-        <!-- 結果表示 -->
-        <div class="result-area">
-          <div class="result-card" id="card_sofa_total">
-            <div class="result-title">SOFA 合計スコア</div>
-            <div class="result-value">--</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              6 臓器のスコアの合計です。入力されていない臓器がある場合は参考値として扱ってください。
+          <!-- 結果表示 -->
+          <div class="result-area">
+            <div class="result-card" id="card_sofa_total">
+              <div class="result-title">SOFA 合計スコア</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                6 臓器のスコアの合計です。入力されていない臓器がある場合は参考値として扱ってください。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_sofa_detail">
+              <div class="result-title">SOFA 臓器別内訳</div>
+              <div class="result-value">—</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                呼吸：-- 点
+                凝固：-- 点
+                肝：-- 点
+                心血管：-- 点
+                中枢神経：-- 点
+                腎：-- 点
+              </div>
             </div>
           </div>
 
-          <div class="result-card" id="card_sofa_detail">
-            <div class="result-title">SOFA 臓器別内訳</div>
-            <div class="result-value">—</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              呼吸：-- 点
-              凝固：-- 点
-              肝：-- 点
-              心血管：-- 点
-              中枢神経：-- 点
-              腎：-- 点
-            </div>
+          <div class="result-warning">
+            ※ 本ツールは教育・参考用です。公式 SOFA スコアの基準に準じていますが、施設ごとの運用差や除外条件を反映していない可能性があります。<br />
+            ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
           </div>
         </div>
-
-        <div class="result-warning">
-          ※ 本ツールは教育・参考用です。公式 SOFA スコアの基準に準じていますが、施設ごとの運用差や除外条件を反映していない可能性があります。<br />
-          ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
-        </div>
-      </div>
     </div>
   </main>
 

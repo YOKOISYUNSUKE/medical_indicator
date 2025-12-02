@@ -29,15 +29,19 @@
       <div class="score-card-container">
         <a href="emergency.index.html" class="back-link">← 救急スコア一覧に戻る</a>
 
-        <div class="score-title">SIRS / 急性期DIC（JAAM, 厚労省ルート）</div>
-        <div class="score-subtitle">
-          上部で SIRS に関するバイタルと、DIC に必要な検査値を入力すると、SIRS スコアと急性期DICスコアを同時に算出します。
-        </div>
 
-        <!-- 入力フォーム -->
-        <form id="sirs_dic_form" onsubmit="return false;">
 
-          <div class="section-label">SIRS 判定用バイタル</div>
+        <div class="score-card" style="cursor: default;">
+          <div class="score-title">SIRS / 急性期DIC（JAAM, 厚労省ルート）</div>
+          <div class="score-subtitle">
+            上部で SIRS に関するバイタルと、DIC に必要な検査値を入力すると、SIRS スコアと急性期DICスコアを同時に算出します。
+          </div>
+
+          <!-- 入力フォーム -->
+          <form id="sirs_dic_form" onsubmit="return false;">
+
+            <div class="section-label">SIRS 判定用バイタル</div>
+            
           <div class="form-grid">
             <div class="form-row">
               <label for="temp">体温 (℃)</label>
@@ -111,32 +115,33 @@
           </div>
         </form>
 
-        <!-- 結果表示 -->
-        <div class="result-area">
-          <div class="result-card" id="card_sirs">
-            <div class="result-title">SIRS スコア</div>
-            <div class="result-value">--</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              4項目のうち、条件を満たす項目数を表示します（2項目以上でSIRS）。
+
+          <!-- 結果表示 -->
+          <div class="result-area">
+            <div class="result-card" id="card_sirs">
+              <div class="result-title">SIRS スコア</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                4項目のうち、条件を満たす項目数を表示します（2項目以上でSIRS）。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_dic">
+              <div class="result-title">急性期DICスコア</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                SIRS、血小板、PT比、FDP から算出される急性期DICスコアです（4点以上でDIC）。
+              </div>
             </div>
           </div>
 
-          <div class="result-card" id="card_dic">
-            <div class="result-title">急性期DICスコア</div>
-            <div class="result-value">--</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              SIRS、血小板、PT比、FDP から算出される急性期DICスコアです（4点以上でDIC）。
-            </div>
+          <div class="result-warning">
+            ※ 本ツールは急性期DIC診断基準（JAAM）を参考に作成しています。<br />
+            ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
           </div>
         </div>
-
-        <div class="result-warning">
-          ※ 本ツールは急性期DIC診断基準（JAAM）を参考に作成しています。<br />
-          ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
-        </div>
-      </div>
     </div>
   </main>
 

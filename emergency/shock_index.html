@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shock Index / Age Shock Index | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+  <!-- Shock Index 専用JS -->
+  <script src="shock_index.js" defer></script>
+</head>
+
+<body data-subtitle="Shock Index / Age Shock Index">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+  <main>
+    <div class="wrapper">
+      <div class="score-card-container">
+        <a href="emergency.index.html" class="back-link">← 救急スコア一覧に戻る</a>
+
+        <div class="score-card score-card--wide">
+          <div class="score-title">Shock Index / Age Shock Index</div>
+          <div class="score-subtitle">
+            Shock Index（心拍数 / 収縮期血圧）は循環不全の早期サインとして用いられます。
+            Age Shock Index は加齢を加味してリスクを補正した指標です。
+          </div>
+
+          <form id="shockindex-form" onsubmit="return false;">
+            <div class="section-label">入力</div>
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="si-age">年齢 (歳)</label>
+                <input id="si-age" type="number" inputmode="decimal" />
+              </div>
+              <div class="form-row">
+                <label for="si-hr">心拍数 (/分)</label>
+                <input id="si-hr" type="number" inputmode="decimal" />
+              </div>
+              <div class="form-row">
+                <label for="si-sbp">収縮期血圧 (mmHg)</label>
+                <input id="si-sbp" type="number" inputmode="decimal" />
+              </div>
+            </div>
+
+            <button type="button" id="si-calc-btn" class="calc-button">
+              Shock Index を計算
+            </button>
+          </form>
+
+          <div id="si-result" class="score-result"></div>
+          <div id="si-interpret" class="score-interpret"></div>
+
+          <div class="result-warning">
+            ※ Shock Index / Age Shock Index は循環不全の「スクリーニング指標」です。<br />
+            ※ 出血性ショックなどで特に有用ですが、β遮断薬内服や基礎高血圧などで解釈が変わる点に注意してください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 医療電算機 v0.1
+  </footer>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

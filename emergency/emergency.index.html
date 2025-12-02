@@ -56,8 +56,35 @@
     </fieldset>
   </div>
 
-    <!-- 追加: data-sortable-id -->
     <div class="score-list" data-sortable-id="emergency-scores">
+
+     <!-- NEWS2 -->
+      <button
+        class="score-card"
+        data-id="score-news2"
+        onclick="location.href='news2_rems.html'"
+      >
+        <div class="score-name">NEWS2</div>
+        <div class="score-desc">
+          呼吸数・SpO₂・血圧・心拍数・体温・意識レベルから全身状態の悪化リスクを評価する
+          National Early Warning Score 2 です。
+        </div>
+      </button>
+
+      <!-- Shock Index / Age Shock Index -->
+      <button
+        class="score-card"
+        data-id="score-shock-index"
+        onclick="location.href='shock_index.html'"
+      >
+        <div class="score-name">Shock Index / Age Shock Index</div>
+        <div class="score-desc">
+          心拍数 / 収縮期血圧（Shock Index）と、年齢を掛け合わせた Age Shock Index により、
+          出血性ショックや敗血症性ショックなど循環不全の早期サインを評価します。
+        </div>
+      </button>
+
+
       <!-- SOFA/qSOFA 同じ窓 -->
       <button class="score-card" onclick="location.href='sofa_qsofa.html'">
         <div class="score-name">SOFA / qSOFA</div>
@@ -78,6 +105,19 @@
         <div class="score-name">APACHE II</div>
         <div class="score-desc">
           ICU 入室後24時間以内の最重度のバイタル・検査値と年齢・慢性疾患から重症度を評価するスコアです。
+        </div>
+      </button>
+
+      <!-- MEDS スコア -->
+      <button
+        class="score-card"
+        data-id="score-meds"
+        onclick="location.href='meds_speed.html'"
+      >
+        <div class="score-name">MEDS スコア</div>
+        <div class="score-desc">
+          救急外来における敗血症疑い患者の短期死亡リスクを、年齢・末期疾患・意識状態・
+          呼吸・ショック・血小板・band 好中球など 9 項目で層別化します。
         </div>
       </button>
     </div>

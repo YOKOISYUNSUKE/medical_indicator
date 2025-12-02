@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>NEWS2 | 医療電算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+
+  <!-- 共通ヘッダー/フッター読込 -->
+  <script src="../js/include.js" defer></script>
+  <!-- 共通スコアユーティリティ -->
+  <script src="../js/score-utils.js" defer></script>
+  <!-- NEWS2 専用JS -->
+  <script src="./news2_rems.js" defer></script>
+</head>
+
+<body data-subtitle="NEWS2（早期警告スコア）">
+  <!-- 共通ヘッダー -->
+  <div data-include="../partials/header.html"></div>
+
+<main>
+  <div class="wrapper">
+    <div class="score-card-container">
+      <a href="emergency.index.html" class="back-link">
+        救急スコア一覧に戻る
+      </a>
+
+      <div class="section-title" style="margin-top: 12px;">
+        NEWS2 / REMS
+      </div>
+
+      <div class="score-list score-list--two">
+        <!-- 左カード：NEWS2 -->
+        <div class="score-card score-card--wide">
+          <div class="score-title">NEWS2（National Early Warning Score 2）</div>
+          <div class="score-desc score-desc--full">
+            <p class="score-desc-text">
+              バイタルサインと意識状態から病状の悪化リスクを評価する院内早期警戒スコアです。
+            </p>
+
+            <form id="news2-form" class="score-form">
+              <div class="form-grid">
+                <div class="form-row">
+                  <label for="news2-rr">呼吸数（/min）</label>
+                  <input id="news2-rr" name="news2-rr" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="news2-spo2">SpO₂（%）</label>
+                  <input id="news2-spo2" name="news2-spo2" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="news2-o2">酸素投与あり</label>
+                  <select id="news2-o2" name="news2-o2" class="select-input">
+                    <option value="no">いいえ</option>
+                    <option value="yes">はい</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="news2-temp">体温（℃）</label>
+                  <input id="news2-temp" name="news2-temp" type="number" inputmode="decimal" step="0.1" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="news2-sbp">収縮期血圧（mmHg）</label>
+                  <input id="news2-sbp" name="news2-sbp" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="news2-hr">脈拍（/min）</label>
+                  <input id="news2-hr" name="news2-hr" type="number" inputmode="numeric" class="text-input">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="section-label">意識レベル（ACVPU）</div>
+                <div class="field-boolean-group field-boolean-group--row js-boolean-group" data-boolean-group="news2-acvpu">
+                  <label class="field-boolean-option">
+                    <input type="radio" name="news2-acvpu" value="A" checked>
+                    A（Alert）
+                  </label>
+                  <label class="field-boolean-option">
+                    <input type="radio" name="news2-acvpu" value="C">
+                    C（新規の錯乱）
+                  </label>
+                  <label class="field-boolean-option">
+                    <input type="radio" name="news2-acvpu" value="V">
+                    V（呼びかけに反応）
+                  </label>
+                  <label class="field-boolean-option">
+                    <input type="radio" name="news2-acvpu" value="P">
+                    P（痛みにのみ反応）
+                  </label>
+                  <label class="field-boolean-option">
+                    <input type="radio" name="news2-acvpu" value="U">
+                    U（反応なし）
+                  </label>
+                </div>
+              </div>
+
+              <button type="button" id="news2-calc-btn" class="calc-button">
+                NEWS2 スコアを計算
+              </button>
+            </form>
+
+            <div id="news2-result" class="score-result"></div>
+            <div id="news2-interpret" class="score-interpret"></div>
+
+            <div class="result-warning">
+              NEWS2 は病状悪化の早期検知を目的としたスコアであり、単独で入院や ICU などの判断を確定するものではありません。
+            </div>
+          </div>
+        </div>
+
+        <!-- 右カード：REMS -->
+        <div class="score-card score-card--wide">
+          <div class="score-title">REMS（Rapid Emergency Medicine Score）</div>
+          <div class="score-desc score-desc--full">
+            <p class="score-desc-text">
+              年齢・バイタル・GCS から院内死亡リスクを予測する救急トリアージスコアです
+              （非外科救急患者を対象とした原法）。REMS の構成要素は Olsson らの原著に基づきます（年齢・MAP・HR・RR・SpO₂・GCS）。[Rapid Emergency Medicine score: J Intern Med 2004]
+            </p>
+
+            <form id="rems-form" class="score-form">
+              <div class="form-grid">
+                <div class="form-row">
+                  <label for="rems-age">年齢（歳）</label>
+                  <input id="rems-age" name="rems-age" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="rems-map">平均血圧 MAP（mmHg）</label>
+                  <input id="rems-map" name="rems-map" type="number" inputmode="numeric" class="text-input">
+                  <div class="field-help">
+                    MAP ≒ { (収縮期 + 2×拡張期) / 3 } で概算
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <label for="rems-hr">脈拍（/min）</label>
+                  <input id="rems-hr" name="rems-hr" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="rems-rr">呼吸数（/min）</label>
+                  <input id="rems-rr" name="rems-rr" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="rems-spo2">SpO₂（%）</label>
+                  <input id="rems-spo2" name="rems-spo2" type="number" inputmode="numeric" class="text-input">
+                </div>
+
+                <div class="form-row">
+                  <label for="rems-gcs">GCS 合計（3–15）</label>
+                  <input id="rems-gcs" name="rems-gcs" type="number" inputmode="numeric" class="text-input">
+                </div>
+              </div>
+
+              <button type="button" id="rems-calc-btn" class="calc-button">
+                REMS スコアを計算
+              </button>
+            </form>
+
+            <div id="rems-result" class="score-result"></div>
+            <div id="rems-interpret" class="score-interpret"></div>
+
+            <div class="result-warning">
+              REMS は院内死亡リスクの予測に有用とされますが、リスクの絶対値は対象集団に依存します。
+              必ず臨床判断・施設の運用と合わせて解釈してください。
+            </div>
+          </div>
+        </div>
+      </div><!-- /.score-list -->
+    </div><!-- /.score-card-container -->
+  </div><!-- /.wrapper -->
+</main>
+
+
+  <footer>
+    © 医療電算機 v0.1
+  </footer>
+
+  <!-- 共通フッター -->
+  <div data-include="../partials/footer.html"></div>
+</body>
+</html>

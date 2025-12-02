@@ -28,16 +28,17 @@
       <div class="score-card-container">
         <a href="emergency.index.html" class="back-link">← 救急スコア一覧に戻る</a>
 
-        <div class="score-title">APACHE II</div>
-        <div class="score-subtitle">
-          ICU 入室後24時間以内の最も異常な生理学的指標 12項目と年齢・慢性疾患から重症度を評価するスコアです。
-          各項目を入力すると Acute Physiology Score（APS）、年齢ポイント、慢性健康ポイントを自動で合計します。
-        </div>
+        <div class="score-card" style="cursor: default;">
+          <div class="score-title">APACHE II</div>
+          <div class="score-subtitle">
+            ICU 入室後24時間以内の最も異常な生理学的指標 12項目と年齢・慢性疾患から重症度を評価するスコアです。
+            各項目を入力すると Acute Physiology Score（APS）、年齢ポイント、慢性健康ポイントを自動で合計します。
+          </div>
 
-        <!-- 入力フォーム -->
-        <form id="apache_form" onsubmit="return false;">
+          <!-- 入力フォーム -->
+          <form id="apache_form" onsubmit="return false;">
 
-          <div class="section-label">基本情報</div>
+            <div class="section-label">基本情報</div>
           <div class="form-grid">
             <div class="form-row">
               <label for="apache_age">年齢 (歳)</label>
@@ -177,34 +178,34 @@
           </div>
         </form>
 
-        <!-- 結果表示 -->
-        <div class="result-area">
-          <div class="result-card" id="card_apache_total">
-            <div class="result-title">APACHE II 合計</div>
-            <div class="result-value">--</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              Acute Physiology Score（APS）+ 年齢ポイント + 慢性健康ポイントの合計です。
-              スコアが高いほど予後不良リスクが高いとされます。
+          <!-- 結果表示 -->
+          <div class="result-area">
+            <div class="result-card" id="card_apache_total">
+              <div class="result-title">APACHE II 合計</div>
+              <div class="result-value">--</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                Acute Physiology Score（APS）+ 年齢ポイント + 慢性健康ポイントの合計です。
+                スコアが高いほど予後不良リスクが高いとされます。
+              </div>
+            </div>
+
+            <div class="result-card" id="card_apache_detail">
+              <div class="result-title">内訳</div>
+              <div class="result-value">—</div>
+              <div class="result-category"></div>
+              <div class="result-message">
+                APS：-- 点 / 年齢ポイント：-- 点 / 慢性健康ポイント：-- 点
+              </div>
             </div>
           </div>
 
-          <div class="result-card" id="card_apache_detail">
-            <div class="result-title">内訳</div>
-            <div class="result-value">—</div>
-            <div class="result-category"></div>
-            <div class="result-message">
-              APS：-- 点 / 年齢ポイント：-- 点 / 慢性健康ポイント：-- 点
-            </div>
+          <div class="result-warning">
+            ※ 本ツールは教育・参考用です。原法の APACHE II スコアを参考に実装していますが、
+            施設ごとの運用や個別の臨床状況を完全には反映しません。<br />
+            ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
           </div>
         </div>
-
-        <div class="result-warning">
-          ※ 本ツールは教育・参考用です。原法の APACHE II スコアを参考に実装していますが、
-          施設ごとの運用や個別の臨床状況を完全には反映しません。<br />
-          ※ 計算結果は参考値であり、診断・治療方針は必ず臨床医の総合判断で行ってください。
-        </div>
-      </div>
     </div>
   </main>
 
