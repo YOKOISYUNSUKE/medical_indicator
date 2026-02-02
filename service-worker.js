@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = "medcalc-cache-v12.02.5";
+const CACHE_NAME = "medcalc-cache-v2.02.1";
 
 // 初期キャッシュに乗せるファイル一覧
 const OFFLINE_ASSETS = [
@@ -22,6 +22,8 @@ const OFFLINE_ASSETS = [
   // 共通パーツ
   "./partials/header.html",
   "./partials/footer.html"
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
   // 診療科ごとの index.html など、よく使うページがあればここに追加していく
 ];
 

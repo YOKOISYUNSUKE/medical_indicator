@@ -20,6 +20,7 @@
   <!-- ▲ ここまで PWA 用に追加 ▲ -->
 
   <script src="js/include.js" defer></script>
+  <script src="js/score-utils.js" defer></script>
   <script src="js/main.js" defer></script> 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
   <script src="js/sortable-init.js" defer></script>
@@ -27,18 +28,32 @@
   <script src="js/pwa-register.js" defer></script>
   <!-- ▲ ここまで追加 ▲ -->
 
+
 </head>
 
 <body data-subtitle="診療科を選んでスコア計算へ進んでください">
   <!-- 共通ヘッダー -->
   <div data-include="partials/header.html"></div>
 
-  <main>
-    <div class="section-title">診療科を選択</div>
+  <main class="wrapper">
 
+    <div class="main-top-row">
+      <div class="section-title">診療科を選択</div>
+
+      <div class="score-card score-card--wide patient-card" id="main-patient-card">
+        <div class="score-name">現在の患者</div>
+        <div class="score-desc score-desc--full" id="main-patient-summary">
+          まだ患者が登録されていません。
+        </div>
+        <button type="button" class="calc-button" id="main-patient-open">
+          患者一覧・登録へ
+        </button>
+      </div>
+    </div>
 
   <!-- ▼ 並び替えモード ラジオ：ここを新規挿入 -->
   <div class="list-header">
+
     <fieldset class="reorder-mode-group" data-reorder-toggle>
       <legend class="reorder-mode-legend">モード</legend>
       <label class="reorder-mode-option">
@@ -60,7 +75,7 @@
       </label>
     </fieldset>
   </div>
-  <!-- ▲ 挿入ここまで -->
+
 
 
 
